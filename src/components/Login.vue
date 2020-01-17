@@ -208,9 +208,9 @@ export default {
   display: flex;
   justify-content: space-between;
 }
-input.md-input {
-    border-style: ridge;
-}
+// input.md-input {
+//     border-style: ridge;
+// }
 
 // .md-progress-bar {
 //   position: absolute;

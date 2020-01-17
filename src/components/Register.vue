@@ -36,7 +36,7 @@
                   >
                 </md-field>
               </div>
-              <div class=" md-layout-item md-size-20" />
+              <div class=" md-layout-item md-size-10" />
               <div class=" curved md-layout-item md-size-45">
                 <md-field :class="getValidationClass('lastName')">
                   <label for="last-name">Last Name</label>
@@ -222,6 +222,9 @@ export default {
         });
     },
 
+
+
+
     validateUser() {
       this.$v.$touch();
 
@@ -234,6 +237,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.md-card{
+  margin-top:75px
+}
+
+
 .image {
   width: "100px";
   height: "100px";
@@ -252,9 +260,9 @@ div.md-layout-item.md-small-size-100 p {
     font-weight: normal;
 }
 
-input.md-input {
-    border-style: ridge;
-}
+// input.md-input {
+//     border-style: ridge;
+// }
 
 
 

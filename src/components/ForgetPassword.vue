@@ -137,9 +137,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-input.md-input {
-    border-style: ridge;
+.md-card{
+  margin-top:75px
 }
+// input.md-input {
+//     border-style: ridge;
+// }
 
 .actions {
   display: flex;

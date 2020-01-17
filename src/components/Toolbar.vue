@@ -1,21 +1,18 @@
 <template>
-  <div>
-    <md-toolbar>
-         <div class="md-toolbar-row">
-        <div class="md-toolbar-section-start">
-          <md-button class="md-icon-button" @click="toggleMenu" v-if="!menuVisible">
-            <md-icon>menu</md-icon>
-          </md-button>
-          <div class="md-icon-button">
+  <!-- <div class="page-container"> -->
+    <md>
+      <md-toolbar class="">
+          <div class="md-toolbar-section-start">
+        <md-button class="md-icon-button" @click="toggleMenu" >
+          <md-icon>menu</md-icon>
+        </md-button>
+        <div class="md-icon-button">
           <img src="../assets/icon_128.png" alt="icon">
           </div>
           <div><h2>Fundoo</h2></div>
-          <!-- <link rel="icon" href="../assets/keep.ico"> -->
-
         </div>
 
-            <div id="serchId">
-
+        <div id="serchId">
             <form class="search-bar md-layout">
               
           <md-button class="md-icon-button md-layout-item">
@@ -37,10 +34,8 @@
               <!-- </> -->
             </form>
           </div>
-
-
-
-        <div class="md-toolbar-section-end">
+    
+    <div class="md-toolbar-section-end">
           <md-button class="md-icon-button">
             <md-icon>refresh</md-icon>
           </md-button>
@@ -58,48 +53,52 @@
                 <img src="../assets/profile.jpg" alt="Avatar">
             </md-avatar>
         </md-button>
-
-        
-
-
         </div>
+      </md-toolbar>
+
+      <md-drawer :md-active.sync="menuVisible" md-persistent="null" >
         
-      
-
-      </div>
         
-     
-    </md-toolbar>
+        <md-list>
+          <md-list-item>
+            <md-icon>move_to_inbox</md-icon>
+            <span class="md-list-item-text">Notes</span>
+          </md-list-item>
 
+        
+          <md-list-item>
+            <md-icon>send</md-icon>
+            <span class="md-list-item-text">Remainders</span>
+          </md-list-item>
 
+        <md-divider></md-divider>
 
+          <md-list-item>
+            <md-icon>delete</md-icon>
+            <span class="md-list-item-text">Trash</span>
+          </md-list-item>
 
+          <md-list-item>
+            <md-icon>error</md-icon>
+            <span class="md-list-item-text">Spam</span>
+          </md-list-item>
 
-    <md-app-drawer :md-active.sync="menuVisible" md-persistent="full">
-        <md-toolbar class="md-transparent" md-elevation="0">
-          <span>Navigation</span>
+         
+          
+        </md-list>
 
-          <div class="md-toolbar-section-end">
-            <md-button class="md-icon-button md-dense" @click="toggleMenu">
-              <md-icon>keyboard_arrow_left</md-icon>
-            </md-button>
-          </div>
-        </md-toolbar>
+      </md-drawer>
 
-
-      </md-app-drawer>
-    
-
-    
-  </div>
+      <md-content>
+       Harikrishna
+      </md-content>
+    </md>
+  <!-- </div> -->
 </template>
 
-
-
 <script>
-export default {
-  name: 'ContentActions',
-//   name: 'PersistentFull',
+  export default {
+    name: 'PersistentFull',
     data: () => ({
       menuVisible: false
     }),
@@ -108,17 +107,13 @@ export default {
         this.menuVisible = !this.menuVisible
       }
     }
-}
-
+  }
 </script>
 
 <style lang="scss" scoped>
-  .md-toolbar + .md-toolbar {
-    margin-top: 16px;
-  }
-
   .md-app {
     min-height: 350px;
+    // height:635px;
     border: 1px solid rgba(#000, .12);
   }
 
@@ -126,9 +121,10 @@ export default {
   .md-drawer {
     width: 230px;
     max-width: calc(100vw - 125px);
+    margin-top:4.615em;
   }
 
-#search {
+  #search {
     width: 631px;
     background-color: lightgrey;
     border: none;
@@ -140,8 +136,4 @@ form.search-bar.md-layout {
     background-color: lightgrey;
 }
 
-//   .search-bar{
-// width: 10px
-
-//   }
 </style>
