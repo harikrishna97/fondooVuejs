@@ -1,7 +1,7 @@
 <template>
   <!-- <div class="page-container"> -->
-    <md>
-      <md-toolbar class="">
+    <md-app>
+      <md-app-toolbar class="">
           <div class="md-toolbar-section-start">
         <md-button class="md-icon-button" @click="toggleMenu" >
           <md-icon>menu</md-icon>
@@ -54,9 +54,9 @@
             </md-avatar>
         </md-button>
         </div>
-      </md-toolbar>
+      </md-app-toolbar>
 
-      <md-drawer :md-active.sync="menuVisible" md-persistent="null" >
+      <md-app-drawer :md-active.sync="menuVisible" md-persistent="null" >
         
         
         <md-list>
@@ -67,32 +67,48 @@
 
         
           <md-list-item>
-            <md-icon>send</md-icon>
+            <md-icon>notifications_none</md-icon>
             <span class="md-list-item-text">Remainders</span>
           </md-list-item>
 
         <md-divider></md-divider>
+
+        <md-list-item>
+            <md-icon>label</md-icon>
+            <span class="md-list-item-text">label</span>
+          </md-list-item>
+
+        
+          <md-list-item>
+            <md-icon>edit</md-icon>
+            <span class="md-list-item-text">Edit label</span>
+          </md-list-item>
+
+        <md-divider></md-divider>
+
+
+            <md-list-item>
+            <md-icon>archive</md-icon>
+            <span class="md-list-item-text">Archive</span>
+          </md-list-item>
 
           <md-list-item>
             <md-icon>delete</md-icon>
             <span class="md-list-item-text">Trash</span>
           </md-list-item>
 
-          <md-list-item>
-            <md-icon>error</md-icon>
-            <span class="md-list-item-text">Spam</span>
-          </md-list-item>
+          
 
          
           
         </md-list>
 
-      </md-drawer>
+      </md-app-drawer>
 
-      <md-content>
+      <md-app-content>
        Harikrishna
-      </md-content>
-    </md>
+      </md-app-content>
+    </md-app>
   <!-- </div> -->
 </template>
 
@@ -113,7 +129,7 @@
 <style lang="scss" scoped>
   .md-app {
     min-height: 350px;
-    // height:635px;
+    // height:630px;
     border: 1px solid rgba(#000, .12);
   }
 

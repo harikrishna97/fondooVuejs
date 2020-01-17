@@ -1,136 +1,101 @@
-<template>
-  <b-row>
-    <b-col cols="12">
-      <h2>
-        Chat Room - <b-btn size="sm" @click.stop="logout()">Logout</b-btn>
-      </h2>
-      <b-list-group class="panel-body">
-        <!-- <b-list-group-item v-for="(item, index) in chats" class="chat" v-bind="chat"> -->
-          <div class="left clearfix" v-if="item.nickname === nickname">
-            <b-img left src="http://placehold.it/50/55C1E7/fff&text=ME" rounded="circle" width="75" height="75" alt="img" class="m-1" />
-            <div class="chat-body clearfix">
-              <div class="header">
-                <strong class="primary-font">{{ item.nickname }}</strong> <small class="pull-right text-muted">
-                <span class="glyphicon glyphicon-time"></span>{{ item.created_date }}</small>
-              </div>
-              <p>{{ item.message }}</p>
-            </div>
+<md-toolbar class="">
+          <div class="md-toolbar-section-start">
+        <md-button class="md-icon-button" @click="toggleMenu" >
+          <md-icon>menu</md-icon>
+        </md-button>
+        <div class="md-icon-button">
+          <img src="../assets/icon_128.png" alt="icon">
           </div>
-          <div class="right clearfix" v-else>
-            <b-img right src="http://placehold.it/50/55C1E7/fff&text=U" rounded="circle" width="75" height="75" alt="img" class="m-1" />
-            <div class="chat-body clearfix">
-              <div class="header">
-                <strong class="primary-font">{{ item.nickname }}</strong> <small class="pull-right text-muted">
-                <span class="glyphicon glyphicon-time"></span>{{ item.created_date }}</small>
-              </div>
-              <p>{{ item.message }}</p>
-            </div>
+          <div><h2>Fundoo</h2></div>
+        </div>
+
+        <div id="serchId">
+            <form class="search-bar md-layout">
+              
+          <md-button class="md-icon-button md-layout-item">
+            <md-icon>search</md-icon>
+          </md-button> 
+                  <input 
+                type="search"
+                id="search"
+                required
+               autocomplete="off" 
+                placeholder="Search"
+                
+              />
+
+            <md-button class="md-icon-button md-layout-item">
+            <md-icon>close</md-icon>
+          </md-button>  
+              <!-- </md-field> -->
+              <!-- </> -->
+            </form>
           </div>
-        <!-- </b-list-group-item> -->
-      </b-list-group>
-      <ul v-if="errors && errors.length">
-        <!-- <li v-for="error of errors"> -->
-          {{error.message}}
-        <!-- </li> -->
-      </ul>
-      <b-form @submit="onSubmit" class="chat-form">
-        <b-input-group prepend="Message">
-          <b-form-input id="message" :state="state" v-model.trim="chat.message"></b-form-input>
-          <b-input-group-append>
-            <b-btn type="submit" variant="info">Send</b-btn>
-          </b-input-group-append>
-        </b-input-group>
-      </b-form>
-    </b-col>
-  </b-row>
-</template>
-
-<script>
-import Vue from 'vue'
-import * as io from 'socket.io-client'
-import VueChatScroll from 'vue-chat-scroll'
-Vue.use(VueChatScroll)
-
-import axios from 'axios'
-
-export default {
-  name: 'ChatRoom',
-  data () {
-  return {
-    chats: [],
-    errors: [],
-    nickname: this.$route.params.nickname,
-    chat: {},
-    socket: io('https://chatyard.herokuapp.com')
-  }
-},
-  created () {  
-
-    axios.get(`https://chatyard.herokuapp.com/api/chat/` + this.$route.params.id)
-    .then(response => {
-      this.chats = response.data
-    })
-    .catch(e => {
-      this.errors.push(e)
-      //
-    })
-
-
-     this.socket.on('new-message', function (data) {
-    if(data.message.room === this.$route.params.id) {
-      this.chats.push(data.message)
-    }
-  }.bind(this))
-  },
-  methods: {
-  logout () {
-    this.socket.emit('save-message', { room: this.chat.room, nickname: this.chat.nickname, message: this.chat.nickname + ' left this room', created_date: new Date() });
-    this.$router.push({
-      name: 'RoomList'
-    })
-  },
-  onSubmit (evt) {
-    evt.preventDefault()
-    this.chat.room = this.$route.params.id
-    this.chat.nickname = this.$route.params.nickname
     
-    
-    axios.post(`https://chatyard.herokuapp.com/api/chat/`, this.chat)
-    .then(response => {
-      this.socket.emit('save-message', response.data)
-      this.chat.message = ''
-    })
-    .catch(e => {
-      this.errors.push(e)
-    })
-  }
-}
-}
-</script>
+    <div class="md-toolbar-section-end">
+          <md-button class="md-icon-button">
+            <md-icon>refresh</md-icon>
+          </md-button>
 
-<style>
-  .chat .left .chat-body {
-    text-align: left;
-    margin-left: 100px;
-  }
+        <md-button class="md-icon-button">
+            <img src="../assets/list_view_24px.svg" alt="List">
+        </md-button>
 
-  .chat .right .chat-body {
-    text-align: right;
-    margin-right: 100px;
-  }
+        <md-button class="md-icon-button">
+            <img src="../assets/settings_24px.svg" alt="Setting">
+          </md-button>
 
-  .chat .chat-body p {
-    margin: 0;
-    color: #777777;
-  }
+        <md-button class="md-icon-button">
+            <md-avatar>
+                <img src="../assets/profile.jpg" alt="Avatar">
+            </md-avatar>
+        </md-button>
+        </div>
+      </md-toolbar>
 
-  .panel-body {
-    overflow-y: scroll;
-    height: 350px;
-  }
+      <md-drawer :md-active.sync="menuVisible" md-persistent="null" >
+        
+        
+        <md-list>
+          <md-list-item>
+            <md-icon>move_to_inbox</md-icon>
+            <span class="md-list-item-text">Notes</span>
+          </md-list-item>
 
-  .chat-form {
-    margin: 20px auto;
-    width: 80%;
-  }
-</style>
+        
+          <md-list-item>
+            <md-icon>notifications_none</md-icon>
+            <span class="md-list-item-text">Remainders</span>
+          </md-list-item>
+
+        <md-divider></md-divider>
+            <md-list-item>
+            <md-icon>label</md-icon>
+            <span class="md-list-item-text">label</span>
+          </md-list-item>
+          
+          <md-list-item>
+            <md-icon>edit</md-icon>
+            <span class="md-list-item-text">Edit labels</span>
+          </md-list-item>
+
+        <md-divider></md-divider>
+
+
+            <md-list-item>
+            <md-icon>archive</md-icon>
+            <span class="md-list-item-text">Archive</span>
+          </md-list-item>
+
+          <md-list-item>
+            <md-icon>delete</md-icon>
+            <span class="md-list-item-text">Trash</span>
+          </md-list-item>
+
+          
+
+         
+          
+        </md-list>
+
+      </md-drawer>
