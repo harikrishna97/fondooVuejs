@@ -5,6 +5,8 @@
           <div class="md-toolbar-section-start">
         <md-button class="md-icon-button" @click="toggleMenu" >
           <md-icon>menu</md-icon>
+           <md-tooltip md-direction="bottom">Main menu</md-tooltip>
+
         </md-button>
         <div class="md-icon-button">
           <img src="../assets/icon_128.png" alt="icon">
@@ -17,6 +19,8 @@
               
           <md-button class="md-icon-button md-layout-item">
             <md-icon>search</md-icon>
+            <md-tooltip md-direction="bottom">Search</md-tooltip>
+
           </md-button> 
                   <input 
                 type="search"
@@ -38,21 +42,49 @@
     <div class="md-toolbar-section-end">
           <md-button class="md-icon-button">
             <md-icon>refresh</md-icon>
+             <md-tooltip md-direction="bottom">Refresh</md-tooltip>
           </md-button>
 
         <md-button class="md-icon-button">
             <img src="../assets/list_view_24px.svg" alt="List">
+             <md-tooltip md-direction="bottom">List view</md-tooltip>
+
         </md-button>
 
         <md-button class="md-icon-button">
             <img src="../assets/settings_24px.svg" alt="Setting">
+             <md-tooltip md-direction="bottom">Settings</md-tooltip>
+
           </md-button>
 
-        <md-button class="md-icon-button">
+    <div >
+        <md-menu md-size="medium" md-align-trigger>
+        <!-- <md-button md-menu-trigger>Align with trigger</md-button> -->
+        <md-card>
+              <md-button md-menu-trigger class="md-icon-button" >
             <md-avatar>
                 <img src="../assets/profile.jpg" alt="Avatar">
+                <md-tooltip md-direction="bottom">Shailesh Borase</md-tooltip>
             </md-avatar>
         </md-button>
+
+        <md-menu-content>
+          <md-button md-menu-trigger class="md-icon-button" style="display:flex; flex:center" >
+            <md-avatar>
+                <img src="../assets/profile.jpg" alt="Avatar">
+                <md-tooltip md-direction="bottom">Shailesh Borase</md-tooltip>
+            </md-avatar>
+        </md-button>
+          <md-menu-item :v-model="user">{{user}}</md-menu-item>
+          <md-menu-item v-model="email">{{email}}</md-menu-item>
+          <md-menu-item>My Item 3</md-menu-item>
+        </md-menu-content>
+        </md-card>
+     
+      </md-menu>
+
+    </div>
+       
         </div>
       </md-app-toolbar>
 
@@ -96,31 +128,43 @@
             <md-icon>delete</md-icon>
             <span class="md-list-item-text">Trash</span>
           </md-list-item>
-
-          
-
-         
+    
           
         </md-list>
 
       </md-app-drawer>
-
       <md-app-content>
-       Harikrishna
+        <!-- Used Selector of create NoteHere -->
+       <create-note></create-note>
+       
       </md-app-content>
+
     </md-app>
   <!-- </div> -->
 </template>
 
 <script>
+import CreateNote from './CreateNote'
   export default {
     name: 'PersistentFull',
     data: () => ({
-      menuVisible: false
+      menuVisible: false,
+      signout:false,
+      user:"Shailesh Borase",
+      email:"adhokshaj108@gmail.com"
     }),
+
+    components:{
+        CreateNote,
+    },
+
     methods: {
       toggleMenu () {
         this.menuVisible = !this.menuVisible
+      },
+      signout(){
+        this.signout = !this.signout
+
       }
     }
   }
