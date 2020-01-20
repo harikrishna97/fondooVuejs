@@ -47,7 +47,7 @@
       </md-card>
 
       <md-snackbar :md-active.sync="userSaved"
-        >The user {{ lastUser }} was saved with success!</md-snackbar
+        > {{ lastUser }} </md-snackbar
       >
     </form>
   </div>
@@ -103,24 +103,25 @@ export default {
       const token = this.$route.params.token;
       this.$log.info("token ::: " + token);
 
-      // const token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZGVjYjgzNGI2ZmEyYTNmMzIzMzI3NjMiLCJlbWFpbCI6ImFkaG9rc2hhajEwOEBnbWFpbC5jb20iLCJpYXQiOjE1NzY0ODkzMjMsImV4cCI6MTU3NjU3NTcyM30.0wBS6MmBwOU0s9rLJmm5U5dRGAcVIiJTH7TST961F7o'
       HTTP.post("resetPassword", resetPasswordData, {
         headers: { token: token }
       })
         .then(response => {
           const data = JSON.stringify(response.data);
           this.$log.info("reset Successfull ::: " + data);
-          alert("Passwrod Reset Successfully");
-          this.lastUser = `${this.form.password}`;
+          // alert("Passwrod Reset Successfully");
+          this.lastUser = `Password Reset Successfully..`;
           this.userSaved = true;
           this.sending = false;
           this.clearForm();
+          window.setTimeout(() => {
+            this.$router.push('/')
+          }, 1000)
         })
         .catch(err => {
           this.$log.error("Error :: " + err);
-          alert("Passwrod Reset Unsuccessfully");
-
-          this.lastUser = `${this.form.password}`;
+          // alert("Passwrod Reset Unsuccessfully");
+          this.lastUser = `Error While reset Password..`;
           this.userSaved = false;
           this.sending = false;
           this.clearForm();

@@ -1,6 +1,6 @@
 <template>
 <!-- <md-card> -->
-  <div class="mainDiv md-layout-item md-small-size-100">
+  <div class="mainDiv md-layout-item  md-small-size-50">
     <form novalidate class="card md-layout  md-alignment-space-around-center " @submit.prevent="validateUser">
       <md-card class="  md-layout-item md-size-50 md-small-size-100">
         <div class="md-title ">
@@ -37,7 +37,7 @@
                 </md-field>
               </div>
               <div class=" md-layout-item md-size-10" />
-              <div class=" curved md-layout-item md-size-45">
+              <div class=" curved md-layout-item md-size-40">
                 <md-field :class="getValidationClass('lastName')">
                   <label for="last-name">Last Name</label>
                   <md-input
@@ -212,6 +212,9 @@ export default {
           this.userSaved = true;
           this.sending = false;
           this.clearForm();
+          window.setTimeout(() => {
+            this.$router.push('/')
+          }, 1000)
         })
         .catch(error => {
           this.$log.info("error :: " + JSON.stringify(error));

@@ -55,7 +55,6 @@
               <span class="md-error" v-else-if="!$v.form.password.minlength"
                 >Password should be of Minimum 6 character</span
               >
-              <!-- <span class="md-error" v-else-if="!$v.form.password.maxlength">Password should be of Maximum 12 character</span> -->
             </md-field>
           </div>
 
@@ -91,11 +90,11 @@
       </md-card>
 
       <md-snackbar :md-active.sync="userSaved"
-        >The user {{ lastUser }} was logged Successfully!</md-snackbar
+        >{{ lastUser }}</md-snackbar
       >
-      <md-snackbar :md-active.sync="userSavedF"
+      <!-- <md-snackbar :md-active.sync="userSavedF"
         >Invalid Email/Password!</md-snackbar
-      >
+      > -->
     </form>
   </div>
 </template>
@@ -107,7 +106,6 @@ import {
   required,
   email,
   minLength,
-  maxLength
 } from "vuelidate/lib/validators";
 
 export default {
@@ -119,8 +117,6 @@ export default {
       email: null
     },
     userSaved: false,
-    userSavedF: false,
-
     sending: false,
     lastUser: null
   }),
@@ -132,8 +128,8 @@ export default {
       },
       password: {
         required,
-        minLength: minLength(6),
-        maxLength: maxLength(12)
+        minLength: minLength(6)
+        
       }
     }
   },
@@ -161,36 +157,45 @@ export default {
 
       HTTP.post("login", loginData)
         .then(response => {
-          // const data=JSON.stringify(response.data);
-          // this.$log.info('token:: '+response.data.token)
-          localStorage.setItem("token", response.data.token);
-          // this.$log.info('Data IS :: '+data)
+
+          const token=JSON.stringify(response.data.token);
+          this.$log.info('data:: '+JSON.stringify(response.data))
+          localStorage.setItem("token", token);
+          localStorage.setItem("firstName", response.data.data.firstName);
+          localStorage.setItem("lastName", response.data.data.lastName);
+          localStorage.setItem("email", response.data.data.email);
+          this.$log.info('data:: '+localStorage.getItem("firstName"));
+
+
+          this.$log.info('Data IS :: '+JSON.stringify(response.data))
           if (response.data.success == true) {
-            // alert('Login Successful..!');
-            // }else{
-            //   alert('Wrong Email ID/Password, Login Unsuccessful..!');
+            this.$log.info('Data IS :: '+response.data.success)
+            
+            this.lastUser = response.data.message
+            this.userSaved = true
+            this.sending = false
+            this.clearForm()
+            window.setTimeout(() => {
+              this.$router.push('toolbar')
+            }, 1000)
+
+          }else{
+            this.lastUser = response.data.message
+            this.userSaved = true
+            this.sending = false
+            this.clearForm()
           }
-          this.lastUser = `${this.form.email}`;
-          this.userSaved = true;
-          this.sending = false;
-          // this.$router.push('dashboard')
-          // this.clearForm()
+        
         })
-        .catch(err => {
-          this.$log.error("Error :: " + err);
-          this.lastUser = `${this.form.email}`;
-          this.userSavedF = true;
+        .catch(error => {
+          this.$log.info("Error :: " + error);
+          this.lastUser = 'invalid Email or Password'+error;
+          this.userSaved = true;
           this.sending = false;
           this.clearForm();
         });
 
-      // Instead of this timeout, here you can call your API
-      // window.setTimeout(() => {
-      // this.lastUser = `${this.form.email} ${this.form.password}`
-      // this.userSaved = true
-      // this.sending = false
-      // this.clearForm()
-      // }, 1500)
+      
     },
     validateUser() {
       this.$v.$touch();
@@ -204,6 +209,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.md-card{
+  margin-top:75px
+}
 .actions {
   display: flex;
   justify-content: space-between;
