@@ -1,11 +1,5 @@
 <template>
-  <div id="app" style="background-color=green;">
-     
-        <!-- <img alt="Chat App logo" style="background-size:cover;" src="./assets/typing1.jpeg" > -->
-
-    
-    <!-- <login></login> -->
-    
+  <div id="app">    
     <!-- <router-link :to="{name:'login'}"></router-link>  -->
 <!-- <router-link :to="{name:'dashboard'}"></router-link>  -->
 

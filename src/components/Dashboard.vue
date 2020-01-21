@@ -1,208 +1,235 @@
 <template>
-  <div class="page-container md-layout-row">
-    <md-app>
-      <md-app-toolbar class="md-primary">
-        <div><span class="md-title">CHAT APPLICATION </span></div>
-        <div><md-button class=""  @click.stop="logout()">Logout</md-button></div>
+  <div class="page-container">
+    <md-app md-mode="fixed">
+      <md-app-toolbar class="">
+        <div class="md-toolbar-section-start">
+          <md-button class="md-icon-button" @click="toggleMenu">
+            <md-icon>menu</md-icon>
+            <md-tooltip md-direction="bottom">Main menu</md-tooltip>
+          </md-button>
+          <div class="md-icon-button">
+            <img src="../assets/icon_128.png" alt="icon" />
+          </div>
+          <div><h2>Fundoo</h2></div>
+        </div>
+
+        <!-- <div class="search-bar md-layout">  <search-bar></search-bar></div> -->
+
+        <div id="serchId">
+          <form class="search-bar md-layout">
+            <md-button class="md-icon-button md-layout-item">
+              <md-icon>search</md-icon>
+              <md-tooltip md-direction="bottom">Search</md-tooltip>
+            </md-button>
+            <search-bar></search-bar>
+
+            <!-- <input :@click="searchbar"
+                type="search"
+                id="search"
+                required
+                style="outline:none"
+               autocomplete="off" 
+                placeholder="Search..."
+                
+              /> -->
+
+            <!-- <md-button class="md-icon-button md-layout-item">
+            <md-icon>close</md-icon>
+          </md-button>   -->
+          </form>
+        </div>
+
+        <div class="md-toolbar-section-end">
+          <md-button class="md-icon-button">
+            <md-icon>refresh</md-icon>
+            <md-tooltip md-direction="bottom">Refresh</md-tooltip>
+          </md-button>
+
+          <md-button class="md-icon-button">
+            <img src="../assets/list_view_24px.svg" alt="List" />
+            <md-tooltip md-direction="bottom">List view</md-tooltip>
+          </md-button>
+
+          <md-button class="md-icon-button">
+            <img src="../assets/settings_24px.svg" alt="Setting" />
+            <md-tooltip md-direction="bottom">Settings</md-tooltip>
+          </md-button>
+
+          <!-- <div> -->
+            <md-menu md-size="medium" md-align-trigger>
+              <!-- <md-card> -->
+                <!-- <md-button md-menu-trigger>Align with trigger</md-button> -->
+                <md-button
+                  class="md-icon-button"
+                  md-menu-trigger
+                  @click="created"
+                >
+                  <md-avatar>
+                    <img src="../assets/profile.jpg" alt="Avatar" />
+                    <md-tooltip md-direction="bottom"
+                      >Shailesh Borase</md-tooltip
+                    >
+                  </md-avatar>
+                </md-button>
+
+                <md-menu-content>
+                  <md-button>
+                    <md-avatar class="md-icon-button">
+                      <img src="../assets/profile.jpg" alt="Avatar" />
+                      <!-- <input type="file"> -->
+                      <md-tooltip md-direction="bottom"
+                        >Shailesh Borase</md-tooltip
+                      >
+                    </md-avatar>
+                  </md-button>
+
+                  <div>
+                    <md-menu-item :v-model="user">{{ user }}</md-menu-item>
+                  </div>
+                  <!-- <div :v-model="user"> {{user}} </div> -->
+                  <div>
+                    <md-menu-item :v-model="email">{{ email }}</md-menu-item>
+                  </div>
+                  <!-- <div v-model="email"> {{email}} </div> -->
+                  <md-button v-on:click="signout()">Sign Out</md-button>
+                </md-menu-content>
+              <!-- </md-card> -->
+            </md-menu>
+          <!-- </div> -->
+        </div>
       </md-app-toolbar>
 
-      <md-app-drawer md-permanent="full">
-        <md-toolbar style="background-color:orange ; text-align:center;"  class="md-transparent" md-elevation="0">
-          USERS
-        </md-toolbar>
+      <md-app-drawer :md-active.sync="menuVisible" md-persistent="null">
+        <md-list>
+          <md-list-item>
+            <md-icon>move_to_inbox</md-icon>
+            <span class="md-list-item-text">Notes</span>
+          </md-list-item>
 
-        <md-list v-for="(user,i) in users" v-bind:key="i">
-          {{ user.firstName }}
-            <!-- <h3>Hari</h3>
-            <h3>Krishna</h3>
-            <h3>shailesh</h3>
-            <h3>Adhokshaj</h3>
-            <h3>Ram</h3>
-            <h3>Gopal</h3> -->
+          <md-list-item>
+            <md-icon>notifications_none</md-icon>
+            <span class="md-list-item-text">Remainders</span>
+          </md-list-item>
 
+          <md-divider></md-divider>
+
+          <md-list-item>
+            <md-icon>label</md-icon>
+            <span class="md-list-item-text">label</span>
+          </md-list-item>
+
+          <md-list-item>
+            <md-icon>edit</md-icon>
+            <span class="md-list-item-text">Edit label</span>
+          </md-list-item>
+
+          <md-divider></md-divider>
+
+          <md-list-item>
+            <md-icon>archive</md-icon>
+            <span class="md-list-item-text">Archive</span>
+          </md-list-item>
+
+          <md-list-item>
+            <md-icon>delete</md-icon>
+            <span class="md-list-item-text">Trash</span>
+          </md-list-item>
         </md-list>
       </md-app-drawer>
 
       <md-app-content>
-       Hello, Welcome to chatApp
+        <create-note></create-note>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error quibusdam, non molestias et! Earum magnam, similique, quo recusandae placeat dicta asperiores modi sint ea repudiandae maxime? Quae non explicabo, neque.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error quibusdam, non molestias et! Earum magnam, similique, quo recusandae placeat dicta asperiores modi sint ea repudiandae maxime? Quae non explicabo, neque.</p>
       </md-app-content>
-
-      
-
     </md-app>
-    <div class="send_field">
-      <div style="width:50%" >
-        <md-field class="send_input">
-            <md-input  v-text="message" id="message" placeholder="  type here.." v-model.trim="message"/>
-        </md-field>
-      </div>
-      <div class="send">
-        <md-button class="md-raised">Send</md-button>
-      </div>
-    </div>
   </div>
 </template>
 
 
-
 <script>
-import { HTTP } from '../services/http-common'
-import * as io from 'socket.io-client'
-// Client side Socket.IO object
-  export default {
-    name: 'Dashboard',
-    data :() =>{
-      return {
-        message:'',
-        chats: [],
-        users:[{"firstName":"hari"},
-        {"firstName":"Krishna"}],
-        errors: [],
-        chat: {},
-        // socket: io('https://chatyard.herokuapp.com')
-        socket: io('localhost:2000')
+import CreateNote from "./CreateNote";
+// import CreateNote from './CreateNote1'
 
-      }
+import SearchBar from "./SearchBar";
+export default {
+  name: "PersistentFull",
+  data: () => ({
+    // component:CreateNote1,
+    fileName: null,
+    menuVisible: false,
+    // searchbar: false,
+    user: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    single: null
+  }),
+
+  components: {
+    CreateNote,
+    // CreateNote1,
+    SearchBar
+  },
+
+  methods: {
+    toggleMenu() {
+      this.menuVisible = !this.menuVisible;
     },
-    created () {  
+    signout() {
+      localStorage.clear();
+      // localStorage.removeItem('token');
 
-    HTTP.get('getAllUser')
-    // axios.get(`https://chatyard.herokuapp.com/api/chat/` + this.$route.params.id)
-    .then(response => {
-      this.users = response.data[0]
-//       const dd=response.data;
-// dd.array.forEach(element => {
-//    this.$log.info(element)
-// });
-      this.$log.info('forget Successfull ::: '+JSON.stringify(response.data.Data))
+      this.$log.info(" sinOut..............:: ");
+      this.$router.push("/");
+    },
 
-    })
-    .catch(e => {
-      this.errors.push(e)
-      //
-    })
-
-
-    this.socket.on('new-message', function (data) {
-    if(data.message.room === this.$route.params.id) {
-      this.chats.push(data.message)
-    }
-  }.bind(this))
-  },
-  // methods: {
-  // logout () {
-  //   this.socket.emit('save-message', { room: this.chat.room, nickname: this.chat.nickname, message: this.chat.nickname + ' left this room', created_date: new Date() });
-  //   this.$router.push({
-  //     name: 'RoomList'
-  //   })
-  // },
-  onSubmit (evt) {
-    evt.preventDefault()
-    this.chat.room = this.$route.params.id
-    this.chat.nickname = this.$route.params.nickname
-    
-    HTTP.post('sendMessages')
-
-    // axios.post(`https://chatyard.herokuapp.com/api/chat/`, this.chat)
-    .then(response => {
-      this.socket.emit('savemessage', response.data)
-      this.chat.message = ''
-    })
-    .catch(e => {
-      this.errors.push(e)
-    })
-  },
-// },
-    methods: {
-        getValidationClass (fieldName) {
-            const field = this.$v.form[fieldName]
-
-            if (field) {
-            return {
-                'md-invalid': field.$invalid && field.$dirty
-            }
-            }
-        },
-        clearForm () {
-            this.$v.$reset()
-            this.form.email = null
-
-        },
-        saveUser () {
-            this.sending = true
-            // const forgetPasswordData={}
-            // forgetPasswordData.email=this.form.email;
-
-            HTTP.get('getAllUsers')
-          .then(response=>{
-           
-            const data=JSON.stringify(response.data);
-            this.users=data;
-            this.$log.info('forget Successfull ::: '+data)
-            
-              alert('Link has been send to your register email Id')
-            
-            this.lastUser = `${this.form.email} ${this.form.password}`
-            this.userSaved = true
-            this.sending = false
-            this.clearForm()
-          })
-          .catch(err=>{
-            this.$log.error('Error :: '+err);
-            alert('Invalid Email ID')
-            this.lastUser = `${this.form.email} ${this.form.password}`
-            this.userSaved = false
-            this.sending = false
-            this.clearForm()
-            
-          })
-
-
-            // Instead of this timeout, here you can call your API
-            window.setTimeout(() => {
-            this.lastUser = `${this.form.email} ${this.form.password}`
-            this.userSaved = true
-            this.sending = false
-            this.clearForm()
-            }, 1500)
-
-            
-        }
+    created() {
+      this.firstName = localStorage.getItem("firstName");
+      this.lastName = localStorage.getItem("lastName");
+      this.user = this.firstName + this.lastName;
+      this.email = localStorage.getItem("email");
+      this.$log.info(" sinOut..:: " + localStorage.getItem("firstName"));
     }
   }
-
+  // destroyed: function(){
+  //   alert('Destroyed');
+  //   }
+};
 </script>
 
 <style lang="scss" scoped>
-  
-  .md-app {
-    width:96%;
-    height: 97vh;
-    border: 1px solid rgba(#000, .12);
-  }
-
-  .md-drawer {
-    width: 230px;
-    max-width: calc(100vw - 125px);
-  }
-  div.md-content.md-app-content.md-flex.md-theme-default {
-    background-color: #b4dbed;
+.md-app {
+  height: 500px;
+  // height:630px;
+  border: 1px solid rgba(#000, 0.12);
 }
 
-div.md-drawer.md-app-drawer.md-theme-default.md-left.md-permanent.md-permanent-full {
-    background-color: #e8e37b;
+.md-drawer {
+  width: 230px;
+  max-width: calc(100vw - 125px);
+  margin-top: 4.615em;
 }
-.send_field{
-    width: 80%;
-    display: flex;
-    flex-flow: row wrap;
-    position: absolute;
-    left: 30%;
-    bottom: 1%;
+
+#search {
+  width: 631px;
+  background-color: lightgrey;
+  border: ridge;
+  margin: 5px 0px;
 }
-.send_input{
-  background: white;
-  justify-content: center;
-  align-content: center;
+
+form.search-bar.md-layout {
+  background-color: lightgrey;
 }
+.content {
+  display: flexbox;
+}
+//  md-app{
+//   height: 570px;
+// }
+// .md-menu-content{
+// background-color:#F5F5F5;
+// width:300px;
+// height:500px;
+// }
 </style>

@@ -158,7 +158,7 @@ export default {
       HTTP.post("login", loginData)
         .then(response => {
 
-          const token=JSON.stringify(response.data.token);
+          const token=response.data.token
           this.$log.info('data:: '+JSON.stringify(response.data))
           localStorage.setItem("token", token);
           localStorage.setItem("firstName", response.data.data.firstName);
