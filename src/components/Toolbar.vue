@@ -1,8 +1,8 @@
 <template>
   <!-- <div class="page-container"> -->
-    <md-app>
+    <md-app md-mode="fixed">
 
-      <md-app-toolbar class="">
+      <md-app-toolbar  class="">
         <div class="md-toolbar-section-start">
           <md-button class="md-icon-button" @click="toggleMenu">
             <md-icon>menu</md-icon>
@@ -83,15 +83,20 @@
                       >
                     </md-avatar>
                   </md-button>
+              <div class="signOuts">
 
-                  <div>
-                    <md-menu-item :v-model="user">{{ user }}</md-menu-item>
+                  <div class="user">
+                    <div><md-menu-item :v-model="user">{{ user }}</md-menu-item></div>
+                    <!-- <div><md-menu-item :v-model="lastName">{{ lastName }}</md-menu-item></div> -->
                   </div>
                   <!-- <div :v-model="user"> {{user}} </div> -->
-                  <div>
+                  <div class="email">
                     <md-menu-item :v-model="email">{{ email }}</md-menu-item>
                   </div>
+              </div>
+   
                   <!-- <div v-model="email"> {{email}} </div> -->
+                  <md-divider></md-divider>
                   <md-button v-on:click="signout()">Sign Out</md-button>
                 </md-menu-content>
               <!-- </md-card> -->
@@ -101,11 +106,16 @@
       </md-app-toolbar>
      
       <md-app-drawer :md-active.sync="menuVisible" md-persistent="null">
+       
         <md-list>
-          <md-list-item>
+           <router-link :to="{ name: 'note', path:'toolbar/trash'}">
+          <md-list-item >
+      
             <md-icon>move_to_inbox</md-icon>
             <span class="md-list-item-text">Notes</span>
+            
           </md-list-item>
+          </router-link>
 
           <md-list-item>
             <md-icon>notifications_none</md-icon>
@@ -138,12 +148,12 @@
         </md-list>
       </md-app-drawer>
 
-      <md-app-content>
-      <create-note></create-note>
+      <md-app-content class="appContent">
+      <note-component></note-component>
 
         
         </md-app-content>
-
+      <router-view></router-view>
       <!-- Used Selector of create NoteHere -->
 
       <!-- <component :is="component" ></component>
@@ -154,7 +164,7 @@
 </template>
 
 <script>
-import CreateNote from "./CreateNote";
+import NoteComponent from "./NoteComponent";
 // import CreateNote from './CreateNote1'
 
 import SearchBar from "./SearchBar";
@@ -169,12 +179,12 @@ export default {
     firstName: "",
     lastName: "",
     email: "",
-    single: null
+    single: null,
+    imageUrl:null
   }),
 
   components: {
-    CreateNote,
-    // CreateNote1,
+    NoteComponent,
     SearchBar
   },
 
@@ -193,7 +203,7 @@ export default {
     created() {
       this.firstName = localStorage.getItem("firstName");
       this.lastName = localStorage.getItem("lastName");
-      this.user = this.firstName+" " + this.lastName;
+      this.user = (this.firstName+" " + this.lastName).toUpperCase();
       this.email = localStorage.getItem("email");
       this.$log.info(" sinOut..:: " + localStorage.getItem("firstName"));
       this.imageUrl="https://admin4000.s3.amazonaws.com/2020-01-21T09%3A37%3A16.033Z-Krishna.jpeg"
@@ -207,8 +217,8 @@ export default {
 
 <style lang="scss" scoped>
 .md-app {
-  height: 500px;
-  // height:630px;
+  // height: 500px;
+  // height:600px;
   border: 1px solid rgba(#000, 0.12);
 }
 
@@ -230,6 +240,38 @@ form.search-bar.md-layout {
 }
 .content {
   display: flexbox;
+}
+.appContent{
+  margin-left:250px;
+  outline:none;
+  border:none;
+}
+.email{
+  color: #5f6368;
+    font: 400 14px/19px Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    letter-spacing: normal;
+    text-align: center;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.user{
+  display:flex;
+  justify-content:space-evenly;
+  color: #202124;
+    font: 500 16px/22px Google Sans,Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    // letter-spacing: .29px;
+    // margin: 0;
+    // text-align: center;
+    // text-overflow: ellipsis;
+    // overflow: hidden;
+}
+.signOuts{
+  display:flex;
+  justify-content: center;
+  flex-direction:column;
+  display: block;
+    // vertical-align: top;
+    // text-align: center;
 }
 //  md-app{
 //   height: 570px;

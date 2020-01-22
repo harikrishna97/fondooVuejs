@@ -1,8 +1,8 @@
 <template>
   <div>
     <div v-if="open==false" @click="toggleComponent">
-      <md-card md-with-hover>
-        <md-ripple>
+      <md-card >
+        <!-- <md-ripple> -->
           <md-card-toolbar class="searchtoolbar">
             <div class="md-toolbar-section-start">
               <md-button>
@@ -17,16 +17,29 @@
               </md-button>
             </div>
             <div class="md-toolbar-section-end">
-              <md-button>close</md-button>
+              <md-button class="md-icon-button">
+                <img src="../assets/newList.svg" alt="newList" />
+                <md-tooltip md-direction="bottom">New List</md-tooltip>
+              </md-button>
+              <md-button class="md-icon-button">
+                <img src="../assets/brush.svg" alt="brush" />
+                <md-tooltip md-direction="bottom">New Note with Drawing</md-tooltip>
+              </md-button>
+              <md-button class="md-icon-button">
+                <img src="../assets/addImage.svg" alt="image" />
+                <md-tooltip md-direction="bottom">New Note with Image</md-tooltip>
+              </md-button>
+
+             
             </div>
           </md-card-toolbar>
-        </md-ripple>
+        <!-- </md-ripple> -->
       </md-card>
     </div>
 
     <div v-else>
-      <md-card md-with-hover>
-        <md-ripple>
+      <md-card >
+        <!-- <md-ripple> -->
           <!-- <md-card-header> -->
           <!-- <div class="md-title">Card with hover effect</div>
           <div class="md-subhead">It also have a ripple</div> -->
@@ -86,11 +99,11 @@
                 <md-tooltip md-direction="bottom">Change color</md-tooltip>
               </md-button>
 
-              <md-button class="md-icon-button">
+              <!-- <md-button class="md-icon-button"> -->
                 <!-- <md-icon>image</md-icon> -->
-                <img src="../assets/addImage.svg" alt="image" />
+                <!-- <img src="../assets/addImage.svg" alt="image" />
                 <md-tooltip md-direction="bottom">Add image</md-tooltip>
-              </md-button>
+              </md-button> -->
 
               <md-button class="md-icon-button">
                 <!-- <md-icon>archive_none</md-icon> -->
@@ -127,20 +140,17 @@
               <!-- <md-button>close</md-button> -->
             </div>
             <div class="md-toolbar-section-end">
-              <md-button @click="toggleComponent">close</md-button>
+              <md-button @click="toggleComponent" >close</md-button>
             </div>
           </md-card-toolbar>
-          <!-- </md-bottom-bar> -->
-          <!-- </md-card-actions> -->
-        </md-ripple>
+          
+        <!-- </md-ripple> -->
       </md-card>
-      <!-- <display-notes></display-notes> -->
     </div>
   </div>
 </template>
 
 <script>
-// import DisplayNotes from './DisplayNotes'
 import { HTTP } from "../services/http-common";
 
 export default {
@@ -150,40 +160,56 @@ export default {
     open: false,
 
     title: null,
-    description: null
+    description: null,
   }),
-
   components: {
-    // DisplayNotes
   },
 
+
   methods: {
+    
+    
     toggleComponent() {
       this.open = !this.open;
       this.$log.info("open:: " + this.open);
+      this.createNote()
+      this.title=null,
+      this.description=null;
       return this.open;
     },
 
+    notEmpty(){
+      if(this.title&&this.description!==null){
+        this.createNote();
+      }
+
+    },
     createNote() {
-      const noteData = {};
-      noteData.title = this.title;
-      noteData.description = this.description;
-      this.$log.info("NoteData :: " + JSON.stringify(noteData));
-      const token = localStorage.getItem("token");
-      this.$log.info("token :: " + typeof token);
-      // headers: {Authorization:'JWT ' + localStorage.getItem('token')
-      // headers: {Authorization:'JWT ' + localStorage.getItem('token')
-      const auth = { headers: { token: token } };
-      HTTP.post("note", noteData, auth)
-        .then(response => {
-          this.$log.info("response :: " + JSON.stringify(response));
-        })
-        .catch(err => {
-          this.$log.info("error :: " + err);
-        });
-    }
+      if(this.title&&this.description!==null){
+
+        const noteData = {};
+        noteData.title = this.title;
+        noteData.description = this.description;
+        this.$log.info("NoteData :: " + JSON.stringify(noteData));
+        const token = localStorage.getItem("token");
+        this.$log.info("token :: " + typeof token);
+        // headers: {Authorization:'JWT ' + localStorage.getItem('token')
+        // headers: {Authorization:'JWT ' + localStorage.getItem('token')
+        const auth = { headers: { token: token } };
+        HTTP.post("note", noteData, auth)
+          .then(response => {
+            this.$log.info("response :: " + JSON.stringify(response));
+            this.$emit('updateNote',"note added")
+          })
+          .catch(err => {
+            this.$log.info("error :: " + err);
+          });
+      }
+    } ,
+    
   }
-};
+}
+
 </script>
 
 <style lang="scss" scoped>

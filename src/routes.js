@@ -1,31 +1,67 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from "vue";
+import Router from "vue-router";
 
-import Dashboard from "./components/NoteComponent.vue" 
-import Login from "./components/Login.vue"
-import Registration from "./components/Register.vue"
-import ForgetPassword from "./components/ForgetPassword.vue"
-import ResetPassword from "./components/ResetPassword.vue"
-import Toolbar from "./components/Toolbar.vue"
-import CreateNote from "./components/CreateNote.vue"
+import NoteComponent from "./components/NoteComponent.vue";
+import Login from "./components/Login.vue";
+import Registration from "./components/Register.vue";
+import ForgetPassword from "./components/ForgetPassword.vue";
+import ResetPassword from "./components/ResetPassword.vue";
+import Toolbar from "./components/Toolbar.vue";
+import CreateNote from "./components/CreateNote.vue";
+import TrashNote from "./components/TrashNote.vue";
+
 // import Signout from "./components/SignOut.vue"
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
-    routes:[
-    {path:'/note',name:'dashboard',component:Dashboard},
-    {path:'/register',name:'register',component:Registration},
-    {path:'/toolbar',name:'toolbar',component:Toolbar},
+  routes: [
+    // {path:'/note',name:'dashboard',component:Dashboard},
+    { path: "/register", name: "register", component: Registration },
+    { path: "/trash", name: "trash", component: TrashNote},
+    {
+      path: "/toolbar",
+      name: "toolbar",
+      component: Toolbar,
 
-    {path:'/',name:'login',component:Login},
-        // {path:'/dashboard',name:'dashboard',component:Dashboard},
+      children: [
+        {
+          name: "note",
+          path: "note",
+          component: NoteComponent
+        },
+        {
+          name: "remainders",
+          path: "/remainders",
+          component: NoteComponent
+        },
+        {
+          name: "archive",
+          path: "/archive",
+          component: NoteComponent
+        },
+        {
+          name: "trash",
+          path: "/trash",
+          component: TrashNote
+        }
+      ]
+    },
 
-    {path:'/forgetpassword',name:'forgetpassword',component:ForgetPassword},
-    {path:'/resetpassword/:token',name:'resetpassword',component:ResetPassword},
-    {path:'/createnote',name:'createnote',component:CreateNote},
+    { path: "/", name: "login", component: Login },
+    // {path:'/dashboard',name:'dashboard',component:Dashboard},
+
+    {
+      path: "/forgetpassword",
+      name: "forgetpassword",
+      component: ForgetPassword
+    },
+    {
+      path: "/resetpassword/:token",
+      name: "resetpassword",
+      component: ResetPassword
+    },
+    { path: "/createnote", name: "createnote", component: CreateNote }
     // {path:'/signout',name:'signout',component:Signout}
-
-    
-    
-]})
+  ]
+});
