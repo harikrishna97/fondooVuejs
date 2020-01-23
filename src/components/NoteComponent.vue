@@ -20,9 +20,11 @@ export default {
       AllNotes: []
     };
   },
+  props:["toggleListGrid"],
   components: {
     CreateNote,
-    DisplayNotes
+    DisplayNotes,
+    
   },
   mounted() {
     this.getAllnotes();

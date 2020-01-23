@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="open==false" @click="toggleComponent">
-      <md-card >
+      <md-card class="card">
         <!-- <md-ripple> -->
           <md-card-toolbar class="searchtoolbar">
             <div class="md-toolbar-section-start">
@@ -38,7 +38,7 @@
     </div>
 
     <div v-else>
-      <md-card >
+      <md-card class="card">
         <!-- <md-ripple> -->
           <!-- <md-card-header> -->
           <!-- <div class="md-title">Card with hover effect</div>
@@ -218,6 +218,7 @@ export default {
   margin: 4px;
   display: inline-block;
   vertical-align: top;
+  border-radius: 8px;
 }
 .searchtoolbar {
   display: flex;
@@ -242,5 +243,14 @@ input.md-layout-row {
 div.md-card-content div input {
   width: 453px;
   padding-left: 6px;
+}
+.md-icon-button{
+  opacity: .85;
+  // background-size: 120px 120px;
+  //   height: 120px;
+  //   margin: 20px;
+  //   opacity: .1;
+  //   width: 120px;
+  
 }
 </style>

@@ -52,5 +52,6 @@
   "description": "## Project setup ``` npm install ```",
   "main": "babel.config.js",
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "resolutions": { "eslint-loader": "2.1.2" }
 }

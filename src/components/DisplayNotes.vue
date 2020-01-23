@@ -1,6 +1,7 @@
 <template>
   <div class="elevation-demo">
-    <div v-for="note in AllNotes" :key="note">
+    <div v-for="note in AllNotes" :key="note._id">
+      
       <md-card class="md-elevation-1">
         <!-- <md-ripple> -->
         <md-card-content class="content">
@@ -30,11 +31,23 @@
               <md-tooltip md-direction="bottom">Collaborator</md-tooltip>
             </md-button>
 
-            <md-button class="md-icon-button">
-              <!-- <md-icon>color_lens</md-icon> -->
-              <img src="../assets/colorPalet.svg" alt="colorpalet" />
-              <md-tooltip md-direction="bottom">Change color</md-tooltip>
-            </md-button>
+            <md-menu md-size="medium" md-direction="top-start" md-align-trigger>
+              <!-- <md-button md-menu-trigger>Small</md-button> -->
+              <md-button md-menu-trigger class="md-icon-button">
+                <!-- <md-icon>color_lens</md-icon> -->
+                <img src="../assets/colorPalet.svg" alt="colorPalet" />
+                <md-tooltip md-direction="bottom">Change color</md-tooltip>
+              </md-button>
+
+              <md-menu-content>
+                <div v-for="color in colorPalet" :key="color" class="palet ">
+                 <md-avatar [style.background-color:{{color.colorCode}}]>
+                   
+                    <!-- {{color.colorName}} -->
+                  </md-avatar>
+                </div>
+              </md-menu-content>
+            </md-menu>
 
             <!-- <md-button class="md-icon-button"> -->
             <!-- <md-icon>image</md-icon> -->
@@ -49,7 +62,7 @@
             </md-button>
 
             <md-menu md-size="small" md-align-trigger>
-              <!-- <md-button >Small</md-button> -->
+              <!-- <md-button >Small</md-menu-item> -->
 
               <md-button class="md-icon-button" md-menu-trigger>
                 <md-icon>more_vert</md-icon>
@@ -58,7 +71,11 @@
               </md-button>
 
               <md-menu-content>
-                <md-menu-item ><md-button @click="$emit('remove',note._id)">Delete Note</md-button></md-menu-item>
+                <md-menu-item
+                  ><md-button @click="$emit('remove', note._id)"
+                    >Delete Note</md-button
+                  ></md-menu-item
+                >
                 <md-menu-item><md-button>Add Label </md-button> </md-menu-item>
                 <!-- <md-menu-item><md-button>Add Label </md-button></md-menu-item> -->
               </md-menu-content>
@@ -80,19 +97,68 @@
 
 export default {
   name: "CreateNote",
-  props: ["AllNotes"],
+  props: ["AllNotes","toggleListGrid"],
 
   data: () => ({
     open: false,
     title: "",
     description: "",
-    // colorPlate:[]
+    colorPalet: [
+      {
+        colorName: "White",
+        colorCode: "#ffffff"
+      },
+      {
+        colorName: "Red",
+        colorCode: "#ea2e2e"
+      },
+      {
+        colorName: "Orange",
+        colorCode: "#ffb600"
+      },
+      {
+        colorName: "Yellow",
+        colorCode: "#e1e82e"
+      },
+      {
+        colorName: "Green",
+        colorCode: "#ccff90"
+      },
+      {
+        colorName: "Teal",
+        colorCode: "#a7ffeb"
+      },
+      {
+        colorName: "Blue",
+        colorCode: "#281bd6"
+      },
+      {
+        colorName: "Dark blue",
+        colorCode: "#aecbfa"
+      },
+      {
+        colorName: "Purple",
+        colorCode: "#d7adfb"
+      },
+      {
+        colorName: "Pink",
+        colorCode: "#fdcfe8"
+      },
+      {
+        colorName: "Dark Brown",
+        colorCode: "#e6c9a7"
+      },
+      {
+        colorName: "Gray",
+        colorCode: "#e8eaed"
+      }
+    ]
   }),
 
   components: {},
 
   mounted() {
-    this.$log.info("Hari:" +this.note._id);
+    this.$log.info("Hari:" + this.note._id);
     // this.title = this.AllNotes;
     // this.description = this.AllNotes;
   }
@@ -107,7 +173,31 @@ export default {
   display: inline-block;
   vertical-align: top;
 }
+.elevation-demo {
+  padding: 16px;
+  display: flex;
+  flex-wrap: wrap;
+}
 
+.listView{
+  
+  width: 250px;
+  margin: 4px;
+  //   height:200px;
+  display: inline-block;
+  vertical-align: top;
+
+}
+
+.md-icon-button{
+  // opacity: .1;
+  // background-size: 120px 120px;
+    // height: 120px;
+    // margin: 20px;
+  opacity: .85;
+    // width: 120px;
+  
+}
 .inputClass {
   width: 166px;
   border: none;
@@ -127,18 +217,15 @@ export default {
   margin-top: 4%;
   position: relative;
 }
-
+.md-elevation-1{
+  border-radius: 8px;
+}
 .md-elevation-1 :hover .md-icon-button {
   //.icon-toolbar{
   visibility: visible;
 }
 .md-icon-button {
   visibility: hidden;
-}
-.elevation-demo {
-  padding: 16px;
-  display: flex;
-  flex-wrap: wrap;
 }
 
 .md-content {
@@ -148,6 +235,10 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.palet{
+  display: flex;
+  // justify-items: flex-start
 }
 // style="border:none;outline:none"
 </style>

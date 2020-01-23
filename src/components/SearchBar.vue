@@ -1,6 +1,6 @@
 <template>
-  <div class="search">
-    <!-- <md-card md-with-hover> -->
+  <div class="search ">
+    <!-- <md-card class="search" style="transparent"> -->
 
     <md-autocomplete
     
@@ -8,7 +8,7 @@
       v-model="selectedEmployee"
       :md-options="employees"
       md-layout="box">
-      <label>Search...</label>
+      <label><md-icon>search</md-icon>Search...</label>
     </md-autocomplete>
 
     <!-- <md-autocomplete
@@ -46,8 +46,8 @@
         </div>
       </div>
     </md-toolbar> -->
+        <!-- </md-card> -->
   </div>
-    <!-- </md-card> -->
 </template>
 
 <script>
@@ -77,6 +77,7 @@
 
 <style lang="scss" scoped>
   .search {
-    width: 500px;
+    width: 631px;
+    border-radius: 8px;
   }
 </style>

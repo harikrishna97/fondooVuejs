@@ -18,7 +18,7 @@ export default new Router({
   routes: [
     // {path:'/note',name:'dashboard',component:Dashboard},
     { path: "/register", name: "register", component: Registration },
-    { path: "/trash", name: "trash", component: TrashNote},
+    // { path: "/trash", name: "trash", component: TrashNote},
     {
       path: "/toolbar",
       name: "toolbar",
@@ -26,23 +26,28 @@ export default new Router({
 
       children: [
         {
+          name: "",
+          path: "",
+          component: NoteComponent
+        },
+        {
           name: "note",
           path: "note",
           component: NoteComponent
         },
         {
           name: "remainders",
-          path: "/remainders",
+          path: "remainders",
           component: NoteComponent
         },
         {
           name: "archive",
-          path: "/archive",
+          path: "archive",
           component: NoteComponent
         },
         {
           name: "trash",
-          path: "/trash",
+          path: "trash",
           component: TrashNote
         }
       ]
