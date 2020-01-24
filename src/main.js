@@ -26,13 +26,12 @@ Vue.use(VueLogger, options);
 import 'vue-material/dist/vue-material.min.css'
 
 Vue.use(VueMaterial)
-Vue.use(Vuelidate)
+Vue.use(Vuelidate,MdIcon)
 Vue.use(MdButton)
 Vue.use(MdContent)
 Vue.use(MdTabs)
 Vue.use(MdField)
 Vue.use(MdCard)
-Vue.use(MdIcon)
 Vue.use(MdApp)
 
 

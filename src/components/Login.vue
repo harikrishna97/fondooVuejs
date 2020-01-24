@@ -89,9 +89,7 @@
         <!-- <router-link :to="{name:'resetpassword'}">Reset password?</router-link> -->
       </md-card>
 
-      <md-snackbar :md-active.sync="userSaved"
-        >{{ lastUser }}</md-snackbar
-      >
+      <md-snackbar :md-active.sync="userSaved">{{ lastUser }}</md-snackbar>
       <!-- <md-snackbar :md-active.sync="userSavedF"
         >Invalid Email/Password!</md-snackbar
       > -->
@@ -102,11 +100,7 @@
 <script>
 import { HTTP } from "../services/http-common";
 import { validationMixin } from "vuelidate";
-import {
-  required,
-  email,
-  minLength,
-} from "vuelidate/lib/validators";
+import { required, email, minLength } from "vuelidate/lib/validators";
 
 export default {
   name: "FormValidation",
@@ -129,7 +123,6 @@ export default {
       password: {
         required,
         minLength: minLength(6)
-        
       }
     }
   },
@@ -157,45 +150,41 @@ export default {
 
       HTTP.post("login", loginData)
         .then(response => {
-
-          const token=response.data.token
-          this.$log.info('data:: '+JSON.stringify(response.data))
+          const token = response.data.token;
+          this.$log.info("data:: " + JSON.stringify(response.data));
           localStorage.setItem("token", token);
           localStorage.setItem("firstName", response.data.data.firstName);
           localStorage.setItem("lastName", response.data.data.lastName);
           localStorage.setItem("email", response.data.data.email);
-          this.$log.info('data:: '+localStorage.getItem("firstName"));
+          localStorage.setItem("imageUrl", response.data.data.imageUrl);
 
+          this.$log.info("data:: " + localStorage.getItem("firstName"));
 
-          this.$log.info('Data IS :: '+JSON.stringify(response.data))
+          this.$log.info("Data IS :: " + JSON.stringify(response.data));
           if (response.data.success == true) {
-            this.$log.info('Data IS :: '+response.data.success)
-            
-            this.lastUser = response.data.message
-            this.userSaved = true
-            this.sending = false
-            this.clearForm()
-            window.setTimeout(() => {
-              this.$router.push('toolbar')
-            }, 1000)
+            this.$log.info("Data IS :: " + response.data.success);
 
-          }else{
-            this.lastUser = response.data.message
-            this.userSaved = true
-            this.sending = false
-            this.clearForm()
+            this.lastUser = response.data.message;
+            this.userSaved = true;
+            this.sending = false;
+            this.clearForm();
+            window.setTimeout(() => {
+              this.$router.push("toolbar");
+            }, 1000);
+          } else {
+            this.lastUser = response.data.message;
+            this.userSaved = true;
+            this.sending = false;
+            this.clearForm();
           }
-        
         })
         .catch(error => {
           this.$log.info("Error :: " + error);
-          this.lastUser = 'invalid Email or Password'+error;
+          this.lastUser = "invalid Email or Password" + error;
           this.userSaved = true;
           this.sending = false;
           this.clearForm();
         });
-
-      
     },
     validateUser() {
       this.$v.$touch();
@@ -209,8 +198,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.md-card{
-  margin-top:75px
+.md-card {
+  margin-top: 75px;
 }
 .actions {
   display: flex;

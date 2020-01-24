@@ -63,7 +63,7 @@
           @click="listGrid"
         >
           <img src="../assets/grid.svg" alt="Grid" />
-          <md-tooltip md-direction="bottom">List view</md-tooltip>
+          <md-tooltip md-direction="bottom">Grid view</md-tooltip>
         </md-button>
 
         <md-button class="md-icon-button">
@@ -77,7 +77,7 @@
           <!-- <md-button md-menu-trigger>Align with trigger</md-button> -->
           <md-button class="md-icon-button" md-menu-trigger @click="created">
             <md-avatar>
-              <img src="../assets/profile.jpg" alt="Avatar" />
+              <img :src="imageUrl" alt="Avatar" />
               <md-tooltip md-direction="bottom">Shailesh Borase</md-tooltip>
             </md-avatar>
           </md-button>
@@ -85,7 +85,7 @@
           <md-menu-content>
             <md-button>
               <md-avatar class="md-icon-button">
-                <img src="../assets/profile.jpg" alt="Avatar" />
+                <img :src="imageUrl" alt="Avatar" />
                 <!-- <input type="file"> -->
                 <md-tooltip md-direction="bottom">Shailesh Borase</md-tooltip>
               </md-avatar>
@@ -113,10 +113,10 @@
       </div>
     </md-app-toolbar>
 
-    <md-app-drawer :md-active.sync="menuVisible" md-persistent="null">
+    <md-app-drawer :md-active.sync="menuVisible" md-persistent="default">
       <md-list>
         <md-list-item @click="navigateTo('note')">
-          <md-icon>move_to_inbox</md-icon>
+          <md-icon>emoji_objects</md-icon>
           <span class="md-list-item-text">Notes</span>
           <!-- <router-link to="trash">Notes</router-link> -->
         </md-list-item>
@@ -154,7 +154,7 @@
     </md-app-drawer>
 
     <md-app-content class="appContent">
-      <!-- <note-component></note-component> -->
+      <!-- <NoteComponent></NoteComponent> -->
       <!-- <TrashNote v-else-if="trash==true"></TrashNote> -->
       <router-view></router-view>
     </md-app-content>
@@ -188,7 +188,8 @@ export default {
   }),
 
   components: {
-    SearchBar
+    SearchBar,
+    // NoteComponent
   },
 
   methods: {
@@ -215,8 +216,7 @@ export default {
       this.user = (this.firstName + " " + this.lastName).toUpperCase();
       this.email = localStorage.getItem("email");
       this.$log.info(" sinOut..:: " + localStorage.getItem("firstName"));
-      this.imageUrl =
-        "https://admin4000.s3.amazonaws.com/2020-01-21T09%3A37%3A16.033Z-Krishna.jpeg";
+      this.imageUrl =localStorage.getItem("imageUrl");
     },
     navigateTo(value){
       switch(value){

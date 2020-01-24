@@ -7,7 +7,6 @@ import Registration from "./components/Register.vue";
 import ForgetPassword from "./components/ForgetPassword.vue";
 import ResetPassword from "./components/ResetPassword.vue";
 import Toolbar from "./components/Toolbar.vue";
-import CreateNote from "./components/CreateNote.vue";
 import TrashNote from "./components/TrashNote.vue";
 
 // import Signout from "./components/SignOut.vue"
@@ -18,6 +17,7 @@ export default new Router({
   routes: [
     // {path:'/note',name:'dashboard',component:Dashboard},
     { path: "/register", name: "register", component: Registration },
+    
     // { path: "/trash", name: "trash", component: TrashNote},
     {
       path: "/toolbar",
@@ -66,7 +66,6 @@ export default new Router({
       name: "resetpassword",
       component: ResetPassword
     },
-    { path: "/createnote", name: "createnote", component: CreateNote }
     // {path:'/signout',name:'signout',component:Signout}
   ]
 });

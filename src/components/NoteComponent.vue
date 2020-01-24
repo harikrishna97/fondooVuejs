@@ -4,7 +4,7 @@
       <create-note @updateNote="update"></create-note>
     </div>
     <div>
-      <DisplayNotes v-bind:AllNotes="AllNotes" @remove="deleteNote"/>
+      <DisplayNotes v-bind:AllNotes="AllNotes" @remove="deleteNote" @mountAgain="update"/>
       <!-- //v-bind:AllNotes="AllNotes"></display-notes> -->
     </div>
   </div>
@@ -36,6 +36,8 @@ export default {
       HTTP.get("note", auth)
         .then(response => {
           this.$log.info("response :: " + JSON.stringify(response.data.data));
+                    this.$log.info("get color :: " + JSON.stringify(response.data.data.color));
+
           this.AllNotes = response.data.data;
           this.$log.info("ALLNOTES :: " + JSON.stringify(this.AllNotes));
         })
@@ -63,8 +65,6 @@ export default {
         .catch(err => {
           this.$log.info("error :: " + err);
         });
-         
-
 
     }
   }
