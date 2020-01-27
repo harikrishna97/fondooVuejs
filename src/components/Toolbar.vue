@@ -1,8 +1,8 @@
 <template>
+
   <!-- <div class="page-container"> -->
-  <md-app
-    style="    height: 100vh;
-"
+  <md-app class="MainApp"
+    
     md-mode="fixed"
   >
     <md-app-toolbar class="">
@@ -75,7 +75,7 @@
         <md-menu md-size="medium" md-align-trigger>
           <!-- <md-card> -->
           <!-- <md-button md-menu-trigger>Align with trigger</md-button> -->
-          <md-button class="md-icon-button" md-menu-trigger @click="created">
+          <md-button class="md-icon-button" md-menu-trigger>
             <md-avatar>
               <img :src="imageUrl" alt="Avatar" />
               <md-tooltip md-direction="bottom">Shailesh Borase</md-tooltip>
@@ -113,7 +113,7 @@
       </div>
     </md-app-toolbar>
 
-    <md-app-drawer :md-active.sync="menuVisible" md-persistent="default">
+    <md-app-drawer :md-active.sync="menuVisible" >
       <md-list>
         <md-list-item @click="navigateTo('note')">
           <md-icon>emoji_objects</md-icon>
@@ -134,7 +134,25 @@
           <span class="md-list-item-text">label</span>
         </md-list-item>
 
-        <md-list-item @click="navigateTo('label')">
+  
+
+      <div v-if="showEditLabel == true" >
+      <md-dialog :md-active.sync="showEditLabel" style="width:200px;height:200px;">
+        editLabel
+        <input type="text" placeholder="Create Your Label.." v-model="label">
+        {{label}}
+        <md-divider></md-divider>
+        <button>Done</button>
+        <!-- <EditLabel
+          :note="note"
+          @closeEdit="noteEdit"
+          @updateNote="updateNotes"
+        ></EditLabel> -->
+      </md-dialog>
+    </div>
+
+
+        <md-list-item @click="editLabelToggle()">
           <md-icon>edit</md-icon>
           <span class="md-list-item-text">Edit label</span>
         </md-list-item>
@@ -154,15 +172,10 @@
     </md-app-drawer>
 
     <md-app-content class="appContent">
-      <!-- <NoteComponent></NoteComponent> -->
-      <!-- <TrashNote v-else-if="trash==true"></TrashNote> -->
+      
       <router-view></router-view>
     </md-app-content>
-    <!-- Used Selector of create NoteHere -->
-
-    <!-- <component :is="component" ></component>
-      <button @click="component=create-note1">one</button>
-      <button @click="component=create-note">two</button> -->
+    
   </md-app>
   <!-- </div> -->
 </template>
@@ -184,14 +197,37 @@ export default {
     imageUrl: null,
     trash: false,
     note: true,
-    toggleListGrid: true
+    toggleListGrid: true,
+    showEditLabel:false,
+    label:"",
   }),
 
   components: {
     SearchBar,
     // NoteComponent
   },
-
+// mounted(){
+// this.created();
+// },
+beforeCreate(){
+      // alert("before create");
+    },
+    created(){
+      // alert("created");
+    },
+    beforeMount(){
+      // alert("before Mount");
+    },
+    mounted(){
+      this.created();
+      // alert("mounted");
+    },
+    beforeUpdate(){
+      // alert("before updated");
+    },
+    updated(){
+      alert("updated");
+    },
   methods: {
     toggleMenu() {
       this.menuVisible = !this.menuVisible;
@@ -199,7 +235,6 @@ export default {
     signout() {
       localStorage.clear();
       // localStorage.removeItem('token');
-
       this.$log.info(" sinOut..............:: ");
       this.$router.push("/");
     },
@@ -221,12 +256,15 @@ export default {
     navigateTo(value){
       switch(value){
         case "note":this.$router.push('note');break;
-        case "remainder":this.$router.push('remainders');break;
+        case "remainder":this.$router.push('dashboard/remainders');break;
         case "label":this.$router.push('labels');break;
         case "archive":this.$router.push('archive');break;
         case "trash":this.$router.push('trash');break;
       }
-    }
+    },
+    editLabelToggle(){
+        this.showEditLabel=!this.showEditLabel;
+      }
   }
   // destroyed: function(){
   //   alert('Destroyed');
@@ -315,4 +353,21 @@ form.search-bar.md-layout {
 // width:300px;
 // height:500px;
 // }
+/deep/ .md-overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    /* z-index: 5; */
+    overflow: hidden;
+   background: no-repeat;
+    transition: .35s cubic-bezier(.4,0,.2,1);
+    transition-property: opacity;
+    will-change: opacity;
+}
+.MainApp{
+   height: 100vh;
+
+}
 </style>

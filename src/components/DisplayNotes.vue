@@ -1,7 +1,14 @@
 <template>
   <div class="elevation-demo">
     <div v-for="note in AllNotes" :key="note._id">
-      <md-card class="md-elevation-1" :style="`background-color: ${note.color}`" :key="note._id" >
+      <md-card
+        class="md-elevation-1"
+        :style="`background-color: ${note.color}`"
+        v-bind:note="note._id"
+        
+      >
+        <!-- {{note}} -->
+
         <!-- <md-ripple> -->
         <md-card-content class="content">
           <div class="title">
@@ -22,7 +29,6 @@
               </md-button>
             </div>
           </div>
-
           <div
             class="description"
             @click="
@@ -33,10 +39,23 @@
             {{ note.description }}
           </div>
         </md-card-content>
-        <md-card-toolbar class="searchtoolbar">
-          <div class=" icon-toolbar md-toolbar-section">
+        <div v-on:click="getNoteId(note._id)">
+          <Icons
+            @remainder="addRemainder"
+            @collaborator="addCollaborator"
+            @archive="addArchive"
+            @colorpalet="colorPalet1"
+            @moreVert="moreVert"
+            @deleteNote="deleteNote1"
+          ></Icons>
+        </div>
+
+       
+
+
+       
+        <!-- <div class=" icon-toolbar md-toolbar-section">
             <md-button class="md-icon-button">
-              <!-- <md-icon>add_alert</md-icon> -->
               <img src="../assets/remainder.svg" alt="remainder" />
               <md-tooltip md-direction="bottom">Remind me</md-tooltip>
             </md-button>
@@ -47,49 +66,36 @@
             </md-button>
 
             <md-menu md-size="medium" md-direction="top-start" md-align-trigger>
-              <!-- <md-button md-menu-trigger>Small</md-button> -->
               <md-button md-menu-trigger class="md-icon-button">
-                <!-- <md-icon>color_lens</md-icon> -->
                 <img src="../assets/colorPalet.svg" alt="colorPalet" />
                 <md-tooltip md-direction="bottom">Change color</md-tooltip>
-              </md-button>
+              </md-button> -->
 
-              <md-menu-content>
+        <!-- <md-menu-content>
                 <div class="menuContent" >
                   <md-avatar
                     class="palet"
                     v-for="color in colorPalet"
-                    :key="color"
+                    :key="color.colorName"
                     :style="`background-color: ${color.colorCode}`"
-                    v-on="changeCardColor(color.colorCode,note._id)"
+                    v-on="updateFlag(color.colorCode,note._id)"
 
                   >
-                    <!-- [style.background-color:{{color.colorName}}] -->
-
-                    <!-- {{color.colorName}} -->
+                   
                   </md-avatar>
                 </div>
               </md-menu-content>
-            </md-menu>
+            </md-menu> -->
 
-            <!-- <md-button class="md-icon-button"> -->
-            <!-- <md-icon>image</md-icon> -->
-            <!-- <img src="../assets/addImage.svg" alt="image" />
-              <md-tooltip md-direction="bottom">Add image</md-tooltip>
-            </md-button> -->
-
-            <md-button class="md-icon-button">
-              <!-- <md-icon>archive_none</md-icon> -->
+        <!-- <md-button class="md-icon-button" @click="updateFlag(note_id)">
               <img src="../assets/archive.svg" alt="archive" />
               <md-tooltip md-direction="bottom">Archive</md-tooltip>
             </md-button>
 
             <md-menu md-size="small" md-align-trigger>
-              <!-- <md-button >Small</md-menu-item> -->
 
               <md-button class="md-icon-button" md-menu-trigger>
                 <md-icon>more_vert</md-icon>
-                <!-- <img src="../assets/threedot.svg" alt="more_vert"> -->
                 <md-tooltip md-direction="bottom">more</md-tooltip>
               </md-button>
 
@@ -100,11 +106,10 @@
                   ></md-menu-item
                 >
                 <md-menu-item><md-button>Add Label </md-button> </md-menu-item>
-                <!-- <md-menu-item><md-button>Add Label </md-button></md-menu-item> -->
-              </md-menu-content>
-            </md-menu>
-          </div>
-        </md-card-toolbar>
+              </md-menu-content> -->
+        <!-- </md-menu> -->
+        <!-- </div> -->
+        <!-- </md-toolbar> -->
       </md-card>
     </div>
 
@@ -123,18 +128,21 @@
 <script>
 import EditNote from "./EditNote";
 import { HTTP } from "../services/http-common";
+import Icons from "./Icons";
 
 export default {
   name: "CreateNote",
-  props: ["AllNotes", "toggleListGrid"],
+  props: ["AllNotes"],
 
   data: () => ({
     open: false,
     editnote: false,
     title: "",
     description: "",
-    noteId: "rama",
     cardColor: "",
+    note:"",
+    mdMenuTrigger: false,
+    currentNoteId:"",
     colorPalet: [
       {
         colorName: "White",
@@ -187,47 +195,106 @@ export default {
     ]
   }),
 
-  components: { EditNote },
+  components: { EditNote, Icons },
   methods: {
+    addRemainder(flag) {
+      this.$log.info("addRemainder:flag :: " + flag);
+    },
+    addCollaborator(flag) {
+      this.$log.info("addCollaborator:flag ::  " + flag);
+    },
+    addArchive(flag) {
+      this.$log.info("addArchive:flag :: " + flag);
+    },
+    colorPalet1(flag) {
+      this.$log.info("colorPalet1:flag :: " + flag);
+    },
+    moreVert(flag) {
+      this.$log.info("moreVert:flag :: " + flag);
+      // this.mdMenuTrigger=true;
+      // this.$log.info("moreVert:mdMenuTrigger :: " +this.mdMenuTrigger);
+
+    },
+     deleteNote(flag) {
+      this.$log.info("deleteNote:flag :: " + flag);
+      
+      // this.$log.info("deleteNote:mdMenuTrigger :: " +this.mdMenuTrigger);
+
+    },
+
     noteEdit() {
       this.editnote = !this.editnote;
       this.$log.info("editnote :" + this.editnote);
     },
     shareId(note) {
       this.note = note;
-      this.$log.info("Shareednote :" + this.note);
+      this.$log.info("Shareed note :" + this.note);
     },
     updateNotes(data) {
       this.$log.info("data :: " + data);
       this.$emit("mountAgain", data);
-      
     },
 
-    changeCardColor(color,noteId) {
-      this.$log.info("color selected :: " +color);
+    getNoteId(noteId){
+    this.$log.info("note id at 246: ", noteId)
+    this.currentNoteId=noteId;
+    this.$log.info("note id at 246: ", this.currentNoteId)
+    },
+    updateFlag(flag, noteId) {
+      this.$log.info("color selected :: " + flag);
       // this.cardColor=color;
       // alert("NoteId:: " +noteId)
       // this.mounted();
 
-       const token = localStorage.getItem("token");
+      const token = localStorage.getItem("token");
       const editData = {};
-      editData.flagValue = color;
+      if (flag == "archive") {
+        editData.flagValue = true;
+      } else {
+        editData.flagValue = flag;
+      }
+
       const auth = { headers: { token: token } };
       this.$log.info("noteId .... :: " + noteId);
-      HTTP.put("/flag/" + noteId + "/color", editData, auth)
+
+      HTTP.put("/flag/" + noteId + "/" + flag, editData, auth)
         // /flag/5e15c3822a8f156011ea42e7/trash
         .then(response => {
           this.$log.info(
             "response restore :: " + JSON.stringify(response.data.data)
           );
+          this.$emit("updateNote", "note archived");
           this.trashNotes = response.data.data;
           this.$log.info("restore .... :: " + JSON.stringify(this.trashNotes));
         })
         .catch(err => {
           this.$log.info("error :: " + err);
         });
+    },
+    
+  deleteNote1(flag){
+    if(flag==true){
+     const noteId=this.currentNoteId;
+     this.$log.info(" current note :: " + noteId);
+      const token = localStorage.getItem("token");
+      const auth = { headers: { token: token } };
+      HTTP.delete("note/"+noteId, auth)
+        .then(response => {
+          this.$log.info(" Display:delete Notes: response :: " +response.data.data);
+          // this.AllNotes = response.data.data;
+          // this.$log.info("ALLNOTES :: " + JSON.stringify(this.AllNotes));
+          // this.getAllnotes();
+        })
+        .catch(err => {
+          this.$log.info("Display:DeleteNote :error :: " + err);
+        });
+    }  
 
     }
+
+
+
+
   },
   mounted() {
     this.$log.info("Display :: Note Object " + JSON.stringify(this.noteId));
@@ -250,9 +317,7 @@ export default {
   display: flex;
   flex-wrap: wrap;
 }
-.palet:hover {
-  border: 1px solid black;
-}
+
 
 // flex-wrap: wrap;
 // justify-items: flex-start
@@ -311,10 +376,7 @@ export default {
   align-items: center;
   justify-content: center;
 }
-.menuContent {
-  display: grid;
-  grid-template-columns: auto auto auto;
-}
+
 .md-avatar {
   width: 25px;
   min-width: 25px;

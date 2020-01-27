@@ -4,7 +4,7 @@
       <create-note @updateNote="update"></create-note>
     </div>
     <div>
-      <DisplayNotes v-bind:AllNotes="AllNotes" @remove="deleteNote" @mountAgain="update"/>
+      <DisplayNotes v-bind:AllNotes="AllNotes" @updateNote="update" @mountAgain="update"/>
       <!-- //v-bind:AllNotes="AllNotes"></display-notes> -->
     </div>
   </div>
@@ -52,21 +52,7 @@ export default {
       this.getAllnotes();
     },
 
-    deleteNote(noteId){
-      const token = localStorage.getItem("token");
-      const auth = { headers: { token: token } };
-      HTTP.delete("note/"+noteId, auth)
-        .then(response => {
-          this.$log.info(" deleteNotes response :: " + JSON.stringify(response.data.data));
-          this.AllNotes = response.data.data;
-          this.$log.info("ALLNOTES :: " + JSON.stringify(this.AllNotes));
-          this.getAllnotes();
-        })
-        .catch(err => {
-          this.$log.info("error :: " + err);
-        });
-
-    }
+    
   }
 };
 </script>

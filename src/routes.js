@@ -6,23 +6,26 @@ import Login from "./components/Login.vue";
 import Registration from "./components/Register.vue";
 import ForgetPassword from "./components/ForgetPassword.vue";
 import ResetPassword from "./components/ResetPassword.vue";
-import Toolbar from "./components/Toolbar.vue";
-import TrashNote from "./components/TrashNote.vue";
+import Dashboard from "./components/Toolbar.vue";
+import CreateNote from "./components/CreateNote.vue";
+import DisplayNotes from "./components/DisplayNotes.vue";
 
-// import Signout from "./components/SignOut.vue"
+import Icons from "./components/Icons.vue"
 
 Vue.use(Router);
 
 export default new Router({
   routes: [
-    // {path:'/note',name:'dashboard',component:Dashboard},
+    {path:'/note',name:'note',component:NoteComponent},
     { path: "/register", name: "register", component: Registration },
     
-    // { path: "/trash", name: "trash", component: TrashNote},
+    { path: "/icon", name: "icon", component: Icons},
+    { path: "/createnote", name: "createnote", component: CreateNote},
+    { path: "/displaynotes", name: "displaynotes", component: DisplayNotes},
     {
-      path: "/toolbar",
-      name: "toolbar",
-      component: Toolbar,
+      path: "/dashboard",
+      name: "dashboard",
+      component: Dashboard,
 
       children: [
         {
@@ -45,11 +48,11 @@ export default new Router({
           path: "archive",
           component: NoteComponent
         },
-        {
-          name: "trash",
-          path: "trash",
-          component: TrashNote
-        }
+        // {
+        //   name: "trash",
+        //   path: "trash",
+        //   component: TrashNote
+        // }
       ]
     },
 

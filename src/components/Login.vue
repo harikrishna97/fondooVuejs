@@ -169,7 +169,7 @@ export default {
             this.sending = false;
             this.clearForm();
             window.setTimeout(() => {
-              this.$router.push("toolbar");
+              this.$router.push("dashboard");
             }, 1000);
           } else {
             this.lastUser = response.data.message;

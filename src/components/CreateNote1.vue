@@ -3,7 +3,7 @@
     <div @click="changeCreate">
       <md-card md-with-hover>
         <md-ripple>
-          <md-card-toolbar class="searchtoolbar">
+          <md-toolbar class="searchtoolbar">
             <div class="md-toolbar-section-start">
               <md-button>
                 <div class="takeanote">
@@ -19,7 +19,7 @@
             <div class="md-toolbar-section-end">
               <md-button>close</md-button>
             </div>
-          </md-card-toolbar>
+          </md-toolbar>
         </md-ripple>
       </md-card>
     </div>
