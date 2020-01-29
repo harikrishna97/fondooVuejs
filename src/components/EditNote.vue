@@ -80,21 +80,21 @@
             <md-tooltip md-direction="bottom">more</md-tooltip>
           </md-button>
 
-          <md-button class="md-icon-button">
-            <!-- <md-icon>archive_none</md-icon> -->
-            <img src="../assets/undo.svg" alt="undo" />
+          <!-- <md-button class="md-icon-button">
+            <md-icon>archive_none</md-icon> -->
+            <!-- <img src="../assets/undo.svg" alt="undo" />
             <md-tooltip md-direction="bottom">Undo</md-tooltip>
           </md-button>
 
           <md-button class="md-icon-button">
-            <!-- <md-icon>archive_none</md-icon> -->
-            <img
+            <md-icon>archive_none</md-icon> -->
+            <!-- <img
               src="../assets/undo.svg"
               style="transform: scaleX(-1);"
               alt="redo"
             />
             <md-tooltip md-direction="bottom">Redo</md-tooltip>
-          </md-button>
+          </md-button> --> 
         </div>
         <div class="md-toolbar-section-end">
           <md-button @click="toggleComponent">close</md-button>

@@ -5,7 +5,6 @@
         class="md-elevation-1"
         :style="`background-color: ${note.color}`"
         v-bind:note="note._id"
-        
       >
         <!-- {{note}} -->
 
@@ -38,6 +37,14 @@
           >
             {{ note.description }}
           </div>
+          <div v-if="note.label!==null">
+            <md-chip class="" md-deletable>label1</md-chip>
+            <!-- <md-chips v-model="messages" md-placeholder></md-chips> -->
+          </div>
+          <div v-if="note.remainder!==null||note.remainder!==''">
+            <md-chip class="" md-deletable>{{note.remainder}}</md-chip>
+            <!-- <md-chips v-model="messages" md-placeholder></md-chips> -->
+          </div>
         </md-card-content>
         <div v-on:click="getNoteId(note._id)">
           <Icons
@@ -47,13 +54,10 @@
             @colorpalet="colorPalet1"
             @moreVert="moreVert"
             @deleteNote="deleteNote1"
+            @shareColor="shareColor"
           ></Icons>
         </div>
 
-       
-
-
-       
         <!-- <div class=" icon-toolbar md-toolbar-section">
             <md-button class="md-icon-button">
               <img src="../assets/remainder.svg" alt="remainder" />
@@ -129,10 +133,11 @@
 import EditNote from "./EditNote";
 import { HTTP } from "../services/http-common";
 import Icons from "./Icons";
+import { messageService } from "../services/messageService";
 
 export default {
   name: "CreateNote",
-  props: ["AllNotes"],
+  props: ["AllNotes","remaindersLabel"],
 
   data: () => ({
     open: false,
@@ -140,59 +145,20 @@ export default {
     title: "",
     description: "",
     cardColor: "",
-    note:"",
+    note: "",
     mdMenuTrigger: false,
-    currentNoteId:"",
-    colorPalet: [
-      {
-        colorName: "White",
-        colorCode: "#ffffff"
-      },
-      {
-        colorName: "Red",
-        colorCode: "#ea2e2e"
-      },
-      {
-        colorName: "Orange",
-        colorCode: "#ffb600"
-      },
-      {
-        colorName: "Yellow",
-        colorCode: "#e1e82e"
-      },
-      {
-        colorName: "Green",
-        colorCode: "#ccff90"
-      },
-      {
-        colorName: "Teal",
-        colorCode: "#a7ffeb"
-      },
-      {
-        colorName: "Blue",
-        colorCode: "#281bd6"
-      },
-      {
-        colorName: "Dark blue",
-        colorCode: "#aecbfa"
-      },
-      {
-        colorName: "Purple",
-        colorCode: "#d7adfb"
-      },
-      {
-        colorName: "Pink",
-        colorCode: "#fdcfe8"
-      },
-      {
-        colorName: "Dark Brown",
-        colorCode: "#e6c9a7"
-      },
-      {
-        colorName: "Gray",
-        colorCode: "#e8eaed"
-      }
-    ]
+    currentNoteId: "",
+    
+    colorCode: "",
+    messages: ["sasa", "sasa"],
+    listView: {
+      "background-color": "green",
+      width: "300px",
+      margin: "4px",
+      //   height:200px;
+      display: "row",
+      "vertical-align": "top"
+    }
   }),
 
   components: { EditNote, Icons },
@@ -205,21 +171,27 @@ export default {
     },
     addArchive(flag) {
       this.$log.info("addArchive:flag :: " + flag);
+      this.updateFlag("archive", this.currentNoteId);
     },
     colorPalet1(flag) {
       this.$log.info("colorPalet1:flag :: " + flag);
     },
+    shareColor(code) {
+      this.colorCode = code;
+      this.$log.info("getColor:colorcode :: " + code);
+      this.$log.info("getColor:colorcode :: " + this.colorCode);
+      this.updateFlag("color", this.currentNoteId);
+    },
+
     moreVert(flag) {
       this.$log.info("moreVert:flag :: " + flag);
       // this.mdMenuTrigger=true;
       // this.$log.info("moreVert:mdMenuTrigger :: " +this.mdMenuTrigger);
-
     },
-     deleteNote(flag) {
+    deleteNote(flag) {
       this.$log.info("deleteNote:flag :: " + flag);
-      
-      // this.$log.info("deleteNote:mdMenuTrigger :: " +this.mdMenuTrigger);
 
+      // this.$log.info("deleteNote:mdMenuTrigger :: " +this.mdMenuTrigger);
     },
 
     noteEdit() {
@@ -232,16 +204,18 @@ export default {
     },
     updateNotes(data) {
       this.$log.info("data :: " + data);
-      this.$emit("mountAgain", data);
+      this.$emit("updateNote", data);
     },
 
-    getNoteId(noteId){
-    this.$log.info("note id at 246: ", noteId)
-    this.currentNoteId=noteId;
-    this.$log.info("note id at 246: ", this.currentNoteId)
+    getNoteId(noteId) {
+      this.$log.info("note id at 246: ", noteId);
+      this.currentNoteId = noteId;
+      this.$log.info("note id at 246: ", this.currentNoteId);
     },
     updateFlag(flag, noteId) {
       this.$log.info("color selected :: " + flag);
+      this.$log.info("color selected :: " + noteId);
+
       // this.cardColor=color;
       // alert("NoteId:: " +noteId)
       // this.mounted();
@@ -250,8 +224,8 @@ export default {
       const editData = {};
       if (flag == "archive") {
         editData.flagValue = true;
-      } else {
-        editData.flagValue = flag;
+      } else if (flag == "color") {
+        editData.flagValue = this.colorCode;
       }
 
       const auth = { headers: { token: token } };
@@ -271,35 +245,51 @@ export default {
           this.$log.info("error :: " + err);
         });
     },
-    
-  deleteNote1(flag){
-    if(flag==true){
-     const noteId=this.currentNoteId;
-     this.$log.info(" current note :: " + noteId);
-      const token = localStorage.getItem("token");
-      const auth = { headers: { token: token } };
-      HTTP.delete("note/"+noteId, auth)
-        .then(response => {
-          this.$log.info(" Display:delete Notes: response :: " +response.data.data);
-          // this.AllNotes = response.data.data;
-          // this.$log.info("ALLNOTES :: " + JSON.stringify(this.AllNotes));
-          // this.getAllnotes();
-        })
-        .catch(err => {
-          this.$log.info("Display:DeleteNote :error :: " + err);
-        });
-    }  
 
+    deleteNote1(flag) {
+      if (flag == true) {
+        const noteId = this.currentNoteId;
+        this.$log.info(" current note :: " + noteId);
+        const token = localStorage.getItem("token");
+        const auth = { headers: { token: token } };
+        HTTP.delete("note/" + noteId, auth)
+          .then(response => {
+            this.$log.info(
+              " Display:delete Notes: response :: " + response.data.data
+            );
+            this.$emit("updateNote", "after delete");
+            // this.AllNotes = response.data.data;
+            // this.$log.info("ALLNOTES :: " + JSON.stringify(this.AllNotes));
+            // this.getAllnotes();
+          })
+          .catch(err => {
+            this.$log.info("Display:DeleteNote :error :: " + err);
+          });
+      }
     }
-
-
-
-
   },
   mounted() {
     this.$log.info("Display :: Note Object " + JSON.stringify(this.noteId));
     // this.title = this.AllNotes;
     // this.description = this.AllNotes;
+  },
+  created() {
+    // subscribe to home component messages
+    this.subscription = messageService.getMessage().subscribe(message => {
+      if (message) {
+        // add message to local state if not empty
+        this.messages.push(message);
+        this.$log.info("RXJS message :: " + JSON.stringify(this.messages));
+      } else {
+        // clear messages when empty message received
+        this.messages = [];
+        // this.$log.info("RXJS message :: " + JSON.stringify(this.messages));
+      }
+    });
+  },
+  beforeDestroy() {
+    // unsubscribe to ensure no memory leaks
+    this.subscription.unsubscribe();
   }
 };
 </script>
@@ -317,7 +307,6 @@ export default {
   display: flex;
   flex-wrap: wrap;
 }
-
 
 // flex-wrap: wrap;
 // justify-items: flex-start

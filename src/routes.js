@@ -2,6 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 
 import NoteComponent from "./components/NoteComponent.vue";
+import TrashNote from "./components/TrashNote.vue";
 import Login from "./components/Login.vue";
 import Registration from "./components/Register.vue";
 import ForgetPassword from "./components/ForgetPassword.vue";
@@ -9,6 +10,10 @@ import ResetPassword from "./components/ResetPassword.vue";
 import Dashboard from "./components/Toolbar.vue";
 import CreateNote from "./components/CreateNote.vue";
 import DisplayNotes from "./components/DisplayNotes.vue";
+import ArchiveNotes from "./components/ArchiveNotes.vue";
+import Remainders from "./components/Remainders.vue";
+import ProfileUpload from "./components/ProfileUpload.vue";
+
 
 import Icons from "./components/Icons.vue"
 
@@ -16,9 +21,10 @@ Vue.use(Router);
 
 export default new Router({
   routes: [
-    {path:'/note',name:'note',component:NoteComponent},
+    // {path:'/note',name:'note',component:NoteComponent},
     { path: "/register", name: "register", component: Registration },
-    
+    { path: "/image", name: "image", component: ProfileUpload },
+
     { path: "/icon", name: "icon", component: Icons},
     { path: "/createnote", name: "createnote", component: CreateNote},
     { path: "/displaynotes", name: "displaynotes", component: DisplayNotes},
@@ -33,26 +39,27 @@ export default new Router({
           path: "",
           component: NoteComponent
         },
+        // {path:'', redirectTo:'/dashboard', pathMatch:'full'},
         {
           name: "note",
-          path: "note",
+          path: "/note",
           component: NoteComponent
         },
         {
           name: "remainders",
-          path: "remainders",
-          component: NoteComponent
+          path: "/remainders",
+          component: Remainders
         },
         {
           name: "archive",
-          path: "archive",
-          component: NoteComponent
+          path: "/archive",
+          component: ArchiveNotes
         },
-        // {
-        //   name: "trash",
-        //   path: "trash",
-        //   component: TrashNote
-        // }
+        {
+          name: "trash",
+          path: "/trash",
+          component: TrashNote
+        }
       ]
     },
 

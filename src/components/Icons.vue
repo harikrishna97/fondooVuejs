@@ -28,18 +28,22 @@
       </md-button>
 
       <md-menu-content>
-        <div class="menuContent">
-          <md-avatar
+        <div class="menuContent" >
+          <div
             class="palet"
             v-for="color in colorPalet"
+            v-on:click="shareColor(color.colorCode)"
             :key="color.colorName"
             :style="`background-color: ${color.colorCode}`"
+            
           >
+                      <!-- <div@click="shareColor(color.colorCode)"/> -->
+
           <!-- v-on="updateFlag(color.colorCode,note._id)" -->
 
             
 
-          </md-avatar>
+          </div>
         </div>
       </md-menu-content>
     </md-menu>
@@ -90,6 +94,7 @@ export default {
   // }),
 
   data: () => ({
+
   colorPalet: [
         {
           colorName: "White",
@@ -97,7 +102,7 @@ export default {
         },
         {
           colorName: "Red",
-          colorCode: "#ea2e2e"
+          colorCode: "#ef8b82"
         },
         {
           colorName: "Orange",
@@ -140,8 +145,15 @@ export default {
           colorCode: "#e8eaed"
         }
       ]
-
   }),
+
+
+ updated(){
+      // alert("updated");
+    this.$log.info("shareColor :"+this.colorCode);
+
+    },
+
 
   methods: {
     remainder() {
@@ -164,7 +176,12 @@ export default {
     },
     deleteNote() {
       this.$emit("deleteNote", true);
-    }
+    },
+    shareColor(colorCode){
+      this.$emit("shareColor",colorCode);
+      this.$log.info("shareColor :"+colorCode);
+      }
+
   }
 };
 </script>
@@ -180,7 +197,7 @@ export default {
   display: grid;
   grid-template-columns: auto auto auto;
 }
-.md-avatar {
+.palet{
   width: 25px;
   min-width: 25px;
   height: 25px;

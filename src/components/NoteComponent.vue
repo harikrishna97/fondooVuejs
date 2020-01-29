@@ -4,7 +4,7 @@
       <create-note @updateNote="update"></create-note>
     </div>
     <div>
-      <DisplayNotes v-bind:AllNotes="AllNotes" @updateNote="update" @mountAgain="update"/>
+      <DisplayNotes v-bind:AllNotes="AllNotes" @updateNote="update" />
       <!-- //v-bind:AllNotes="AllNotes"></display-notes> -->
     </div>
   </div>
