@@ -1,13 +1,13 @@
 <template>
   <div>
-    <!-- <md-card class="card"> -->
+    <md-card class="card" :style="`background-color: ${note.color}`">
       <!-- <md-ripple> -->
       <!-- <md-card-header> -->
       <!-- <div class="md-title">Card with hover effect</div>
           <div class="md-subhead">It also have a ripple</div> -->
       <!-- </md-card-header> -->
 <!-- {{note}} -->
-      <md-card-content>
+      <md-card-content >
         <form>
           <div class=" md-layout">
             <div>
@@ -18,6 +18,7 @@
                 v-model="title"
                 placeholder="Title"
                 style="border:none;outline:none"
+                :style="`background-color: ${note.color}`"
               />
             </div>
 
@@ -35,11 +36,12 @@
               v-model="description"
               placeholder="Take a note..."
               style="border:none;outline:none"
+              :style="`background-color: ${note.color}`"
             />
           </div>
         </form>
       </md-card-content>
-      <md-card-toolbar class="searchtoolbar">
+      <md-card-toolbar class="searchtoolbar" >
         <div class="md-toolbar-section">
           <md-button class="md-icon-button">
             <!-- <md-icon>add_alert</md-icon> -->
@@ -100,7 +102,7 @@
           <md-button @click="toggleComponent">close</md-button>
         </div>
       </md-card-toolbar>
-    <!-- </md-card> -->
+    </md-card>
   </div>
 </template>
 
@@ -112,7 +114,8 @@ export default {
 
   data: () => ({
     title: null,
-    description: null
+    description: null,
+    noteColor:"",
   }),
   components: {},
   props:["note"],
@@ -120,8 +123,7 @@ export default {
       this.$log.info("Shared note from display :: " +this.note);
       this.title = this.note.title;
       this.description = this.note.description;
-
-
+      this.noteColor=this.note.color
   },
   methods: {
     toggleComponent() {

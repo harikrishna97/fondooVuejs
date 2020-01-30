@@ -16,7 +16,9 @@
     </div>
     <div v-else class="elevation-demo">
       <div v-for="note in trashNotes" :key="note._id">
-        <md-card class="md-elevation-1">
+        <md-card class="md-elevation-1"
+        :style="`background-color: ${note.color}`"
+        >
           <!-- <md-ripple> -->
           <md-card-content class="content">
             <div class="title">

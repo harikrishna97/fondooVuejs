@@ -2,7 +2,7 @@
   <div>
     <!-- @createNote1 -->
     <div v-if="open == false" @click="toggleComponent" class="create1">
-      <md-card class="card1">
+      <md-card class="card1" >
         <div class="inputDiv">
           <input type="text" placeholder="  Take a note..." class="input1" />
         </div>
@@ -26,7 +26,7 @@
 
     <!-- CreateNote2 -->
     <div v-else>
-      <md-card class="card2">
+      <md-card class="card2" :style="`background-color: ${noteColor}`">
         <md-card-content>
           <div class=" md-layout">
             <div>
@@ -37,6 +37,7 @@
                 v-model="title"
                 placeholder="Title"
                 style="border:none;outline:none"
+                :style="`background-color: ${noteColor}`"
               />
             </div>
 
@@ -54,6 +55,7 @@
               v-model="description"
               placeholder="Take a note..."
               style="border:none;outline:none"
+              :style="`background-color: ${noteColor}`"
             />
           </div>
         </md-card-content>
@@ -67,6 +69,7 @@
               @archive="addArchive"
               @colorpalet="colorPalet"
               @moreVert="moreVert"
+              @shareColor="shareColor"
             ></Icons>
           </div>
 
@@ -146,7 +149,8 @@ export default {
     open: false,
 
     title: null,
-    description: null
+    description: null,
+    noteColor:"",
   }),
   components: { Icons },
 
@@ -154,7 +158,13 @@ export default {
     addRemainder(flag) {this.$log.info("addRemainder:flag :: " +flag);},
     addCollaborator(flag) {this.$log.info("addCollaborator:flag ::  " +flag);},
     addArchive(flag) {this.$log.info("addArchive:flag :: " +flag);},
-    colorPalet(flag) {this.$log.info("colorPalet:flag :: " +flag);},
+    colorPalet(flag) {
+      this.$log.info("colorPalet:flag :: " +flag)
+      // this.noteColor=color;
+      },
+      shareColor(color){
+this.noteColor=color;
+      },
     moreVert(flag) {this.$log.info("moreVert:flag :: " +flag);},
 
     /**
@@ -183,6 +193,7 @@ export default {
         const noteData = {};
         noteData.title = this.title;
         noteData.description = this.description;
+        noteData.color=this.noteColor;
         this.$log.info("NoteData :: " + JSON.stringify(noteData));
         const token = localStorage.getItem("token");
         this.$log.info("token :: " + typeof token);

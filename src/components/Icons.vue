@@ -28,21 +28,17 @@
       </md-button>
 
       <md-menu-content>
-        <div class="menuContent" >
+        <div class="menuContent">
           <div
             class="palet"
             v-for="color in colorPalet"
             v-on:click="shareColor(color.colorCode)"
             :key="color.colorName"
             :style="`background-color: ${color.colorCode}`"
-            
           >
-                      <!-- <div@click="shareColor(color.colorCode)"/> -->
+            <!-- <div@click="shareColor(color.colorCode)"/> -->
 
-          <!-- v-on="updateFlag(color.colorCode,note._id)" -->
-
-            
-
+            <!-- v-on="updateFlag(color.colorCode,note._id)" -->
           </div>
         </div>
       </md-menu-content>
@@ -94,66 +90,63 @@ export default {
   // }),
 
   data: () => ({
-
-  colorPalet: [
-        {
-          colorName: "White",
-          colorCode: "#ffffff"
-        },
-        {
-          colorName: "Red",
-          colorCode: "#ef8b82"
-        },
-        {
-          colorName: "Orange",
-          colorCode: "#ffb600"
-        },
-        {
-          colorName: "Yellow",
-          colorCode: "#e1e82e"
-        },
-        {
-          colorName: "Green",
-          colorCode: "#ccff90"
-        },
-        {
-          colorName: "Teal",
-          colorCode: "#a7ffeb"
-        },
-        {
-          colorName: "Blue",
-          colorCode: "#281bd6"
-        },
-        {
-          colorName: "Dark blue",
-          colorCode: "#aecbfa"
-        },
-        {
-          colorName: "Purple",
-          colorCode: "#d7adfb"
-        },
-        {
-          colorName: "Pink",
-          colorCode: "#fdcfe8"
-        },
-        {
-          colorName: "Dark Brown",
-          colorCode: "#e6c9a7"
-        },
-        {
-          colorName: "Gray",
-          colorCode: "#e8eaed"
-        }
-      ]
+    color: "",
+    colorPalet: [
+      {
+        colorName: "White",
+        colorCode: "#ffffff"
+      },
+      {
+        colorName: "Red",
+        colorCode: "#ef8b82"
+      },
+      {
+        colorName: "Orange",
+        colorCode: "#ffb600"
+      },
+      {
+        colorName: "Yellow",
+        colorCode: "#e1e82e"
+      },
+      {
+        colorName: "Green",
+        colorCode: "#ccff90"
+      },
+      {
+        colorName: "Teal",
+        colorCode: "#a7ffeb"
+      },
+      {
+        colorName: "Blue",
+        colorCode: "#281bd6"
+      },
+      {
+        colorName: "Dark blue",
+        colorCode: "#aecbfa"
+      },
+      {
+        colorName: "Purple",
+        colorCode: "#d7adfb"
+      },
+      {
+        colorName: "Pink",
+        colorCode: "#fdcfe8"
+      },
+      {
+        colorName: "Dark Brown",
+        colorCode: "#e6c9a7"
+      },
+      {
+        colorName: "Gray",
+        colorCode: "#e8eaed"
+      }
+    ]
   }),
 
-
- updated(){
-      // alert("updated");
-    this.$log.info("shareColor :"+this.colorCode);
-
-    },
-
+  updated() {
+    // alert("updated");
+    this.$log.info("shareColor :" + this.colorCode);
+  },
 
   methods: {
     remainder() {
@@ -177,11 +170,11 @@ export default {
     deleteNote() {
       this.$emit("deleteNote", true);
     },
-    shareColor(colorCode){
-      this.$emit("shareColor",colorCode);
-      this.$log.info("shareColor :"+colorCode);
-      }
-
+    shareColor(colorCode) {
+      this.$emit("shareColor", colorCode);
+      this.color = colorCode;
+      this.$log.info("shareColor :" + colorCode);
+    }
   }
 };
 </script>
@@ -197,7 +190,7 @@ export default {
   display: grid;
   grid-template-columns: auto auto auto;
 }
-.palet{
+.palet {
   width: 25px;
   min-width: 25px;
   height: 25px;

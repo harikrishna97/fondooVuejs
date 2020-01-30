@@ -1,6 +1,6 @@
 <template>
   <div>
-    <md-dialog :md-active.sync="showDialog" md-click-outside-to-close="true">
+    <md-dialog :md-active.sync="showDialog" md-clicked-outside>
       <md-dialog-title>Select Profile Photo</md-dialog-title>
 
       <md-tabs md-dynamic-height>
@@ -60,6 +60,7 @@ export default {
       // this.createImage(files[0]);
     },
     setProfile(){
+      this.showDialog=!this.showDialog;
       var formData = new FormData();
       formData.append("image", this.selectedFile, this.selectedFile.name);
       const token = localStorage.getItem("token");

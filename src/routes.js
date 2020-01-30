@@ -30,34 +30,28 @@ export default new Router({
     { path: "/displaynotes", name: "displaynotes", component: DisplayNotes},
     {
       path: "/dashboard",
-      name: "dashboard",
       component: Dashboard,
 
       children: [
         {
-          name: "",
           path: "",
           component: NoteComponent
         },
         // {path:'', redirectTo:'/dashboard', pathMatch:'full'},
         {
-          name: "note",
-          path: "/note",
+          path: "note",
           component: NoteComponent
         },
         {
-          name: "remainders",
-          path: "/remainders",
+          path: "remainders",
           component: Remainders
         },
         {
-          name: "archive",
-          path: "/archive",
+          path: "archive",
           component: ArchiveNotes
         },
         {
-          name: "trash",
-          path: "/trash",
+          path: "trash",
           component: TrashNote
         }
       ]

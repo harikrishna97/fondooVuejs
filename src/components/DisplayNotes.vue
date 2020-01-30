@@ -1,5 +1,5 @@
 <template>
-  <div class="elevation-demo">
+  <div  class="elevation-demo" :class="[listView==true? 'gridViewClass' : 'listViewClass']">
     <div v-for="note in AllNotes" :key="note._id">
       <md-card
         class="md-elevation-1"
@@ -37,11 +37,11 @@
           >
             {{ note.description }}
           </div>
-          <div v-if="note.label!==null">
+          <div v-if="note.label!=null">
             <md-chip class="" md-deletable>label1</md-chip>
             <!-- <md-chips v-model="messages" md-placeholder></md-chips> -->
           </div>
-          <div v-if="note.remainder!==null||note.remainder!==''">
+          <div v-if="note.remainder!=null">
             <md-chip class="" md-deletable>{{note.remainder}}</md-chip>
             <!-- <md-chips v-model="messages" md-placeholder></md-chips> -->
           </div>
@@ -140,6 +140,7 @@ export default {
   props: ["AllNotes","remaindersLabel"],
 
   data: () => ({
+    // listView:true,
     open: false,
     editnote: false,
     title: "",
@@ -150,18 +151,18 @@ export default {
     currentNoteId: "",
     
     colorCode: "",
-    messages: ["sasa", "sasa"],
-    listView: {
-      "background-color": "green",
-      width: "300px",
-      margin: "4px",
-      //   height:200px;
-      display: "row",
-      "vertical-align": "top"
-    }
+    messages: [],
+  // gridViewClass:{
+  //   padding: "16px",
+  // display: "flex",
+  // "flex-wrap": "wrap",
+  // },
+  // listViewClass:{},
+    
   }),
 
   components: { EditNote, Icons },
+  updated(){},
   methods: {
     addRemainder(flag) {
       this.$log.info("addRemainder:flag :: " + flag);
@@ -174,7 +175,7 @@ export default {
       this.updateFlag("archive", this.currentNoteId);
     },
     colorPalet1(flag) {
-      this.$log.info("colorPalet1:flag :: " + flag);
+      this.$log.info("display colorPalet1:flag :: " + flag);
     },
     shareColor(code) {
       this.colorCode = code;
@@ -279,7 +280,7 @@ export default {
       if (message) {
         // add message to local state if not empty
         this.messages.push(message);
-        this.$log.info("RXJS message :: " + JSON.stringify(this.messages));
+        this.$log.info("DisplayComponent:RXJS message from toolbar:: " + JSON.stringify(this.messages));
       } else {
         // clear messages when empty message received
         this.messages = [];

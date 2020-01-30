@@ -72,7 +72,7 @@
         </md-button>
 
         <!-- <div> -->
-        <md-menu md-size="medium" md-align-trigger>
+        <md-menu md-size="medium" md-align-trigger @click.stop="stopTheEvent">
           <!-- <md-card> -->
           <!-- <md-button md-menu-trigger>Align with trigger</md-button> -->
           <md-button class="md-icon-button" md-menu-trigger>
@@ -89,12 +89,15 @@
             <!-- <ProfileUpload @update="mounted"></ProfileUpload> -->
             <!-- </div> -->
             <div class="profile">
-              <!-- <md-badge class="" md-position="bottom" md-content> -->
+              <!-- <md-badge class="" md-position="bottom" md-content="<md-icon>menu</md-icon>"> -->
               <div class="avatar md-icon-button" @click="profileUpload1()">
                 <img :src="imageUrl" alt="Avatar" />
                 <!-- <input type="file"> -->
                 <md-tooltip md-direction="bottom">Shailesh Borase</md-tooltip>
               </div>
+              <!-- <md-button class="md-fab md-primary md-fab-bottom-right badge">
+                <md-icon>camera_alt</md-icon>
+              </md-button> -->
               <!-- </md-badge> -->
             </div>
 
@@ -124,12 +127,10 @@
             <!-- <ProfileUpload @update="mounted"></ProfileUpload></div> -->
             <!-- </md-dailog-content> -->
             <!-- </md-dialog> -->
-
-            <div v-if="profileUpload == true">
-              <ProfileUpload></ProfileUpload>
-            </div>
           </md-menu-content>
-
+          <div v-if="profileUpload == true">
+            <ProfileUpload @update="update"></ProfileUpload>
+          </div>
           <!-- </md-card> -->
         </md-menu>
         <!-- </div> -->
@@ -141,6 +142,8 @@
         <md-list-item @click="navigateTo('note')">
           <md-icon>emoji_objects</md-icon>
           <span class="md-list-item-text">Notes</span>
+          <!-- <router-link :to="{ path: '/dashboard/note' } " replace>Notes</router-link> -->
+
           <!-- <router-link to="trash">Notes</router-link> -->
         </md-list-item>
         <!-- <router-link to="/toolbar/trash">Home</router-link> -->
@@ -148,12 +151,13 @@
         <md-list-item @click="navigateTo('remainder')">
           <md-icon>notifications_none</md-icon>
           <span class="md-list-item-text">Remainders</span>
+          <!-- <router-link :to="{ path: '/dashboard/remainders' } " replace>Remainders</router-link> -->
         </md-list-item>
 
         <md-divider></md-divider>
 
         <div v-for="label in AllLabels" :key="label._id">
-          <md-list-item @click="navigateTo('label')">
+          <md-list-item>
             <md-icon>label</md-icon>
             <span class="md-list-item-text">{{ label.label }}</span>
           </md-list-item>
@@ -285,6 +289,12 @@ export default {
     this.createLabel();
   },
   methods: {
+    update(e) {
+      this.$log.info(" Profile changed...:: ",e);
+      this.created();
+      this.getAllLabels();
+    },
+    stopTheEvent: event => event.stopPropagation(),
     sendMessage() {
       // send message to subscribers via observable subject
       messageService.sendMessage("Message from toolbar listview");
@@ -316,19 +326,20 @@ export default {
     navigateTo(value) {
       switch (value) {
         case "note":
-          this.$router.push("dashboard");
+          this.$router.replace("/dashboard/note");
+
           break;
         case "remainder":
-          this.$router.push("remainders");
+          this.$router.replace("/dashboard/remainders");
           break;
         case "label":
-          this.$router.push("labels");
+          this.$router.replace("/dashboard/label");
           break;
         case "archive":
-          this.$router.push("archive");
+          this.$router.replace("/dashboard/archive");
           break;
         case "trash":
-          this.$router.push("trash");
+          this.$router.replace("/dashboard/trash");
           break;
       }
     },
@@ -391,6 +402,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.badge:after {
+  content: "";
+  position: absolute;
+  background: rgba(255, 0, 0, 0.85);
+  height: 1rem;
+  top: 1rem;
+  right: 1rem;
+  width: 1rem;
+  text-align: center;
+  line-height: 2rem;
+  font-size: 1rem;
+  border-radius: 50%;
+  color: white;
+}
 .profile {
   display: flex;
   justify-content: center;
