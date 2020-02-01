@@ -22,20 +22,6 @@
               <md-tooltip md-direction="bottom">Search</md-tooltip>
             </md-button> -->
           <search-bar></search-bar>
-
-          <!-- <input :@click="searchbar"
-                type="search"
-                id="search"
-                required
-                style="outline:none"
-               autocomplete="off" 
-                placeholder="Search..."
-                
-              /> -->
-
-          <!-- <md-button class="md-icon-button md-layout-item">
-            <md-icon>close</md-icon>
-          </md-button>   -->
         </form>
       </div>
 
@@ -48,18 +34,15 @@
 
         <md-button
           class="md-icon-button"
-          v-if="toggleListGrid"
-          @click="
-            listGrid();
-            sendMessage();
-          "
+          v-if="toggleListGrid == false"
+          @click="listGrid()"
         >
           <img src="../assets/list_view_24px.svg" alt="List" />
           <md-tooltip md-direction="bottom">List view</md-tooltip>
         </md-button>
         <md-button
           class="md-icon-button"
-          v-if="toggleListGrid == false"
+          v-if="toggleListGrid == true"
           @click="listGrid"
         >
           <img src="../assets/grid.svg" alt="Grid" />
@@ -166,7 +149,7 @@
         <div v-if="showEditLabel == true">
           <md-dialog
             :md-active.sync="showEditLabel"
-            style="width:200px;height:200px;"
+            style="width:200px;height:500px;"
           >
             <div>
               <div>Edit labels</div>
@@ -187,9 +170,28 @@
                   <!-- </button> -->
                 </md-field>
               </div>
-              {{ label }}
+              <div>
+                <md-dialog-content
+                  v-for="label in AllLabels"
+                  :key="label._id"
+                  class="editLabel1"
+                >
+                  <div>
+                    <button class="md-icon-button">
+                      <md-icon>label</md-icon>
+                    </button>
+                  </div>
+
+                  <div>{{ label.label }}</div>
+                  <div>
+                    <button class="md-icon-button">
+                      <md-icon>edit</md-icon>
+                    </button>
+                  </div>
+                </md-dialog-content>
+              </div>
               <md-divider></md-divider>
-              <button @click="createLabel()">Done</button>
+              <button class="md-primary" @click="createLabel()">Done</button>
             </div>
 
             <!-- <EditLabel
@@ -231,7 +233,7 @@
 import SearchBar from "./SearchBar";
 import ProfileUpload from "./ProfileUpload";
 
-import { messageService } from "../services/messageService";
+import { listGridService, labelService } from "../services/messageService";
 import { HTTP } from "../services/http-common";
 
 export default {
@@ -252,7 +254,7 @@ export default {
     imageUrl: "",
     trash: false,
     note: true,
-    toggleListGrid: true,
+    toggleListGrid: false,
     showEditLabel: false,
     label: "",
     labelName: null
@@ -285,20 +287,28 @@ export default {
   },
   updated() {
     // alert("updated");
+    // this.toggleListGrid=this.toggleListGrid;
 
     this.createLabel();
+    this.getAllLabels();
   },
   methods: {
     update(e) {
-      this.$log.info(" Profile changed...:: ",e);
+      this.$log.info(" Profile changed...:: ", e);
       this.created();
       this.getAllLabels();
     },
     stopTheEvent: event => event.stopPropagation(),
-    sendMessage() {
+    sendListViewTrue(value) {
       // send message to subscribers via observable subject
-      messageService.sendMessage("Message from toolbar listview");
+      listGridService.sendListView(value);
     },
+
+    sendLabelToIcon(value) {
+      // send message to subscribers via observable subject
+      labelService.sendLabelToIcon(value);
+    },
+
     toggleMenu() {
       this.menuVisible = !this.menuVisible;
     },
@@ -314,6 +324,7 @@ export default {
     },
     listGrid() {
       this.toggleListGrid = !this.toggleListGrid;
+      this.sendListViewTrue(this.toggleListGrid);
     },
     created() {
       this.firstName = localStorage.getItem("firstName");
@@ -384,9 +395,11 @@ export default {
             " getaLLLabels:toolbar:response :: " +
               JSON.stringify(response.data.data)
           );
+
           // this.$log.info("get color :: " + JSON.stringify(response.data.data.color));
 
-          this.AllLabels = response.data.data;
+          this.AllLabels =response.data.data;
+          this.sendLabelToIcon(this.AllLabels);
           this.$log.info("AllLabels :: " + JSON.stringify(this.AllLabels));
         })
         .catch(err => {
@@ -402,6 +415,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.editLabel1 {
+  display: flex;
+  justify-content: space-around;
+}
 .badge:after {
   content: "";
   position: absolute;
@@ -499,7 +516,8 @@ form.search-bar.md-layout {
 // width:300px;
 // height:500px;
 // }
-/deep/ .md-overlay {
+//
+.md-overlay {
   position: absolute;
   top: 0;
   right: 0;
@@ -512,6 +530,9 @@ form.search-bar.md-layout {
   transition-property: opacity;
   will-change: opacity;
 }
+// div.md-overlay {
+//     height: 0px;
+// }
 .MainApp {
   height: 100vh;
 }

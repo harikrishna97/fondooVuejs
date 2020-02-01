@@ -25,7 +25,7 @@
     </div>
 
     <!-- CreateNote2 -->
-    <div v-else>
+    <div v-else class="create1">
       <md-card class="card2" :style="`background-color: ${noteColor}`">
         <md-card-content>
           <div class=" md-layout">
@@ -77,62 +77,6 @@
             <md-button @click="toggleComponent">close</md-button>
           </div>
         </div>
-
-        <!-- <md-card-actions> -->
-        <!-- <md-bottom-bar> -->
-        <!-- <md-toolbar class="searchtoolbar">
-          <div class="md-toolbar-section">
-            <md-button class="md-icon-button">
-              <img src="../assets/remainder.svg" alt="remainder" />
-              <md-tooltip md-direction="bottom">Remind me</md-tooltip>
-            </md-button>
-
-            <md-button class="md-icon-button">
-              <img src="../assets/collaborator.svg" alt="colaborator" />
-              <md-tooltip md-direction="bottom">Collaborator</md-tooltip>
-            </md-button>
-
-            <md-button class="md-icon-button">
-              <img src="../assets/colorPalet.svg" alt="colorpalet" />
-              <md-tooltip md-direction="bottom">Change color</md-tooltip>
-            </md-button>
-
-            
-            <md-button class="md-icon-button">
-              <img
-                src="../assets/archive.svg"
-                style="transform: scaleX(-1);"
-                alt="archive"
-              />
-              <md-tooltip md-direction="bottom">Archive</md-tooltip>
-            </md-button>
-
-            <md-button class="md-icon-button">
-              <md-icon>more_vert</md-icon>
-              <md-tooltip md-direction="bottom">more</md-tooltip>
-            </md-button>
-
-            <md-button class="md-icon-button">
-              <img src="../assets/undo.svg" alt="undo" />
-              <md-tooltip md-direction="bottom">Undo</md-tooltip>
-            </md-button>
-
-            <md-button class="md-icon-button">
-              <img
-                src="../assets/undo.svg"
-                style="transform: scaleX(-1);"
-                alt="redo"
-              />
-              <md-tooltip md-direction="bottom">Redo</md-tooltip>
-            </md-button>
-
-          </div>
-          <div class="md-toolbar-section-end">
-            <md-button @click="toggleComponent">close</md-button>
-          </div>
-        </md-toolbar> -->
-
-        <!-- </md-ripple> -->
       </md-card>
     </div>
   </div>

@@ -5,9 +5,11 @@
 </template>
 
 <script>
+import { HTTP } from "../services/http-common";
+
 export default {
 data:()=>{
-ALLLabels:[]
+[]
 
 },
 methods: {

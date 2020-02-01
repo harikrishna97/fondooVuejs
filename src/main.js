@@ -1,16 +1,16 @@
 import Vue from 'vue'
 import App from './App.vue'
- import { MdButton, MdContent, MdTabs, MdField, MdCard, MdIcon, MdApp,MdToolbar} from 'vue-material/dist/components'
- import 'vue-material/dist/vue-material.min.css'
- import 'vue-material/dist/theme/default.css'
+import { MdButton, MdContent, MdTabs, MdField, MdCard, MdIcon, MdApp,MdToolbar} from 'vue-material/dist/components'
+import 'vue-material/dist/vue-material.min.css'
+import 'vue-material/dist/theme/default.css'
 import Vuelidate from 'vuelidate'
 // import VueRouter from 'vue-router'
 import router from './routes'
 import VueMaterial from 'vue-material'
-
+import vuetify from './plugins/vuetify'
 import VueLogger from 'vuejs-logger';
 const isProduction = process.env.NODE_ENV === 'production';
- 
+
 const options = {
     isEnabled: true,
     logLevel : isProduction ? 'error' : 'debug',
@@ -20,10 +20,10 @@ const options = {
     separator: '|',
     showConsoleColors: true
 };
- 
+
 Vue.use(VueLogger, options);
 
-import 'vue-material/dist/vue-material.min.css'
+
 
 Vue.use(VueMaterial)
 Vue.use(Vuelidate,MdIcon)
@@ -45,5 +45,6 @@ new Vue({
   render: h => h(App),
   router,
   template:'<App/>',
+  vuetify,
   components:{App}
 }).$mount('#app')

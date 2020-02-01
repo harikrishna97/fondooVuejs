@@ -1,10 +1,14 @@
 <template>
-  <div  class="elevation-demo" :class="[listView==true? 'gridViewClass' : 'listViewClass']">
+  <div
+    class="elevation-demo"
+    :class="listView ? 'listViewClass' : 'gridViewClass'"
+  >
     <div v-for="note in AllNotes" :key="note._id">
       <md-card
         class="md-elevation-1"
         :style="`background-color: ${note.color}`"
         v-bind:note="note._id"
+        :class="listView ? 'md-card1' : 'md-card2'"
       >
         <!-- {{note}} -->
 
@@ -37,17 +41,21 @@
           >
             {{ note.description }}
           </div>
-          <div v-if="note.label!=null">
+          <div v-if="note.label != null" class="Icons">
+            <!-- <div v-for="label in note.label" :key="label._id"> -->
             <md-chip class="" md-deletable>label1</md-chip>
+            <!-- </div> -->
+
             <!-- <md-chips v-model="messages" md-placeholder></md-chips> -->
           </div>
-          <div v-if="note.remainder!=null">
-            <md-chip class="" md-deletable>{{note.remainder}}</md-chip>
+          <div v-if="note.remainder != null" class="Icons">
+            <md-chip class="" md-deletable>{{ note.remainder }}</md-chip>
             <!-- <md-chips v-model="messages" md-placeholder></md-chips> -->
           </div>
         </md-card-content>
         <div v-on:click="getNoteId(note._id)">
           <Icons
+            class="Icons"
             @remainder="addRemainder"
             @collaborator="addCollaborator"
             @archive="addArchive"
@@ -55,68 +63,11 @@
             @moreVert="moreVert"
             @deleteNote="deleteNote1"
             @shareColor="shareColor"
+            @reminder="shareReminder"
           ></Icons>
         </div>
-
-        <!-- <div class=" icon-toolbar md-toolbar-section">
-            <md-button class="md-icon-button">
-              <img src="../assets/remainder.svg" alt="remainder" />
-              <md-tooltip md-direction="bottom">Remind me</md-tooltip>
-            </md-button>
-
-            <md-button class="md-icon-button">
-              <img src="../assets/collaborator.svg" alt="colaborator" />
-              <md-tooltip md-direction="bottom">Collaborator</md-tooltip>
-            </md-button>
-
-            <md-menu md-size="medium" md-direction="top-start" md-align-trigger>
-              <md-button md-menu-trigger class="md-icon-button">
-                <img src="../assets/colorPalet.svg" alt="colorPalet" />
-                <md-tooltip md-direction="bottom">Change color</md-tooltip>
-              </md-button> -->
-
-        <!-- <md-menu-content>
-                <div class="menuContent" >
-                  <md-avatar
-                    class="palet"
-                    v-for="color in colorPalet"
-                    :key="color.colorName"
-                    :style="`background-color: ${color.colorCode}`"
-                    v-on="updateFlag(color.colorCode,note._id)"
-
-                  >
-                   
-                  </md-avatar>
-                </div>
-              </md-menu-content>
-            </md-menu> -->
-
-        <!-- <md-button class="md-icon-button" @click="updateFlag(note_id)">
-              <img src="../assets/archive.svg" alt="archive" />
-              <md-tooltip md-direction="bottom">Archive</md-tooltip>
-            </md-button>
-
-            <md-menu md-size="small" md-align-trigger>
-
-              <md-button class="md-icon-button" md-menu-trigger>
-                <md-icon>more_vert</md-icon>
-                <md-tooltip md-direction="bottom">more</md-tooltip>
-              </md-button>
-
-              <md-menu-content>
-                <md-menu-item
-                  ><md-button @click="$emit('remove', note._id)"
-                    >Delete Note</md-button
-                  ></md-menu-item
-                >
-                <md-menu-item><md-button>Add Label </md-button> </md-menu-item>
-              </md-menu-content> -->
-        <!-- </md-menu> -->
-        <!-- </div> -->
-        <!-- </md-toolbar> -->
       </md-card>
     </div>
-
     <div v-if="editnote == true">
       <md-dialog :md-active.sync="editnote">
         <EditNote
@@ -133,37 +84,36 @@
 import EditNote from "./EditNote";
 import { HTTP } from "../services/http-common";
 import Icons from "./Icons";
-import { messageService } from "../services/messageService";
+import { listGridService } from "../services/messageService";
 
 export default {
   name: "CreateNote",
-  props: ["AllNotes","remaindersLabel"],
+  props: ["AllNotes", "remaindersLabel"],
 
   data: () => ({
-    // listView:true,
+    listView: false,
     open: false,
     editnote: false,
     title: "",
     description: "",
     cardColor: "",
+    reminderValue: null,
     note: "",
     mdMenuTrigger: false,
     currentNoteId: "",
-    
+
     colorCode: "",
-    messages: [],
-  // gridViewClass:{
-  //   padding: "16px",
-  // display: "flex",
-  // "flex-wrap": "wrap",
-  // },
-  // listViewClass:{},
-    
+    messages: []
   }),
 
   components: { EditNote, Icons },
-  updated(){},
+  updated() {},
   methods: {
+    shareReminder(reminder) {
+      this.reminderValue = reminder;
+      this.$log.info("reminderValue from icon :: " + this.reminderValue);
+      this.addRemainderToNote(this.reminderValue);
+    },
     addRemainder(flag) {
       this.$log.info("addRemainder:flag :: " + flag);
     },
@@ -267,6 +217,30 @@ export default {
             this.$log.info("Display:DeleteNote :error :: " + err);
           });
       }
+    },
+
+    addRemainderToNote(value) {
+      const reminderData = {};
+      reminderData.remainder = value;
+      const token = localStorage.getItem("token");
+
+      const auth = { headers: { token: token } };
+      const noteId = "5e3270ad174f8639caed2f06"; //this.currentNoteId;
+      this.$log.info("noteId .... :: " + this.currentNoteId);
+
+      HTTP.post("remainder/" + noteId, reminderData, auth)
+        // /flag/5e15c3822a8f156011ea42e7/trash
+        .then(response => {
+          this.$log.info(
+            "response restore :: " + JSON.stringify(response.data.data)
+          );
+          this.$emit("updateNote", "note archived");
+          this.trashNotes = response.data.data;
+          this.$log.info("restore .... :: " + JSON.stringify(this.trashNotes));
+        })
+        .catch(err => {
+          this.$log.info("error :: " + err);
+        });
     }
   },
   mounted() {
@@ -276,11 +250,14 @@ export default {
   },
   created() {
     // subscribe to home component messages
-    this.subscription = messageService.getMessage().subscribe(message => {
+    this.subscription = listGridService.getListView().subscribe(message => {
       if (message) {
         // add message to local state if not empty
-        this.messages.push(message);
-        this.$log.info("DisplayComponent:RXJS message from toolbar:: " + JSON.stringify(this.messages));
+        this.listView = message.text;
+        this.$log.info(
+          "DisplayComponent:RXJS message from toolbar:: " +
+            JSON.stringify(this.listView)
+        );
       } else {
         // clear messages when empty message received
         this.messages = [];
@@ -296,29 +273,49 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.md-card {
-  width: 250px;
-  margin: 4px;
-  //   height:200px;
-  display: inline-block;
-  vertical-align: top;
+.Icons {
+  display: flex;
+  justify-content: start;
 }
-.elevation-demo {
+.gridViewClass {
   padding: 16px;
   display: flex;
   flex-wrap: wrap;
 }
+.listViewClass {
+  padding: 16px;
+}
 
-// flex-wrap: wrap;
-// justify-items: flex-start
-
-.listView {
+.md-card2 {
   width: 250px;
-  margin: 4px;
+  margin: 10px;
   //   height:200px;
   display: inline-block;
   vertical-align: top;
 }
+.md-card1 {
+  width: 550px;
+  margin: 10px;
+  //   height:200px;
+  display: inline-block;
+  vertical-align: top;
+}
+// .elevation-demo {
+//   padding: 16px;
+//   display: flex;
+//   flex-wrap: wrap;
+// }
+
+// flex-wrap: wrap;
+// justify-items: flex-start
+
+// .listView {
+//   width: 250px;
+//   margin: 4px;
+//   //   height:200px;
+//   display: inline-block;
+//   vertical-align: top;
+// }
 
 .md-icon-button {
   // opacity: .1;

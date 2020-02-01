@@ -16,12 +16,14 @@ import ProfileUpload from "./components/ProfileUpload.vue";
 
 
 import Icons from "./components/Icons.vue"
+import DatePicker from "./components/DateTimePicker.vue"
+
 
 Vue.use(Router);
 
 export default new Router({
   routes: [
-    // {path:'/note',name:'note',component:NoteComponent},
+    {path:'/date',name:'date',component:DatePicker},
     { path: "/register", name: "register", component: Registration },
     { path: "/image", name: "image", component: ProfileUpload },
 

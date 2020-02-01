@@ -1,23 +1,22 @@
 <template>
-  <div id="app">    
-    <!-- <router-link :to="{name:'login'}"></router-link>  -->
-<!-- <router-link :to="{name:'dashboard'}"></router-link>  -->
-
+<div id="app">
    <router-view></router-view>
-   
-  </div>
+  <v-app data-app>
+  </v-app>
+</div>
+
 </template>
 
 <script>
-
-
-
 export default {
-  name: 'app',
-  components: {
-    
-  }
-}
+  name: 'App',
+
+  
+
+  data: () => ({
+    //
+  }),
+};
 </script>
 
 <style>

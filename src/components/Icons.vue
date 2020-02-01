@@ -1,10 +1,169 @@
 <template>
   <div>
-    <md-button class="md-icon-button" @click="remainder">
-      <!-- <md-icon>add_alert</md-icon> -->
+    <!-- <md-menu md-size="medium" md-align-trigger md-mode="fixed">
+      <md-button md-menu-trigger class="md-icon-button" @click="remainder">
+        
+        <img src="../assets/remainder.svg" alt="remainder" />
+        <md-tooltip md-direction="bottom">Remind me</md-tooltip>
+      </md-button>
+
+      <md-menu-content>
+        <md-menu-item>Reminder:</md-menu-item>
+        <md-divider></md-divider>
+        <md-menu-item>
+          <div @click.stop="stopTheEvent">
+            <md-datepicker v-model="selectedDate">
+              <label>Select date</label>
+            </md-datepicker>
+          </div>
+         </md-menu-item>
+        <md-menu-item>My Item 3</md-menu-item>
+      </md-menu-content>
+    </md-menu> -->
+
+    <!-- <md-button md-menu-trigger class="md-icon-button" @click="remainder">
       <img src="../assets/remainder.svg" alt="remainder" />
       <md-tooltip md-direction="bottom">Remind me</md-tooltip>
-    </md-button>
+    </md-button> -->
+
+    <div class="text-center">
+      <v-menu>
+        <template v-slot:activator="{ on: menu }">
+          <!-- <v-btn
+             class="md-icon-button"
+              v-on="{ ...tooltip, ...menu }"
+            >
+            <img src="../assets/remainder.svg" alt="remainder" />
+      <md-tooltip md-direction="bottom">Remind me</md-tooltip>
+            </v-btn> -->
+          <md-button
+            v-on="{ ...menu }"
+            class="md-icon-button"
+            @click="remainder"
+          >
+            <img src="../assets/remainder.svg" alt="remainder" />
+            <md-tooltip md-direction="bottom">Remind me</md-tooltip>
+          </md-button>
+        </template>
+        <v-list>
+          <v-list-item>
+            <v-list-item-title>Reminder:</v-list-item-title>
+          </v-list-item>
+
+          <v-list-item>
+            <v-row>
+              <!-- <v-col sm="12" lg="3" class="mb-4 controls"> -->
+              <v-menu
+                v-if="hasEnd"
+                ref="endMenu"
+                v-model="endMenu"
+                :close-on-content-click="false"
+                :nudge-right="40"
+                :return-value.sync="end"
+                transition="scale-transition"
+                min-width="290px"
+                offset-y
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-model="end"
+                    class="mt-3"
+                    label="End Date"
+                    prepend-icon="event"
+                    dense
+                    readonly
+                    outlined
+                    hide-details
+                    v-on="on"
+                  ></v-text-field>
+                </template>
+                <v-date-picker v-model="end" no-title scrollable>
+                  <v-spacer></v-spacer>
+                  <v-btn text color="primary" @click="endMenu = false">
+                    Cancel
+                  </v-btn>
+                  <v-btn text color="primary" @click="$refs.endMenu.save(end)">
+                    OK
+                  </v-btn>
+                </v-date-picker>
+              </v-menu>
+              <v-menu
+                ref="nowMenu"
+                v-model="nowMenu"
+                :close-on-content-click="false"
+                :nudge-right="40"
+                :return-value.sync="now"
+                transition="scale-transition"
+                min-width="290px"
+                offset-y
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-model="now"
+                    class="mt-3"
+                    label="Today"
+                    prepend-icon="event"
+                    dense
+                    readonly
+                    outlined
+                    hide-details
+                    v-on="on"
+                  ></v-text-field>
+                </template>
+                <v-date-picker v-model="now" no-title scrollable>
+                  <v-spacer></v-spacer>
+                  <v-btn text color="primary" @click="nowMenu = false">
+                    Cancel
+                  </v-btn>
+                  <v-btn text color="primary" @click="$refs.nowMenu.save(now)">
+                    OK
+                  </v-btn>
+                </v-date-picker>
+              </v-menu>
+              <!-- </v-col> -->
+            </v-row>
+          </v-list-item>
+
+          <v-list-item>
+            <v-row>
+              <v-menu
+                ref="menu"
+                v-model="menu2"
+                :close-on-content-click="false"
+                :nudge-right="40"
+                :return-value.sync="time"
+                transition="scale-transition"
+                offset-y
+                max-width="290px"
+                min-width="290px"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-model="time"
+                    label="Picker in menu"
+                    prepend-icon="access_time"
+                    readonly
+                    v-on="on"
+                  ></v-text-field>
+                </template>
+                <v-time-picker
+                  v-if="menu2"
+                  v-model="time"
+                  full-width
+                  @click:minute="$refs.menu.save(time)"
+                ></v-time-picker>
+              </v-menu> </v-row
+          ></v-list-item>
+
+          <div>
+            <v-btn @click="shareReminder">save</v-btn>
+          </div>
+          <!-- <v-list-item v-for="(item, index) in items" :key="index" @click="a">
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item> -->
+        </v-list>
+      </v-menu>
+    </div>
 
     <md-button class="md-icon-button" @click="collaborator">
       <img src="../assets/collaborator.svg" alt="colaborator" />
@@ -56,7 +215,44 @@
       <md-tooltip md-direction="bottom">Archive</md-tooltip>
     </md-button>
 
-    <md-menu md-size="medium" md-align-trigger>
+    <!-- LABESs -->
+    <md-menu md-size="medium" v-if="addLabel == true" md-align-trigger>
+      <md-button
+        md-menu-trigger
+        class="md-icon-button"
+        style="opacity:1"
+        @click="moreVert"
+      >
+        <md-icon class="menu_vert">more_vert</md-icon>
+        <!-- <img src="../assets/menu_vert.svg"  alt="more_vert"> -->
+        <md-tooltip md-direction="bottom">more</md-tooltip>
+      </md-button>
+
+      <md-menu-content>
+        <md-menu-item>
+          <md-button @click="deleteNote">Label Note</md-button>
+          </md-menu-item>
+        <md-content v-for="label in AllLabels" :key="label._id">
+          <md-menu-item>
+            <md-checkbox v-model="boolean">{{label.label}}</md-checkbox>
+          </md-menu-item>
+        </md-content>
+
+        <!-- <md-menu-item v-if="addLabel == true">
+          
+        </md-menu-item> -->
+
+        <md-menu-item
+          ><md-button @click="addLabelTrue" md-menu-trigger
+            >Add Label
+          </md-button>
+        </md-menu-item>
+      </md-menu-content>
+    </md-menu>
+
+    <!-- .......................... ADD Label.....-->
+
+    <md-menu md-size="medium" v-if="addLabel == false" md-align-trigger>
       <md-button
         md-menu-trigger
         class="md-icon-button"
@@ -72,25 +268,57 @@
         <md-menu-item
           ><md-button @click="deleteNote">Delete Note</md-button></md-menu-item
         >
-        <md-menu-item><md-button>Add Label </md-button> </md-menu-item>
+        <!-- <md-menu-item v-if="addLabel == true">
+          
+        </md-menu-item> -->
+
+        <md-menu-item
+          ><md-button @click="addLabelTrue" md-menu-trigger
+            >Add Label
+          </md-button>
+        </md-menu-item>
       </md-menu-content>
     </md-menu>
   </div>
 </template>
 
 <script>
-export default {
-  // data: () => ({
-  //   colorPalet: [
-  //     {
-  //       colorName: "White",
-  //       colorCode: "red"
-  //     }
-  //   ]
-  // }),
+// import DatePicker from "vue2-datepicker";
+// import { Datetime } from 'vue-datetime'
+import { labelService } from "../services/messageService";
 
+export default {
+  components: {
+    // DatePicker,
+    // Datetime,
+  },
+  computed: {
+    hasEnd() {
+      return (
+        this.type in
+        {
+          "custom-weekly": 1,
+          "custom-daily": 1
+        }
+      );
+    }
+  },
   data: () => ({
+    AllLabels:["fadf","label","dfdd",],
+    boolean:[] ,
+    type: "month",
+    now: null,
+    nowMenu: false,
+    time: null,
+    menu2: false,
+
+    addLabel: false,
+    closeOnClick: false,
+    closeOnSelect: false,
+    selectedDate: null,
     color: "",
+    // date: "",
+    // datetimeEmpty:'',
     colorPalet: [
       {
         colorName: "White",
@@ -147,8 +375,41 @@ export default {
     // alert("updated");
     this.$log.info("shareColor :" + this.colorCode);
   },
+created() {
+    // subscribe to home component messages
+    this.subscription = labelService.getLabelFromToolbar().subscribe(message => {
+      if (message) {
+        // add message to local state if not empty
+        this.AllLabels = message.text;
+        this.$log.info(
+          "IConComponent:RXJS Labels from toolbar:: " +
+            JSON.stringify(this.AllLabels)
+        );
+      } else {
+        // clear messages when empty message received
+        this.AllLabels = [];
+        // this.$log.info("RXJS message :: " + JSON.stringify(this.messages));
+      }
+    });
+  },
 
   methods: {
+    shareReminder() {
+      if (this.now !== null || this.time !== null) {
+        this.$log.info("now :" + this.now);
+        this.$log.info("time :" + this.time);
+        this.$log.info("menu2 :" + this.menu2);
+        const reminder = this.now + " " + this.time;
+        this.$log.info("reminder :" + reminder);
+        this.$emit("reminder", reminder);
+      }
+    },
+
+    addLabelTrue() {
+      this.addLabel = !this.addLabel;
+      // this.$log.info("shareColor :" + colorCode);
+    },
+    stopTheEvent: $event => $event.stopPropagation(),
     remainder() {
       this.$emit("remainder", true);
     },
