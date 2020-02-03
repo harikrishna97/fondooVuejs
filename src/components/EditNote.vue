@@ -143,15 +143,15 @@ export default {
         const noteData = {};
         noteData.title = this.title;
         noteData.description = this.description;
-        this.$log.info("NoteData :: " + JSON.stringify(noteData));
+        // this.$log.info("NoteData :: " + JSON.stringify(noteData));
         const token = localStorage.getItem("token");
-        this.$log.info("token :: " + typeof token);
+        // this.$log.info("token :: " + typeof token);
         // headers: {Authorization:'JWT ' + localStorage.getItem('token')
         // headers: {Authorization:'JWT ' + localStorage.getItem('token')
         const auth = { headers: { token: token } };
         HTTP.put("note/"+this.note._id, noteData, auth)
           .then(response => {
-            this.$log.info("response :: " + JSON.stringify(response));
+            this.$log.info("response :: " + JSON.stringify(response.data.data.title));
             this.$emit("updateNote", "noteupdated");
           })
           .catch(err => {

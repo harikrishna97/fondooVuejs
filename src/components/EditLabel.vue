@@ -18,11 +18,11 @@ methods: {
       const auth = { headers: { token: token } };
       HTTP.get("label", auth)
         .then(response => {
-          this.$log.info("response :: " + JSON.stringify(response.data.data));
+          // this.$log.info("response :: " + JSON.stringify(response.data.data));
                     // this.$log.info("get color :: " + JSON.stringify(response.data.data.color));
 
           this.ALLLabels = response.data.data;
-          this.$log.info("ALLLabels :: " + JSON.stringify(this.ALLLabels));
+          // this.$log.info("ALLLabels :: " + JSON.stringify(this.ALLLabels));
         })
         .catch(err => {
           this.$log.info("error :: " + err);

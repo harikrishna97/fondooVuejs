@@ -205,8 +205,8 @@ export default {
 
       HTTP.post("user", registerData)
         .then(response => {
-          const data = JSON.stringify(response.data);
-          this.$log.info("Registration Successfull ::: " + data);
+          // const data = JSON.stringify(response.data);
+          // this.$log.info("Registration Successfull ::: " + data);
           // alert('Registration Successful')
           this.lastUser = response.data.data.message;
           this.userSaved = true;

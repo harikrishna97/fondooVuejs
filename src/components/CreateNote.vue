@@ -109,14 +109,14 @@ export default {
       shareColor(color){
 this.noteColor=color;
       },
-    moreVert(flag) {this.$log.info("moreVert:flag :: " +flag);},
+    // moreVert(flag) {this.$log.info("moreVert:flag :: " +flag);},
 
     /**
      * @description toggle value to close current componet and to Create Note
      */
     toggleComponent() {
       this.open = !this.open;
-      this.$log.info("open:: " + this.open);
+      // this.$log.info("open:: " + this.open);
       this.createNote();
       (this.title = null), (this.description = null);
       return this.open;
@@ -138,15 +138,14 @@ this.noteColor=color;
         noteData.title = this.title;
         noteData.description = this.description;
         noteData.color=this.noteColor;
-        this.$log.info("NoteData :: " + JSON.stringify(noteData));
+        // this.$log.info("NoteData :: " + JSON.stringify(noteData));
         const token = localStorage.getItem("token");
-        this.$log.info("token :: " + typeof token);
-        // headers: {Authorization:'JWT ' + localStorage.getItem('token')
-        // headers: {Authorization:'JWT ' + localStorage.getItem('token')
+        // this.$log.info("token :: " + typeof token);
+        
         const auth = { headers: { token: token } };
         HTTP.post("note", noteData, auth)
           .then(response => {
-            this.$log.info("response :: " + JSON.stringify(response));
+            this.$log.info("response :: " + JSON.stringify(response.data.data.title));
             this.$emit("updateNote", "note added");
           })
           .catch(err => {

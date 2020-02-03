@@ -25,10 +25,10 @@ export default {
       const auth = { headers: { token: token } };
       HTTP.get("remainder", auth)
         .then(response => {
-          this.$log.info(
-            " getALL remainder : response :: " +
-              JSON.stringify(response.data.data)
-          );
+          // this.$log.info(
+          //   " getALL remainder : response :: " +
+          //     JSON.stringify(response.data.data)
+          // );
           this.AllNotes = response.data.data;
           //   this.title=this.trashNotes.title;
           //   this.description=this.trashNotes.description;

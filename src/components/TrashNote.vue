@@ -103,9 +103,9 @@ export default {
       HTTP.put("/flag/" + noteId + "/trash", trashData, auth)
         // /flag/5e15c3822a8f156011ea42e7/trash
         .then(response => {
-          this.$log.info(
-            "response restore :: " + JSON.stringify(response.data.data)
-          );
+          // this.$log.info(
+          //   "response restore :: " + JSON.stringify(response.data.data)
+          // );
           this.trashNotes = response.data.data;
           this.$log.info("restore .... :: " + JSON.stringify(this.trashNotes));
           this.getAllTrashNotes();

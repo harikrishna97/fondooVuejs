@@ -295,8 +295,8 @@ export default {
   methods: {
     update(e) {
       this.$log.info(" Profile changed...:: ", e);
-      this.created();
-      this.getAllLabels();
+      // this.created();
+      // this.getAllLabels();
     },
     stopTheEvent: event => event.stopPropagation(),
     sendListViewTrue(value) {
@@ -315,7 +315,7 @@ export default {
     signout() {
       localStorage.clear();
       // localStorage.removeItem('token');
-      this.$log.info(" sinOut..............:: ");
+      // this.$log.info(" sinOut..............:: ");
       this.$router.push("/");
     },
     changeComponent() {
@@ -331,7 +331,7 @@ export default {
       this.lastName = localStorage.getItem("lastName");
       this.user = (this.firstName + " " + this.lastName).toUpperCase();
       this.email = localStorage.getItem("email");
-      this.$log.info(" sinOut..:: " + localStorage.getItem("firstName"));
+      // this.$log.info(" sinOut..:: " + localStorage.getItem("firstName"));
       this.imageUrl = localStorage.getItem("imageUrl");
     },
     navigateTo(value) {
@@ -359,25 +359,25 @@ export default {
     },
     profileUpload1() {
       this.profileUpload = !this.profileUpload;
-      this.$log.info("profileUpload :: " + this.profileUpload);
+      // this.$log.info("profileUpload :: " + this.profileUpload);
     },
 
     createLabel() {
       if (this.labelName !== null) {
         const labelData = {};
         labelData.label = this.labelName;
-        this.$log.info("labelData :: " + JSON.stringify(labelData));
+        // this.$log.info("labelData :: " + JSON.stringify(labelData));
         const token = localStorage.getItem("token");
-        this.$log.info("token :: " + typeof token);
+        //this.$log.info("token :: " + typeof token);
         // headers: {Authorization:'JWT ' + localStorage.getItem('token')
         // headers: {Authorization:'JWT ' + localStorage.getItem('token')
         const auth = { headers: { token: token } };
         HTTP.post("label", labelData, auth)
-          .then(response => {
+        .then(response => {
             this.$log.info(
-              "createLabel:toolbar:response :: " + JSON.stringify(response)
+              "createLabel:toolbar:response :: " + JSON.stringify(response.data.data.label)
             );
-            // this.$emit("updateNote", "note added");
+            this.$emit("updateNote", "note added");
           })
           .catch(err => {
             this.$log.info("createLabel : toolbar:error :: " + err);
@@ -393,14 +393,14 @@ export default {
         .then(response => {
           this.$log.info(
             " getaLLLabels:toolbar:response :: " +
-              JSON.stringify(response.data.data)
+              JSON.stringify(response.data.data.label)
           );
 
           // this.$log.info("get color :: " + JSON.stringify(response.data.data.color));
 
           this.AllLabels =response.data.data;
           this.sendLabelToIcon(this.AllLabels);
-          this.$log.info("AllLabels :: " + JSON.stringify(this.AllLabels));
+          // this.$log.info("AllLabels :: " + JSON.stringify(this.AllLabels));
         })
         .catch(err => {
           this.$log.info("error :: " + err);
@@ -419,26 +419,26 @@ export default {
   display: flex;
   justify-content: space-around;
 }
-.badge:after {
-  content: "";
-  position: absolute;
-  background: rgba(255, 0, 0, 0.85);
-  height: 1rem;
-  top: 1rem;
-  right: 1rem;
-  width: 1rem;
-  text-align: center;
-  line-height: 2rem;
-  font-size: 1rem;
-  border-radius: 50%;
-  color: white;
-}
+// .badge:after {
+//   content: "";
+//   position: absolute;
+//   background: rgba(255, 0, 0, 0.85);
+//   height: 1rem;
+//   top: 1rem;
+//   right: 1rem;
+//   width: 1rem;
+//   text-align: center;
+//   line-height: 2rem;
+//   font-size: 1rem;
+//   border-radius: 50%;
+//   color: white;
+// }
 .profile {
   display: flex;
   justify-content: center;
 }
 .md-app {
-  // height: 500px;
+  // max-height: 500px;
   // height:600px;
   border: 1px solid rgba(#000, 0.12);
   overflow: hidden;
@@ -516,13 +516,10 @@ form.search-bar.md-layout {
 // width:300px;
 // height:500px;
 // }
-//
+// /deep/
 .md-overlay {
   position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  height:0px !important;
   /* z-index: 5; */
   overflow: hidden;
   background: no-repeat;

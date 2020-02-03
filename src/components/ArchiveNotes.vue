@@ -25,10 +25,10 @@ export default {
       const auth = { headers: { token: token } };
       HTTP.get("archive", auth)
         .then(response => {
-          this.$log.info(
-            " getALL archive : response :: " +
-              JSON.stringify(response.data.data)
-          );
+          // this.$log.info(
+          //   " getALL archive : response :: " +
+          //     JSON.stringify(response.data.data)
+          // );
           this.AllNotes = response.data.data;
           //   this.title=this.trashNotes.title;
           //   this.description=this.trashNotes.description;

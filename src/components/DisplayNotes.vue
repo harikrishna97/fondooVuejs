@@ -53,7 +53,7 @@
             <!-- <md-chips v-model="messages" md-placeholder></md-chips> -->
           </div>
         </md-card-content>
-        <div v-on:click="getNoteId(note._id)">
+        <div @click="getNoteId(note._id)">
           <Icons
             class="Icons"
             @remainder="addRemainder"
@@ -111,7 +111,7 @@ export default {
   methods: {
     shareReminder(reminder) {
       this.reminderValue = reminder;
-      this.$log.info("reminderValue from icon :: " + this.reminderValue);
+      // this.$log.info("reminderValue from icon :: " + this.reminderValue);
       this.addRemainderToNote(this.reminderValue);
     },
     addRemainder(flag) {
@@ -129,20 +129,18 @@ export default {
     },
     shareColor(code) {
       this.colorCode = code;
-      this.$log.info("getColor:colorcode :: " + code);
-      this.$log.info("getColor:colorcode :: " + this.colorCode);
+      // this.$log.info("getColor:colorcode :: " + code);
+      // this.$log.info("getColor:colorcode :: " + this.colorCode);
       this.updateFlag("color", this.currentNoteId);
     },
 
     moreVert(flag) {
       this.$log.info("moreVert:flag :: " + flag);
-      // this.mdMenuTrigger=true;
-      // this.$log.info("moreVert:mdMenuTrigger :: " +this.mdMenuTrigger);
+      this.mdMenuTrigger=true;
     },
     deleteNote(flag) {
       this.$log.info("deleteNote:flag :: " + flag);
 
-      // this.$log.info("deleteNote:mdMenuTrigger :: " +this.mdMenuTrigger);
     },
 
     noteEdit() {
@@ -161,7 +159,7 @@ export default {
     getNoteId(noteId) {
       this.$log.info("note id at 246: ", noteId);
       this.currentNoteId = noteId;
-      this.$log.info("note id at 246: ", this.currentNoteId);
+      // this.$log.info("note id at 246: ", this.currentNoteId);
     },
     updateFlag(flag, noteId) {
       this.$log.info("color selected :: " + flag);
@@ -183,14 +181,13 @@ export default {
       this.$log.info("noteId .... :: " + noteId);
 
       HTTP.put("/flag/" + noteId + "/" + flag, editData, auth)
-        // /flag/5e15c3822a8f156011ea42e7/trash
         .then(response => {
-          this.$log.info(
-            "response restore :: " + JSON.stringify(response.data.data)
-          );
+          // this.$log.info(
+          //   "response restore :: " + JSON.stringify(response.data.data)
+          // );
           this.$emit("updateNote", "note archived");
           this.trashNotes = response.data.data;
-          this.$log.info("restore .... :: " + JSON.stringify(this.trashNotes));
+          // this.$log.info("restore .... :: " + JSON.stringify(this.trashNotes));
         })
         .catch(err => {
           this.$log.info("error :: " + err);
@@ -231,12 +228,12 @@ export default {
       HTTP.post("remainder/" + noteId, reminderData, auth)
         // /flag/5e15c3822a8f156011ea42e7/trash
         .then(response => {
-          this.$log.info(
-            "response restore :: " + JSON.stringify(response.data.data)
-          );
+          // this.$log.info(
+          //   "response restore :: " + JSON.stringify(response.data.data)
+          // );
           this.$emit("updateNote", "note archived");
           this.trashNotes = response.data.data;
-          this.$log.info("restore .... :: " + JSON.stringify(this.trashNotes));
+          // this.$log.info("restore .... :: " + JSON.stringify(this.trashNotes));
         })
         .catch(err => {
           this.$log.info("error :: " + err);
@@ -244,7 +241,7 @@ export default {
     }
   },
   mounted() {
-    this.$log.info("Display :: Note Object " + JSON.stringify(this.noteId));
+    // this.$log.info("Display :: Note Object " + JSON.stringify(this.noteId));
     // this.title = this.AllNotes;
     // this.description = this.AllNotes;
   },
@@ -254,10 +251,10 @@ export default {
       if (message) {
         // add message to local state if not empty
         this.listView = message.text;
-        this.$log.info(
-          "DisplayComponent:RXJS message from toolbar:: " +
-            JSON.stringify(this.listView)
-        );
+        // this.$log.info(
+        //   "DisplayComponent:RXJS message from toolbar:: " +
+        //     JSON.stringify(this.listView)
+        // );
       } else {
         // clear messages when empty message received
         this.messages = [];
@@ -273,6 +270,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+// @import './assets/styles/yourstyles.css';
 .Icons {
   display: flex;
   justify-content: start;

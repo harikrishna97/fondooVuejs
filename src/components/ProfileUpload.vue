@@ -67,9 +67,9 @@ export default {
       const auth = { headers: { token: token } };
       HTTP.put("imageUpload", formData, auth)
         .then(response => {
-          this.$log.info(
-            " imageUpload : response :: " + JSON.stringify(response.data)
-          );
+          // this.$log.info(
+          //   " imageUpload : response :: " + JSON.stringify(response.data)
+          // );
           this.imageUrl=response.data.imageUrl
           localStorage.setItem("imageUrl", response.data.imageUrl);
           this.$emit('update')

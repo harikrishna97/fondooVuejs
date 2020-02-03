@@ -160,9 +160,9 @@ export default {
 
           this.$log.info("data:: " + localStorage.getItem("firstName"));
 
-          this.$log.info("Data IS :: " + JSON.stringify(response.data));
+          // this.$log.info("Data IS :: " + JSON.stringify(response.data));
           if (response.data.success == true) {
-            this.$log.info("Data IS :: " + response.data.success);
+            // this.$log.info("Data IS :: " + response.data.success);
 
             this.lastUser = response.data.message;
             this.userSaved = true;

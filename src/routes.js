@@ -16,14 +16,14 @@ import ProfileUpload from "./components/ProfileUpload.vue";
 
 
 import Icons from "./components/Icons.vue"
-import DatePicker from "./components/DateTimePicker.vue"
+import Collaborator from "./components/Collaborator.vue"
 
 
 Vue.use(Router);
 
 export default new Router({
   routes: [
-    {path:'/date',name:'date',component:DatePicker},
+    {path:'/collaborator',name:'collaborator',component:Collaborator},
     { path: "/register", name: "register", component: Registration },
     { path: "/image", name: "image", component: ProfileUpload },
 

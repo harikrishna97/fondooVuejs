@@ -234,7 +234,7 @@
           </md-menu-item>
         <md-content v-for="label in AllLabels" :key="label._id">
           <md-menu-item>
-            <md-checkbox v-model="boolean">{{label.label}}</md-checkbox>
+            <md-checkbox v-model="labels" value="label.label" @click="addNoteLabel(label._id,label.label)">{{label.label}}</md-checkbox>
           </md-menu-item>
         </md-content>
 
@@ -283,14 +283,14 @@
 </template>
 
 <script>
-// import DatePicker from "vue2-datepicker";
+// import Collaborator from "./Collaborator";
 // import { Datetime } from 'vue-datetime'
 import { labelService } from "../services/messageService";
 
 export default {
   components: {
-    // DatePicker,
-    // Datetime,
+    // Collaborator
+   
   },
   computed: {
     hasEnd() {
@@ -304,8 +304,11 @@ export default {
     }
   },
   data: () => ({
+    labelId:"",
+    LabelValue:"",
+    // collaborator:false,
     AllLabels:["fadf","label","dfdd",],
-    boolean:[] ,
+    labels:[] ,
     type: "month",
     now: null,
     nowMenu: false,
@@ -373,7 +376,7 @@ export default {
 
   updated() {
     // alert("updated");
-    this.$log.info("shareColor :" + this.colorCode);
+    // this.$log.info("shareColor :" + this.colorCode);
   },
 created() {
     // subscribe to home component messages
@@ -381,10 +384,10 @@ created() {
       if (message) {
         // add message to local state if not empty
         this.AllLabels = message.text;
-        this.$log.info(
-          "IConComponent:RXJS Labels from toolbar:: " +
-            JSON.stringify(this.AllLabels)
-        );
+        // this.$log.info(
+        //   "IConComponent:RXJS Labels from toolbar:: " +
+        //     JSON.stringify(this.AllLabels)
+        // );
       } else {
         // clear messages when empty message received
         this.AllLabels = [];
@@ -394,13 +397,18 @@ created() {
   },
 
   methods: {
+    addNoteLabel(labelId,label){
+      this.labelId=labelId;
+      this.labelValue=label;
+       this.$log.info("Labels of Note :" +this.labels);
+    },
     shareReminder() {
       if (this.now !== null || this.time !== null) {
-        this.$log.info("now :" + this.now);
-        this.$log.info("time :" + this.time);
-        this.$log.info("menu2 :" + this.menu2);
+        // this.$log.info("now :" + this.now);
+        // this.$log.info("time :" + this.time);
+        // this.$log.info("menu2 :" + this.menu2);
         const reminder = this.now + " " + this.time;
-        this.$log.info("reminder :" + reminder);
+        // this.$log.info("reminder :" + reminder);
         this.$emit("reminder", reminder);
       }
     },
@@ -414,6 +422,7 @@ created() {
       this.$emit("remainder", true);
     },
     collaborator() {
+      this.collaborator=true;
       this.$emit("collaborator", true);
     },
 
@@ -434,7 +443,7 @@ created() {
     shareColor(colorCode) {
       this.$emit("shareColor", colorCode);
       this.color = colorCode;
-      this.$log.info("shareColor :" + colorCode);
+      // this.$log.info("shareColor :" + colorCode);
     }
   }
 };

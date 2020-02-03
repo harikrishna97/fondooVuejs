@@ -31,26 +31,14 @@ export default {
   mounted() {
     this.getAllnotes();
   },
-  // computed: {
-  //     searchedApts: function() {
-  //       return this.AllNotes.filter(item => {
-  //       this.$log.info("search2 :: " + JSON.stringify(item));
-
-  //         return (
-  //           item.title.toLowerCase().match(this.searchTerms.toLowerCase()) ||
-  //           item.description.toLowerCase().match(this.searchTerms.toLowerCase()) ||
-  //           item.color.toLowerCase().match(this.searchTerms.toLowerCase())
-  //         );
-  //       });
-  //     }
-  //   },
+  
   created() {
     // subscribe to home component messages
     this.subscription = messageService.getMessage().subscribe(message => {
       if (message) {
         // add message to local state if not empty
         this.AllNotes=message.text;
-        this.$log.info("NoteComponent:created:RXJS message from search:: " + JSON.stringify(this.AllNotes));
+        // this.$log.info("NoteComponent:created:RXJS message from search:: " + JSON.stringify(this.AllNotes));
       } else {
         // clear messages when empty message received
         this.AllNotes = [];
@@ -69,13 +57,13 @@ export default {
       const auth = { headers: { token: token } };
       HTTP.get("note", auth)
         .then(response => {
-          this.$log.info("response :: " + JSON.stringify(response.data.data));
-          this.$log.info(
-            "get color :: " + JSON.stringify(response.data.data.color)
-          );
+          // this.$log.info("response :: " + JSON.stringify(response.data.data));
+          // this.$log.info(
+          //   "get color :: " + JSON.stringify(response.data.data.color)
+          // );
 
           this.AllNotes = response.data.data;
-          this.$log.info("ALLNOTES :: " + JSON.stringify(this.AllNotes));
+          // this.$log.info("ALLNOTES :: " + JSON.stringify(this.AllNotes));
         })
         .catch(err => {
           this.$log.info("error :: " + err);
