@@ -20,6 +20,10 @@ export default {
 </script>
 
 <style>
+div.v-application--wrap {
+    display: none;
+}
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
    /* background-color: linear-gradient(-90deg, #84CF6A, #16C0B0);  */

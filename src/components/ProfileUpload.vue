@@ -53,11 +53,7 @@ export default {
   methods: {
     onFileChange(e) {
       this.selectedFile = e.target.files[0]; // || e.dataTransfer.files;
-      // this.$log.info("file :: " +files[0]);
-      // if (!files.length) return;
-      // var formData = new FormData();
-      // formData.append("userfile", fileInputElement.files[0]);
-      // this.createImage(files[0]);
+      
     },
     setProfile(){
       this.showDialog=!this.showDialog;
@@ -83,41 +79,6 @@ export default {
           this.$log.info("error :: " + err);
         });
     }
-
-    //   createImage(file) {
-    //     // var imageUrl = new Image();
-    //     var reader = new FileReader();
-    //     // this.$log.info("imageUrl :: " + ${'imageUrl'});
-
-    //     var vm = this;
-    //     reader.onload = e => {
-    //       vm.imageUrl = e.target.result;
-    //       // this.imageUrl=imageUrl;
-    //     };
-    //     reader.readAsDataURL(file);
-    //   },
-
-    //   fileUpload() {
-    //     var formData = new FormData();
-    //     formData.append("image", files[0]);
-    //     const token = localStorage.getItem("token");
-    //     const auth = { headers: { token: token } };
-    //     HTTP.put("imageUpload", auth, formData)
-    //       .then(response => {
-    //         this.$log.info(
-    //           " getALL archive : response :: " +
-    //             JSON.stringify(response.data.data)
-    //         );
-    //         this.AllNotes = response.data.data;
-    //         //   this.title=this.trashNotes.title;
-    //         //   this.description=this.trashNotes.description;
-
-    //         //   this.$log.info("trashNotes :: " + JSON.stringify(this.trashNotes));
-    //       })
-    //       .catch(err => {
-    //         this.$log.info("error :: " + err);
-    //       });
-    //   }
   }
 };
 </script>

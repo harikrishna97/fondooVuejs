@@ -1,169 +1,132 @@
 <template>
   <div>
-    <!-- <md-menu md-size="medium" md-align-trigger md-mode="fixed">
-      <md-button md-menu-trigger class="md-icon-button" @click="remainder">
-        
-        <img src="../assets/remainder.svg" alt="remainder" />
-        <md-tooltip md-direction="bottom">Remind me</md-tooltip>
-      </md-button>
+    <!-- <div class="text-center"> -->
+    <v-menu>
+      <template v-slot:activator="{ on: menu }">
+        <md-button v-on="{ ...menu }" class="md-icon-button" @click="remainder">
+          <img src="../assets/remainder.svg" alt="remainder" />
+          <md-tooltip md-direction="bottom">Remind me</md-tooltip>
+        </md-button>
+      </template>
+      <v-list>
+        <v-list-item>
+          <v-list-item-title>Reminder:</v-list-item-title>
+        </v-list-item>
 
-      <md-menu-content>
-        <md-menu-item>Reminder:</md-menu-item>
-        <md-divider></md-divider>
-        <md-menu-item>
-          <div @click.stop="stopTheEvent">
-            <md-datepicker v-model="selectedDate">
-              <label>Select date</label>
-            </md-datepicker>
-          </div>
-         </md-menu-item>
-        <md-menu-item>My Item 3</md-menu-item>
-      </md-menu-content>
-    </md-menu> -->
-
-    <!-- <md-button md-menu-trigger class="md-icon-button" @click="remainder">
-      <img src="../assets/remainder.svg" alt="remainder" />
-      <md-tooltip md-direction="bottom">Remind me</md-tooltip>
-    </md-button> -->
-
-    <div class="text-center">
-      <v-menu>
-        <template v-slot:activator="{ on: menu }">
-          <!-- <v-btn
-             class="md-icon-button"
-              v-on="{ ...tooltip, ...menu }"
+        <v-list-item>
+          <v-row>
+            <!-- <v-col sm="12" lg="3" class="mb-4 controls"> -->
+            <v-menu
+              v-if="hasEnd"
+              ref="endMenu"
+              v-model="endMenu"
+              :close-on-content-click="false"
+              :nudge-right="40"
+              :return-value.sync="end"
+              transition="scale-transition"
+              min-width="290px"
+              offset-y
             >
-            <img src="../assets/remainder.svg" alt="remainder" />
-      <md-tooltip md-direction="bottom">Remind me</md-tooltip>
-            </v-btn> -->
-          <md-button
-            v-on="{ ...menu }"
-            class="md-icon-button"
-            @click="remainder"
-          >
-            <img src="../assets/remainder.svg" alt="remainder" />
-            <md-tooltip md-direction="bottom">Remind me</md-tooltip>
-          </md-button>
-        </template>
-        <v-list>
-          <v-list-item>
-            <v-list-item-title>Reminder:</v-list-item-title>
-          </v-list-item>
+              <template v-slot:activator="{ on }">
+                <v-text-field
+                  v-model="end"
+                  class="mt-3"
+                  label="End Date"
+                  prepend-icon="event"
+                  dense
+                  readonly
+                  outlined
+                  hide-details
+                  v-on="on"
+                ></v-text-field>
+              </template>
+              <v-date-picker v-model="end" no-title scrollable>
+                <v-spacer></v-spacer>
+                <v-btn text color="primary" @click="endMenu = false">
+                  Cancel
+                </v-btn>
+                <v-btn text color="primary" @click="$refs.endMenu.save(end)">
+                  OK
+                </v-btn>
+              </v-date-picker>
+            </v-menu>
+            <v-menu
+              ref="nowMenu"
+              v-model="nowMenu"
+              :close-on-content-click="false"
+              :nudge-right="40"
+              :return-value.sync="now"
+              transition="scale-transition"
+              min-width="290px"
+              offset-y
+            >
+              <template v-slot:activator="{ on }">
+                <v-text-field
+                  v-model="now"
+                  class="mt-3"
+                  label="Today"
+                  prepend-icon="event"
+                  dense
+                  readonly
+                  outlined
+                  hide-details
+                  v-on="on"
+                ></v-text-field>
+              </template>
+              <v-date-picker v-model="now" no-title scrollable>
+                <v-spacer></v-spacer>
+                <v-btn text color="primary" @click="nowMenu = false">
+                  Cancel
+                </v-btn>
+                <v-btn text color="primary" @click="$refs.nowMenu.save(now)">
+                  OK
+                </v-btn>
+              </v-date-picker>
+            </v-menu>
+            <!-- </v-col> -->
+          </v-row>
+        </v-list-item>
 
-          <v-list-item>
-            <v-row>
-              <!-- <v-col sm="12" lg="3" class="mb-4 controls"> -->
-              <v-menu
-                v-if="hasEnd"
-                ref="endMenu"
-                v-model="endMenu"
-                :close-on-content-click="false"
-                :nudge-right="40"
-                :return-value.sync="end"
-                transition="scale-transition"
-                min-width="290px"
-                offset-y
-              >
-                <template v-slot:activator="{ on }">
-                  <v-text-field
-                    v-model="end"
-                    class="mt-3"
-                    label="End Date"
-                    prepend-icon="event"
-                    dense
-                    readonly
-                    outlined
-                    hide-details
-                    v-on="on"
-                  ></v-text-field>
-                </template>
-                <v-date-picker v-model="end" no-title scrollable>
-                  <v-spacer></v-spacer>
-                  <v-btn text color="primary" @click="endMenu = false">
-                    Cancel
-                  </v-btn>
-                  <v-btn text color="primary" @click="$refs.endMenu.save(end)">
-                    OK
-                  </v-btn>
-                </v-date-picker>
-              </v-menu>
-              <v-menu
-                ref="nowMenu"
-                v-model="nowMenu"
-                :close-on-content-click="false"
-                :nudge-right="40"
-                :return-value.sync="now"
-                transition="scale-transition"
-                min-width="290px"
-                offset-y
-              >
-                <template v-slot:activator="{ on }">
-                  <v-text-field
-                    v-model="now"
-                    class="mt-3"
-                    label="Today"
-                    prepend-icon="event"
-                    dense
-                    readonly
-                    outlined
-                    hide-details
-                    v-on="on"
-                  ></v-text-field>
-                </template>
-                <v-date-picker v-model="now" no-title scrollable>
-                  <v-spacer></v-spacer>
-                  <v-btn text color="primary" @click="nowMenu = false">
-                    Cancel
-                  </v-btn>
-                  <v-btn text color="primary" @click="$refs.nowMenu.save(now)">
-                    OK
-                  </v-btn>
-                </v-date-picker>
-              </v-menu>
-              <!-- </v-col> -->
-            </v-row>
-          </v-list-item>
-
-          <v-list-item>
-            <v-row>
-              <v-menu
-                ref="menu"
-                v-model="menu2"
-                :close-on-content-click="false"
-                :nudge-right="40"
-                :return-value.sync="time"
-                transition="scale-transition"
-                offset-y
-                max-width="290px"
-                min-width="290px"
-              >
-                <template v-slot:activator="{ on }">
-                  <v-text-field
-                    v-model="time"
-                    label="Picker in menu"
-                    prepend-icon="access_time"
-                    readonly
-                    v-on="on"
-                  ></v-text-field>
-                </template>
-                <v-time-picker
-                  v-if="menu2"
+        <v-list-item>
+          <v-row>
+            <v-menu
+              ref="menu"
+              v-model="menu2"
+              :close-on-content-click="false"
+              :nudge-right="40"
+              :return-value.sync="time"
+              transition="scale-transition"
+              offset-y
+              max-width="290px"
+              min-width="290px"
+            >
+              <template v-slot:activator="{ on }">
+                <v-text-field
                   v-model="time"
-                  full-width
-                  @click:minute="$refs.menu.save(time)"
-                ></v-time-picker>
-              </v-menu> </v-row
-          ></v-list-item>
+                  label="Picker in menu"
+                  prepend-icon="access_time"
+                  readonly
+                  v-on="on"
+                ></v-text-field>
+              </template>
+              <v-time-picker
+                v-if="menu2"
+                v-model="time"
+                full-width
+                @click:minute="$refs.menu.save(time)"
+              ></v-time-picker>
+            </v-menu> </v-row
+        ></v-list-item>
 
-          <div>
-            <v-btn @click="shareReminder">save</v-btn>
-          </div>
-          <!-- <v-list-item v-for="(item, index) in items" :key="index" @click="a">
+        <div>
+          <v-btn @click="shareReminder">save</v-btn>
+        </div>
+        <!-- <v-list-item v-for="(item, index) in items" :key="index" @click="a">
             <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item> -->
-        </v-list>
-      </v-menu>
-    </div>
+      </v-list>
+    </v-menu>
+    <!-- </div> -->
 
     <md-button class="md-icon-button" @click="collaborator">
       <img src="../assets/collaborator.svg" alt="colaborator" />
@@ -231,16 +194,23 @@
       <md-menu-content>
         <md-menu-item>
           <md-button @click="deleteNote">Label Note</md-button>
-          </md-menu-item>
+        </md-menu-item>
         <md-content v-for="label in AllLabels" :key="label._id">
           <md-menu-item>
-            <md-checkbox v-model="labels" value="label.label" @click="addNoteLabel(label._id,label.label)">{{label.label}}</md-checkbox>
+            <md-checkbox
+            
+              v-model="labels"
+              value="label._id"
+              @click="$event.stopPropagation();addNoteLabel(label._id, label.label)"
+              >{{ label.label }}</md-checkbox
+            > 
+            <!--  <input type="checkbox" v-model="user.roles" :value="role"/> -->
           </md-menu-item>
         </md-content>
 
-        <!-- <md-menu-item v-if="addLabel == true">
+        <md-menu-item v-if="addLabel == true">
           
-        </md-menu-item> -->
+        </md-menu-item>
 
         <md-menu-item
           ><md-button @click="addLabelTrue" md-menu-trigger
@@ -256,7 +226,7 @@
       <md-button
         md-menu-trigger
         class="md-icon-button"
-        style="opacity:1"
+        id="menu_vert"
         @click="moreVert"
       >
         <md-icon class="menu_vert">more_vert</md-icon>
@@ -290,7 +260,6 @@ import { labelService } from "../services/messageService";
 export default {
   components: {
     // Collaborator
-   
   },
   computed: {
     hasEnd() {
@@ -304,11 +273,11 @@ export default {
     }
   },
   data: () => ({
-    labelId:"",
-    LabelValue:"",
+    labelId: "",
+    LabelValue: "",
     // collaborator:false,
-    AllLabels:["fadf","label","dfdd",],
-    labels:[] ,
+    AllLabels: ["fadf", "label", "dfdd"],
+    labels: [],
     type: "month",
     now: null,
     nowMenu: false,
@@ -378,29 +347,31 @@ export default {
     // alert("updated");
     // this.$log.info("shareColor :" + this.colorCode);
   },
-created() {
+  created() {
     // subscribe to home component messages
-    this.subscription = labelService.getLabelFromToolbar().subscribe(message => {
-      if (message) {
-        // add message to local state if not empty
-        this.AllLabels = message.text;
-        // this.$log.info(
-        //   "IConComponent:RXJS Labels from toolbar:: " +
-        //     JSON.stringify(this.AllLabels)
-        // );
-      } else {
-        // clear messages when empty message received
-        this.AllLabels = [];
-        // this.$log.info("RXJS message :: " + JSON.stringify(this.messages));
-      }
-    });
+    this.subscription = labelService
+      .getLabelFromToolbar()
+      .subscribe(message => {
+        if (message) {
+          // add message to local state if not empty
+          this.AllLabels = message.text;
+          this.$log.info(
+            "IConComponent:RXJS Labels from toolbar:: " +
+              JSON.stringify(this.AllLabels)
+          );
+        } else {
+          // clear messages when empty message received
+          this.AllLabels = [];
+          // this.$log.info("RXJS message :: " + JSON.stringify(this.messages));
+        }
+      });
   },
 
   methods: {
-    addNoteLabel(labelId,label){
-      this.labelId=labelId;
-      this.labelValue=label;
-       this.$log.info("Labels of Note :" +this.labels);
+    addNoteLabel(labelId, label) {
+      this.labelId = labelId;
+      this.labelValue = label;
+      this.$log.info("Labels of Note :" + this.labels);
     },
     shareReminder() {
       if (this.now !== null || this.time !== null) {
@@ -422,7 +393,7 @@ created() {
       this.$emit("remainder", true);
     },
     collaborator() {
-      this.collaborator=true;
+      this.collaborator = true;
       this.$emit("collaborator", true);
     },
 
@@ -450,6 +421,9 @@ created() {
 </script>
 
 <style>
+.menu_vert {
+  opacity: 1;
+}
 .md-icon-button {
   opacity: 0.65;
 }

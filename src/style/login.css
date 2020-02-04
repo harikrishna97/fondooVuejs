@@ -1,0 +1,25 @@
+.md-card {
+    margin-top: 75px;
+  }
+  .actions {
+    display: flex;
+    justify-content: space-between;
+  }
+  #I1{
+    color:blue;
+  }
+  #I2{
+    color:red
+  }
+  #I3{
+    color:#f3c300
+  }
+  #I4{
+    color:blue
+  }
+  #I5{
+    color:green
+  }
+  #I6{
+    color:red
+  }

@@ -10,12 +10,12 @@
       <md-card class="  md-layout-item md-size-50 md-small-size-100">
         <!-- <md-card-header> -->
         <div class="md-title ">
-          <span style="color:blue">F</span>
-          <span style="color:red">u</span>
-          <span style="color:#f3c300">n</span>
-          <span style="color:blue">d</span>
-          <span style="color:green">o</span>
-          <span style="color:red">o</span>
+          <span id="I1">F</span>
+          <span id="I2">u</span>
+          <span id="I3">n</span>
+          <span id="I4">d</span>
+          <span id="I5">o</span>
+          <span id="I6">o</span>
         </div>
         <div class="md-title">Sign In</div>
         <!-- </md-card-header> -->
@@ -198,36 +198,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.md-card {
-  margin-top: 75px;
-}
-.actions {
-  display: flex;
-  justify-content: space-between;
-}
-// input.md-input {
-//     border-style: ridge;
-// }
 
-// .md-progress-bar {
-//   position: absolute;
-//   top: 0;
-//   right: 0;
-//   left: 0;
-// }
-// .md-layout {
-//   display: flex;
-//   /* height: 164px; */
-//   margin-top: 40px;
-//   margin-left: 413px;
-//   // background-color: red
-// }
-// .md-card-header {
-//   background-color: cornflowerblue;
-// }
-// .md-card-actions {
-//   display: flex;
-//   flex-direction: row;
-//   justify-content: center;
-// }
+@import "../style/login.css";
+
 </style>

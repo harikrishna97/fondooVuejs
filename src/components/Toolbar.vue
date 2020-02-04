@@ -1,6 +1,6 @@
 <template>
   <!-- <div class="page-container"> -->
-  <md-app class="MainApp" md-mode="fixed">
+  <md-app class="MainApp" md-waterfall  md-mode="fixed" >
     <md-app-toolbar class="">
       <div class="md-toolbar-section-start">
         <md-button class="md-icon-button" @click="toggleMenu">
@@ -147,10 +147,7 @@
         </div>
 
         <div v-if="showEditLabel == true">
-          <md-dialog
-            :md-active.sync="showEditLabel"
-            style="width:200px;height:500px;"
-          >
+          <md-dialog :md-active.sync="showEditLabel" class="Dialog1">
             <div>
               <div>Edit labels</div>
               <div sytle="display:flex;justify-content:space-around">
@@ -158,7 +155,7 @@
                    <md-icon class="menu_vert">more_vert</md-icon> -->
                 <!-- </button> -->
 
-                <md-field style="width:200px;height:20px;">
+                <md-field class="Field1">
                   <md-input
                     type="text"
                     placeholder="Create Your Label.."
@@ -373,9 +370,10 @@ export default {
         // headers: {Authorization:'JWT ' + localStorage.getItem('token')
         const auth = { headers: { token: token } };
         HTTP.post("label", labelData, auth)
-        .then(response => {
+          .then(response => {
             this.$log.info(
-              "createLabel:toolbar:response :: " + JSON.stringify(response.data.data.label)
+              "createLabel:toolbar:response :: " +
+                JSON.stringify(response.data.data.label)
             );
             this.$emit("updateNote", "note added");
           })
@@ -393,12 +391,12 @@ export default {
         .then(response => {
           this.$log.info(
             " getaLLLabels:toolbar:response :: " +
-              JSON.stringify(response.data.data.label)
+              JSON.stringify(response.data.data)
           );
 
           // this.$log.info("get color :: " + JSON.stringify(response.data.data.color));
 
-          this.AllLabels =response.data.data;
+          this.AllLabels = response.data.data;
           this.sendLabelToIcon(this.AllLabels);
           // this.$log.info("AllLabels :: " + JSON.stringify(this.AllLabels));
         })
@@ -407,152 +405,10 @@ export default {
         });
     }
   }
-
-  // destroyed: function(){
-  //   alert('Destroyed');
-  //   }
 };
 </script>
 
 <style lang="scss" scoped>
-.editLabel1 {
-  display: flex;
-  justify-content: space-around;
-}
-// .badge:after {
-//   content: "";
-//   position: absolute;
-//   background: rgba(255, 0, 0, 0.85);
-//   height: 1rem;
-//   top: 1rem;
-//   right: 1rem;
-//   width: 1rem;
-//   text-align: center;
-//   line-height: 2rem;
-//   font-size: 1rem;
-//   border-radius: 50%;
-//   color: white;
-// }
-.profile {
-  display: flex;
-  justify-content: center;
-}
-.md-app {
-  // max-height: 500px;
-  // height:600px;
-  border: 1px solid rgba(#000, 0.12);
-  overflow: hidden;
-}
+@import "../style/dashboard.css";
 
-.md-drawer {
-  width: 230px;
-  max-width: calc(100vw - 125px);
-  margin-top: 4.615em;
-}
-
-#search {
-  width: 631px;
-  background-color: lightgrey;
-  border: ridge;
-  margin: 5px 0px;
-}
-
-form.search-bar.md-layout {
-  background-color: lightgrey;
-  border-radius: 8px;
-}
-.content {
-  display: flexbox;
-}
-.appContent {
-  margin-left: 250px;
-  outline: none;
-  border: none;
-}
-.email {
-  color: #5f6368;
-  font: 400 14px/19px Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
-  letter-spacing: normal;
-  text-align: center;
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-.user {
-  display: flex;
-  justify-content: space-evenly;
-  color: #202124;
-  font: 500 16px/22px Google Sans, Roboto, RobotoDraft, Helvetica, Arial,
-    sans-serif;
-  // letter-spacing: .29px;
-  // margin: 0;
-  // text-align: center;
-  // text-overflow: ellipsis;
-  // overflow: hidden;
-}
-.signOuts {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  display: block;
-  // vertical-align: top;
-  // text-align: center;
-}
-.searchId {
-  border-radius: 8px;
-}
-.md-icon-button {
-  opacity: 0.85;
-  // background-size: 120px 120px;
-  //   height: 120px;
-  //   margin: 20px;
-  //   opacity: .1;
-  //   width: 120px;
-}
-//  md-app{
-//   height: 570px;
-// }
-// .md-menu-content{
-// background-color:#F5F5F5;
-// width:300px;
-// height:500px;
-// }
-// /deep/
-.md-overlay {
-  position: absolute;
-  height:0px !important;
-  /* z-index: 5; */
-  overflow: hidden;
-  background: no-repeat;
-  transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  transition-property: opacity;
-  will-change: opacity;
-}
-// div.md-overlay {
-//     height: 0px;
-// }
-.MainApp {
-  height: 100vh;
-}
-
-.avatar {
-  width: 40px;
-  min-width: 40px;
-  height: 40px;
-  margin: auto;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  position: relative;
-  border-radius: 40px;
-  transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  transition-property: color, background-color;
-  will-change: color, background-color;
-  font-size: 24px;
-  letter-spacing: -0.05em;
-  vertical-align: middle;
-}
 </style>

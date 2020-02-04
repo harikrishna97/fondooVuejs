@@ -1,0 +1,116 @@
+.Dialog1 {
+    width: 200px;
+    height: 500px;
+  }
+  .Field1 {
+    width: 200px;
+    height: 20px;
+  }
+  .editLabel1 {
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .profile {
+    display: flex;
+    justify-content: center;
+  }
+  .md-app {
+    /* // max-height: 500px;
+    // height:600px; */
+    border: 1px solid rgba(#000, 0.12);
+    overflow: hidden;
+  }
+  
+  .md-drawer {
+    width: 230px;
+    max-width: calc(100vw - 125px);
+    margin-top: 4.615em;
+  }
+  
+  #search {
+    width: 631px;
+    background-color: lightgrey;
+    border: ridge;
+    margin: 5px 0px;
+  }
+  
+  form.search-bar.md-layout {
+    background-color: lightgrey;
+    border-radius: 8px;
+  }
+  .content {
+    display: flexbox;
+  }
+  .appContent {
+    margin-left: 250px;
+    outline: none;
+    border: none;
+  }
+  .email {
+    color: #5f6368;
+    font: 400 14px/19px Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
+    letter-spacing: normal;
+    text-align: center;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  .user {
+    display: flex;
+    justify-content: space-evenly;
+    color: #202124;
+    font: 500 16px/22px Google Sans, Roboto, RobotoDraft, Helvetica, Arial,
+      sans-serif;
+  }
+  .signOuts {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    display: block;
+    /* // vertical-align: top; */
+    /* // text-align: center; */
+  }
+  .searchId {
+    border-radius: 8px;
+  }
+  .md-icon-button {
+    opacity: 0.85;
+  }
+  
+  /* // /deep/ */
+  .md-overlay {
+    position: absolute;
+    height: 0px !important;
+    /* z-index: 5; */
+    overflow: hidden;
+    background: no-repeat;
+    transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    transition-property: opacity;
+    will-change: opacity;
+  }
+  
+  .MainApp {
+    height: 100vh;
+  }
+  
+  .avatar {
+    width: 40px;
+    min-width: 40px;
+    height: 40px;
+    margin: auto;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    position: relative;
+    border-radius: 40px;
+    transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition-property: color, background-color;
+    will-change: color, background-color;
+    font-size: 24px;
+    letter-spacing: -0.05em;
+    vertical-align: middle;
+  }

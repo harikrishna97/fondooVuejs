@@ -40,11 +40,12 @@
             "
           >
             {{ note.description }}
+
           </div>
           <div v-if="note.label != null" class="Icons">
-            <!-- <div v-for="label in note.label" :key="label._id"> -->
-            <md-chip class="" md-deletable>label1</md-chip>
-            <!-- </div> -->
+            <div v-for="label in note.label" :key="label._id">
+            <md-chip class="" md-deletable>{{label.label}}</md-chip>
+            </div>
 
             <!-- <md-chips v-model="messages" md-placeholder></md-chips> -->
           </div>
@@ -136,11 +137,10 @@ export default {
 
     moreVert(flag) {
       this.$log.info("moreVert:flag :: " + flag);
-      this.mdMenuTrigger=true;
+      this.mdMenuTrigger = true;
     },
     deleteNote(flag) {
       this.$log.info("deleteNote:flag :: " + flag);
-
     },
 
     noteEdit() {
@@ -270,119 +270,97 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// @import './assets/styles/yourstyles.css';
+// @import "../style/displayNote.css";
 .Icons {
-  display: flex;
-  justify-content: start;
-}
-.gridViewClass {
-  padding: 16px;
-  display: flex;
-  flex-wrap: wrap;
-}
-.listViewClass {
-  padding: 16px;
-}
+    display: flex;
+    justify-content: start;
+  }
+  .gridViewClass {
+    padding: 16px;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .listViewClass {
+    padding: 16px;
+  }
+  
+  .md-card2 {
+    width: 250px;
+    margin: 10px;
+    /* //   height:200px; */
+    display: inline-block;
+    vertical-align: top;
+  }
+  .md-card1 {
+    width: 550px;
+    margin: 10px;
+    /* //   height:200px; */
+    display: inline-block;
+    vertical-align: top;
+  }
+  
+  
+  .md-icon-button {
+    
+    opacity: 0.85;
+  }
+  .inputClass {
+    width: 166px;
+    border: none;
+    outline: none;
+  }
+  .description {
+    justify-content: flex-start;
+    display: flex;
+  }
+  .title {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+  }
+  
+  .title1 {
+    margin-top: 4%;
+    position: relative;
+  }
+  .md-elevation-1 {
+    border-radius: 8px;
+  }
+  .md-elevation-1 :hover .md-icon-button {
+    visibility: visible;
+  }
+  .md-icon-button {
+    visibility: hidden;
+  }
+  
+  .md-content {
+    width: 100px;
+    /* // height: 100px; */
+    margin: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .md-avatar {
+    width: 25px;
+    min-width: 25px;
+    height: 25px;
+    margin: auto;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    position: relative;
+    border-radius: 40px;
+    transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition-property: color, background-color;
+    will-change: color, background-color;
+    font-size: 24px;
+    letter-spacing: -0.05em;
+    vertical-align: middle;
+    padding: 5px 7px 3px;
+  }
 
-.md-card2 {
-  width: 250px;
-  margin: 10px;
-  //   height:200px;
-  display: inline-block;
-  vertical-align: top;
-}
-.md-card1 {
-  width: 550px;
-  margin: 10px;
-  //   height:200px;
-  display: inline-block;
-  vertical-align: top;
-}
-// .elevation-demo {
-//   padding: 16px;
-//   display: flex;
-//   flex-wrap: wrap;
-// }
-
-// flex-wrap: wrap;
-// justify-items: flex-start
-
-// .listView {
-//   width: 250px;
-//   margin: 4px;
-//   //   height:200px;
-//   display: inline-block;
-//   vertical-align: top;
-// }
-
-.md-icon-button {
-  // opacity: .1;
-  // background-size: 120px 120px;
-  // height: 120px;
-  // margin: 20px;
-  opacity: 0.85;
-  // width: 120px;
-}
-.inputClass {
-  width: 166px;
-  border: none;
-  outline: none;
-}
-.description {
-  justify-content: flex-start;
-  display: flex;
-}
-.title {
-  display: flex;
-  justify-content: space-between;
-  flex-direction: row;
-}
-
-.title1 {
-  margin-top: 4%;
-  position: relative;
-}
-.md-elevation-1 {
-  border-radius: 8px;
-}
-.md-elevation-1 :hover .md-icon-button {
-  //.icon-toolbar{
-  visibility: visible;
-}
-.md-icon-button {
-  visibility: hidden;
-}
-
-.md-content {
-  width: 100px;
-  // height: 100px;
-  margin: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.md-avatar {
-  width: 25px;
-  min-width: 25px;
-  height: 25px;
-  margin: auto;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  /* overflow: hidden; */
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  /* user-select: none; */
-  position: relative;
-  border-radius: 40px;
-  transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  transition-property: color, background-color;
-  will-change: color, background-color;
-  font-size: 24px;
-  letter-spacing: -0.05em;
-  vertical-align: middle;
-  padding: 5px 7px 3px;
-}
-// style="border:none;outline:none"
 </style>

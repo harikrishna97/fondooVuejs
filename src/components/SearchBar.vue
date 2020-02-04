@@ -33,10 +33,7 @@ export default {
     searchData: [],
     searchOption: []
   }),
-  // watch: {
-  //   searchTerm: function() {
-  //     this.$emit("searchRecords", this.searchTerm);
-  //   },
+ 
   methods: {
     searchNotes() {
       if (this.searchTerm !== "") {
@@ -45,10 +42,10 @@ export default {
         const auth = { headers: { token: token } };
         HTTP.get("search/" + this.searchTerm, auth)
           .then(response => {
-            // this.$log.info(
-            //   " SearchBNote:searchComponent : response :: " +
-            //     JSON.stringify(response.data.data)
-            // );
+            this.$log.info(
+              " SearchBNote:searchComponent : response :: " +
+                JSON.stringify(response.data.data)
+            );
             this.searchData = response.data.data;
             // this.searchData.forEach(element => {
             //   this.searchOption=element.title

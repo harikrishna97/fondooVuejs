@@ -41,6 +41,9 @@
           </div>
         </form>
       </md-card-content>
+      <!-- <div>
+        <Icons></Icons>
+        </div> -->
       <md-card-toolbar class="searchtoolbar" >
         <div class="md-toolbar-section">
           <md-button class="md-icon-button">
@@ -81,22 +84,6 @@
             <!-- <img src="../assets/threedot.svg" alt="more_vert"> -->
             <md-tooltip md-direction="bottom">more</md-tooltip>
           </md-button>
-
-          <!-- <md-button class="md-icon-button">
-            <md-icon>archive_none</md-icon> -->
-            <!-- <img src="../assets/undo.svg" alt="undo" />
-            <md-tooltip md-direction="bottom">Undo</md-tooltip>
-          </md-button>
-
-          <md-button class="md-icon-button">
-            <md-icon>archive_none</md-icon> -->
-            <!-- <img
-              src="../assets/undo.svg"
-              style="transform: scaleX(-1);"
-              alt="redo"
-            />
-            <md-tooltip md-direction="bottom">Redo</md-tooltip>
-          </md-button> --> 
         </div>
         <div class="md-toolbar-section-end">
           <md-button @click="toggleComponent">close</md-button>
@@ -108,6 +95,7 @@
 
 <script>
 import { HTTP } from "../services/http-common";
+// import Icons from "./Icons";
 
 export default {
   name: "editNote",
@@ -117,8 +105,11 @@ export default {
     description: null,
     noteColor:"",
   }),
-  components: {},
+  components: {
+    // Icons
+    },
   props:["note"],
+
   mounted(){
       this.$log.info("Shared note from display :: " +this.note);
       this.title = this.note.title;
