@@ -36,9 +36,9 @@
       </md-dialog-actions>
     </md-dialog>
 
-    <md-button class="md-primary md-raised" @click="showDialog = true;"
+    <!-- <md-button class="md-primary md-raised" @click="showDialog = true;"
       >Show Dialog</md-button
-    >
+    > -->
   </div>
 </template>
 
@@ -49,7 +49,7 @@ export default {
   name: "DialogCustom",
   data: () => ({
     collaboratorId: null,
-    showDialog: false
+    showDialog: true
   }),
 
   methods: {

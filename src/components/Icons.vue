@@ -1,9 +1,48 @@
 <template>
   <div>
-    <!-- <div class="text-center"> -->
+  
+    <!-- CollaboratorDialog -->
+    <md-dialog :md-active.sync="showCollaborator">
+      <md-dialog-title>Collaborators</md-dialog-title>
+      <md-divider></md-divider>
+
+      <md-card class="card1">
+
+        <div>
+          <md-avatar style="opacity:0.5;">
+            <img src="../assets/sharePeople.svg" alt="share" />
+            <md-tooltip md-direction="bottom">Shailesh Borase</md-tooltip>
+          </md-avatar>
+        </div>
+
+        <!-- <div > -->
+        <input
+          class="inputEmail"
+          type="text"
+          v-model="collaboratorId"
+          placeholder="Person or email to share with"
+        />
+        <!-- </div> -->
+      </md-card>
+
+      <md-dialog-actions>
+        <md-button class="md-primary" @click="showCollaborator=false"
+          >cancel</md-button
+        >
+        <md-button
+          class="md-primary"
+          @click="
+            showCollaborator = false;
+            addCollaborator();
+          "
+          >Save</md-button
+        >
+      </md-dialog-actions>
+    </md-dialog>
+<!-- ........................... -->
     <v-menu>
       <template v-slot:activator="{ on: menu }">
-        <md-button v-on="{ ...menu }" class="md-icon-button" @click="remainder">
+        <md-button v-on="{ ...menu }" class="md-icon-button">
           <img src="../assets/remainder.svg" alt="remainder" />
           <md-tooltip md-direction="bottom">Remind me</md-tooltip>
         </md-button>
@@ -128,16 +167,10 @@
     </v-menu>
     <!-- </div> -->
 
-    <md-button class="md-icon-button" @click="collaborator">
+    <md-button class="md-icon-button" v-on:click="showCollaborator1">
       <img src="../assets/collaborator.svg" alt="colaborator" />
       <md-tooltip md-direction="bottom">Collaborator</md-tooltip>
     </md-button>
-
-    <!-- <md-button class="md-icon-button" @click="colorpalet">
-       <md-icon>color_lens</md-icon> -->
-    <!-- <img src="../assets/colorPalet.svg" alt="colorpalet" />
-      <md-tooltip md-direction="bottom">Change color</md-tooltip>
-    </md-button> -->
 
     <!--  ...................................... -->
 
@@ -198,19 +231,16 @@
         <md-content v-for="label in AllLabels" :key="label._id">
           <md-menu-item>
             <md-checkbox
-            
-              v-model="labels"
+              v-model="label[label]"
               value="label._id"
-              @click="$event.stopPropagation();addNoteLabel(label._id, label.label)"
+              @change="addNoteLabel(label)"
               >{{ label.label }}</md-checkbox
-            > 
+            >
             <!--  <input type="checkbox" v-model="user.roles" :value="role"/> -->
           </md-menu-item>
         </md-content>
 
-        <md-menu-item v-if="addLabel == true">
-          
-        </md-menu-item>
+        <md-menu-item v-if="addLabel == true"> </md-menu-item>
 
         <md-menu-item
           ><md-button @click="addLabelTrue" md-menu-trigger
@@ -273,11 +303,13 @@ export default {
     }
   },
   data: () => ({
+   collaboratorId:null,
+    showCollaborator: false,
     labelId: "",
     LabelValue: "",
     // collaborator:false,
-    AllLabels: ["fadf", "label", "dfdd"],
-    labels: [],
+    AllLabels: [],
+    labels: [Boolean],
     type: "month",
     now: null,
     nowMenu: false,
@@ -368,10 +400,19 @@ export default {
   },
 
   methods: {
-    addNoteLabel(labelId, label) {
-      this.labelId = labelId;
+    addCollaborator(){
+      this.$emit("collaborator",this.collaboratorId);
+      // this.$log.info("showCollaborator :", this.collaboratorId);
+      
+    },
+    showCollaborator1(){
+      this.showCollaborator=!this.showCollaborator;
+      this.$log.info("showCollaborator :", this.showCollaborator);
+    },
+    addNoteLabel(label) {
       this.labelValue = label;
-      this.$log.info("Labels of Note :" + this.labels);
+      this.$log.info("Labels of Note :", label.label);
+      this.$emit("addLabel", label._id);
     },
     shareReminder() {
       if (this.now !== null || this.time !== null) {
@@ -389,14 +430,6 @@ export default {
       // this.$log.info("shareColor :" + colorCode);
     },
     stopTheEvent: $event => $event.stopPropagation(),
-    remainder() {
-      this.$emit("remainder", true);
-    },
-    collaborator() {
-      this.collaborator = true;
-      this.$emit("collaborator", true);
-    },
-
     archive() {
       this.$emit("archive", true);
     },

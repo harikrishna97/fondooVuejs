@@ -5,10 +5,11 @@
 
       <md-tabs md-dynamic-height>
         <md-tab md-label="Upload Photos">
-          <!-- <md-avatar>
-            <img :src="imageUrl" alt="Avatar" />
+          <!-- <div class="Image"  > 
+            
+            <img alt="Avatar" :src="selectedFile"  />
             <md-tooltip md-direction="bottom">Shailesh Borase</md-tooltip>
-          </md-avatar> -->
+          </div> -->
 
           <div class="inputfile">
             <!-- <input type="file" placeholder="Select a Photo from your computer" name:fileName> -->
@@ -84,6 +85,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.Image{
+  display: flex;
+  justify-content:center;
+  width:200px;
+  height:200px;
+}
 .md-dialog {
   max-width: 768px;
 }

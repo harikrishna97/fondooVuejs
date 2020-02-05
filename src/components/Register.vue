@@ -240,10 +240,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.md-card{
-  margin-top:75px
+.mainDiv{
+  display: flex;
+    justify-content: center
 }
-
+.md-card{
+  margin-top:75px;
+  width:700px;
+}
+.column{
+  width: 50px;
+}
 
 .image {
   width: "100px";

@@ -286,14 +286,14 @@ export default {
     // alert("updated");
     // this.toggleListGrid=this.toggleListGrid;
 
-    this.createLabel();
-    this.getAllLabels();
+    // this.createLabel();
+    // this.getAllLabels();
   },
   methods: {
     update(e) {
       this.$log.info(" Profile changed...:: ", e);
-      // this.created();
-      // this.getAllLabels();
+      this.created();
+      this.getAllLabels();
     },
     stopTheEvent: event => event.stopPropagation(),
     sendListViewTrue(value) {

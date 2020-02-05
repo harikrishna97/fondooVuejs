@@ -1,7 +1,7 @@
 //@description: Login Component
 
 <template>
-  <div class="mainDiv md-layout-item md-small-size-100">
+  <div class="mainDiv md-layout-item  md-size-50 md-small-size-100">
     <form
       novalidate
       class="card md-layout  md-alignment-space-around-center"
@@ -199,6 +199,37 @@ export default {
 
 <style lang="scss" scoped>
 
-@import "../style/login.css";
+// @import "../style/login.css";
+.mainDiv{
+  display: flex;
+    justify-content: center
+}
+.md-card {
+    margin-top: 75px;
+    
+  }
+  .actions {
+    display: flex;
+    justify-content: space-between;
+  }
+  #I1{
+    color:blue;
+  }
+  #I2{
+    color:red
+  }
+  #I3{
+    color:#f3c300
+  }
+  #I4{
+    color:blue
+  }
+  #I5{
+    color:green
+  }
+  #I6{
+    color:red
+  }
+
 
 </style>

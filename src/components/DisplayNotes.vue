@@ -40,15 +40,26 @@
             "
           >
             {{ note.description }}
-
           </div>
+
           <div v-if="note.label != null" class="Icons">
             <div v-for="label in note.label" :key="label._id">
-            <md-chip class="" md-deletable>{{label.label}}</md-chip>
+              <md-chip class="" md-deletable>{{ label.label }}</md-chip>
             </div>
-
+            <!-- md-limit md-delete -->
             <!-- <md-chips v-model="messages" md-placeholder></md-chips> -->
           </div>
+
+          <!-- <div v-if="note.collaborator != null" class="Icons">-->
+          <!-- <div v-for="collaborator in note.collaborator" :key="collaborator._id"> -->
+          <!-- <md-button class="collaboratorDiv md-icon-button">
+            <img src="../assets/avatar.png" alt="Avatar" />
+            <md-tooltip md-direction="bottom">Shailesh Borase</md-tooltip>
+          </md-button> -->
+          <!-- </div> -->
+
+          <!-- </div>  -->
+
           <div v-if="note.remainder != null" class="Icons">
             <md-chip class="" md-deletable>{{ note.remainder }}</md-chip>
             <!-- <md-chips v-model="messages" md-placeholder></md-chips> -->
@@ -57,7 +68,7 @@
         <div @click="getNoteId(note._id)">
           <Icons
             class="Icons"
-            @remainder="addRemainder"
+            @addLabel="labelIdFromIcon"
             @collaborator="addCollaborator"
             @archive="addArchive"
             @colorpalet="colorPalet1"
@@ -92,6 +103,7 @@ export default {
   props: ["AllNotes", "remaindersLabel"],
 
   data: () => ({
+    currentLabelId: null,
     listView: false,
     open: false,
     editnote: false,
@@ -104,12 +116,23 @@ export default {
     currentNoteId: "",
 
     colorCode: "",
-    messages: []
+    messages: [],
+    defaultImage: "",
+    collaboratorId: null
   }),
 
   components: { EditNote, Icons },
-  updated() {},
   methods: {
+    addCollaborator(flag) {
+      this.collaboratorId = flag;
+      this.$log.info("addCollaborator2:flag ::  ", flag, this.collaboratorId);
+      this.addCollaboratorToNote();
+    },
+    labelIdFromIcon(labelId) {
+      this.currentLabelId = labelId;
+      this.updateFlag("label", this.currentNoteId);
+    },
+
     shareReminder(reminder) {
       this.reminderValue = reminder;
       // this.$log.info("reminderValue from icon :: " + this.reminderValue);
@@ -118,9 +141,7 @@ export default {
     addRemainder(flag) {
       this.$log.info("addRemainder:flag :: " + flag);
     },
-    addCollaborator(flag) {
-      this.$log.info("addCollaborator:flag ::  " + flag);
-    },
+
     addArchive(flag) {
       this.$log.info("addArchive:flag :: " + flag);
       this.updateFlag("archive", this.currentNoteId);
@@ -165,16 +186,14 @@ export default {
       this.$log.info("color selected :: " + flag);
       this.$log.info("color selected :: " + noteId);
 
-      // this.cardColor=color;
-      // alert("NoteId:: " +noteId)
-      // this.mounted();
-
       const token = localStorage.getItem("token");
       const editData = {};
       if (flag == "archive") {
         editData.flagValue = true;
       } else if (flag == "color") {
         editData.flagValue = this.colorCode;
+      } else if (flag == "label") {
+        editData.flagValue = this.currentLabelId;
       }
 
       const auth = { headers: { token: token } };
@@ -215,7 +234,24 @@ export default {
           });
       }
     },
+    addCollaboratorToNote() {
+      if (this.collaboratorId !== null) {
+        const token = localStorage.getItem("token");
+        const auth = { headers: { token: token } };
+                this.$log.info("TOken .... :: " + auth,this.currentNoteId,this.collaboratorId,token);
+          const noteId=this.currentNoteId;
+          // const collaboratorId=this.collaboratorId;
+        HTTP.post("collaborator/"+noteId+"/5e2ea07520fbd470c4320d23",{},auth)
+          .then(response => {
+            this.$log.info("response :: " + JSON.stringify(response.data.data));
+            // this.$emit("updateNote", "note added");
+          })
+          .catch(err => {
+            this.$log.info("error :: " + err);
+          });
+      }
 
+    },
     addRemainderToNote(value) {
       const reminderData = {};
       reminderData.remainder = value;
@@ -241,6 +277,7 @@ export default {
     }
   },
   mounted() {
+    this.defaultImage = localStorage.getItem("imageUrl");
     // this.$log.info("Display :: Note Object " + JSON.stringify(this.noteId));
     // this.title = this.AllNotes;
     // this.description = this.AllNotes;
@@ -272,95 +309,98 @@ export default {
 <style lang="scss" scoped>
 // @import "../style/displayNote.css";
 .Icons {
-    display: flex;
-    justify-content: start;
-  }
-  .gridViewClass {
-    padding: 16px;
-    display: flex;
-    flex-wrap: wrap;
-  }
-  .listViewClass {
-    padding: 16px;
-  }
-  
-  .md-card2 {
-    width: 250px;
-    margin: 10px;
-    /* //   height:200px; */
-    display: inline-block;
-    vertical-align: top;
-  }
-  .md-card1 {
-    width: 550px;
-    margin: 10px;
-    /* //   height:200px; */
-    display: inline-block;
-    vertical-align: top;
-  }
-  
-  
-  .md-icon-button {
-    
-    opacity: 0.85;
-  }
-  .inputClass {
-    width: 166px;
-    border: none;
-    outline: none;
-  }
-  .description {
-    justify-content: flex-start;
-    display: flex;
-  }
-  .title {
-    display: flex;
-    justify-content: space-between;
-    flex-direction: row;
-  }
-  
-  .title1 {
-    margin-top: 4%;
-    position: relative;
-  }
-  .md-elevation-1 {
-    border-radius: 8px;
-  }
-  .md-elevation-1 :hover .md-icon-button {
-    visibility: visible;
-  }
-  .md-icon-button {
-    visibility: hidden;
-  }
-  
-  .md-content {
-    width: 100px;
-    /* // height: 100px; */
-    margin: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .md-avatar {
-    width: 25px;
-    min-width: 25px;
-    height: 25px;
-    margin: auto;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    position: relative;
-    border-radius: 40px;
-    transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    transition-property: color, background-color;
-    will-change: color, background-color;
-    font-size: 24px;
-    letter-spacing: -0.05em;
-    vertical-align: middle;
-    padding: 5px 7px 3px;
-  }
+  display: flex;
+  justify-content: start;
+  flex-wrap: wrap;
+}
+.gridViewClass {
+  padding: 16px;
+  display: flex;
+  flex-wrap: wrap;
+}
+.listViewClass {
+  padding: 16px;
+}
 
+.md-card2 {
+  width: 250px;
+  margin: 10px;
+  /* //   height:200px; */
+  display: inline-block;
+  vertical-align: top;
+}
+.md-card1 {
+  width: 550px;
+  margin: 10px;
+  /* //   height:200px; */
+  display: inline-block;
+  vertical-align: top;
+}
+
+.md-icon-button {
+  opacity: 0.85;
+}
+.inputClass {
+  width: 166px;
+  border: none;
+  outline: none;
+}
+.description {
+  justify-content: flex-start;
+  display: flex;
+}
+.title {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+.title1 {
+  margin-top: 4%;
+  position: relative;
+}
+.md-elevation-1 {
+  border-radius: 8px;
+}
+.md-elevation-1 :hover .md-icon-button {
+  visibility: visible;
+}
+.md-icon-button {
+  visibility: hidden;
+}
+
+.md-content {
+  width: 100px;
+  /* // height: 100px; */
+  margin: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.collaboratorDiv {
+  // background-color: grey;
+  border-radius: 25px;
+  width: 25px;
+  height: 25px;
+}
+.md-avatar {
+  width: 25px;
+  min-width: 25px;
+  height: 25px;
+  margin: auto;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  position: relative;
+  border-radius: 40px;
+  transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition-property: color, background-color;
+  will-change: color, background-color;
+  font-size: 24px;
+  letter-spacing: -0.05em;
+  vertical-align: middle;
+  padding: 5px 7px 3px;
+}
 </style>
