@@ -1,36 +1,56 @@
 <template>
   <div>
-  
     <!-- CollaboratorDialog -->
-    <md-dialog :md-active.sync="showCollaborator">
+    <md-dialog :md-active.sync="showCollaborator" class="collDialog">
       <md-dialog-title>Collaborators</md-dialog-title>
-      <md-divider></md-divider>
-
-      <md-card class="card1">
-
-        <div>
-          <md-avatar style="opacity:0.5;">
-            <img src="../assets/sharePeople.svg" alt="share" />
+      <!-- <md-divider></md-divider> -->
+      <hr style="width:100%;" />
+      <div class="Owner">
+        <div class="Owner1">
+          <md-avatar style="">
+            <img :src="imageUrl" alt="share" />
             <md-tooltip md-direction="bottom">Shailesh Borase</md-tooltip>
           </md-avatar>
         </div>
+        <div class="Owner2">
+          <h4 :v-model="user">{{ user }}</h4>
+          <!-- </div> -->
+          <!-- <div class="email" :v-model="email"> -->
+          <p :v-model="email">{{ email }}</p>
+        </div>
+      </div>
+      <div class="card1">
+        <div class="addcoll">
+          <div
+            style="border-radius:50%;height:40px;width:40px;border:1px solid grey"
+          >
+            <!-- <img src="../assets/sharePeople.svg" alt="share" /> -->
+            <md-icon style="height:100%;width:100%">person_add</md-icon>
+            <!-- <md-tooltip md-direction="bottom">Shailesh Borase</md-tooltip> -->
+          </div>
+        </div>
 
-        <!-- <div > -->
-        <input
+        <!-- <div class="inputEmail"> -->
+        <md-autocomplete
+          class="inputEmail"
+          v-model="collaboratorId"
+          :md-options="AllUsers"
+          md-layout="box"
+        >
+          <label>Person or email to share with...</label>
+        </md-autocomplete>
+        <!-- <input
           class="inputEmail"
           type="text"
           v-model="collaboratorId"
           placeholder="Person or email to share with"
-        />
+        /> -->
         <!-- </div> -->
-      </md-card>
+      </div>
 
-      <md-dialog-actions>
-        <md-button class="md-primary" @click="showCollaborator=false"
-          >cancel</md-button
-        >
+      <md-dialog-actions class="actions">
+        <md-button @click="showCollaborator = false">cancel</md-button>
         <md-button
-          class="md-primary"
           @click="
             showCollaborator = false;
             addCollaborator();
@@ -39,7 +59,7 @@
         >
       </md-dialog-actions>
     </md-dialog>
-<!-- ........................... -->
+    <!-- ........................... -->
     <v-menu>
       <template v-slot:activator="{ on: menu }">
         <md-button v-on="{ ...menu }" class="md-icon-button">
@@ -286,6 +306,7 @@
 // import Collaborator from "./Collaborator";
 // import { Datetime } from 'vue-datetime'
 import { labelService } from "../services/messageService";
+import { HTTP } from "../services/http-common";
 
 export default {
   components: {
@@ -303,7 +324,8 @@ export default {
     }
   },
   data: () => ({
-   collaboratorId:null,
+    imageUrl: "",
+    collaboratorId: null,
     showCollaborator: false,
     labelId: "",
     LabelValue: "",
@@ -321,8 +343,10 @@ export default {
     closeOnSelect: false,
     selectedDate: null,
     color: "",
-    // date: "",
-    // datetimeEmpty:'',
+    user: "Shailesh Borase(Owner)",
+    email: "adhokshaj108@gmail.com",
+    AllUsers: [],
+
     colorPalet: [
       {
         colorName: "White",
@@ -375,9 +399,10 @@ export default {
     ]
   }),
 
-  updated() {
+  mounted() {
     // alert("updated");
-    // this.$log.info("shareColor :" + this.colorCode);
+    this.getAllUsers();
+    this.$log.info("ALL Users" + JSON.stringify(this.AllUsers));
   },
   created() {
     // subscribe to home component messages
@@ -400,13 +425,13 @@ export default {
   },
 
   methods: {
-    addCollaborator(){
-      this.$emit("collaborator",this.collaboratorId);
+    addCollaborator() {
+      this.$emit("collaborator", this.collaboratorId);
       // this.$log.info("showCollaborator :", this.collaboratorId);
-      
     },
-    showCollaborator1(){
-      this.showCollaborator=!this.showCollaborator;
+    showCollaborator1() {
+      this.showCollaborator = !this.showCollaborator;
+      this.imageUrl = localStorage.getItem("imageUrl");
       this.$log.info("showCollaborator :", this.showCollaborator);
     },
     addNoteLabel(label) {
@@ -448,6 +473,23 @@ export default {
       this.$emit("shareColor", colorCode);
       this.color = colorCode;
       // this.$log.info("shareColor :" + colorCode);
+    },
+    /**
+     * @description :API to get All Users
+     */
+    getAllUsers() {
+      HTTP.get("user")
+        .then(response => {
+          this.$log.info(
+            "get All Users:IconComponent: " + JSON.stringify(response.data.data)
+          );
+
+          this.AllUsers = response.data.data;
+          // this.$log.info("ALLNOTES :: " + JSON.stringify(this.AllNotes));
+        })
+        .catch(err => {
+          this.$log.info("error :: " + err);
+        });
     }
   }
 };
@@ -488,5 +530,39 @@ export default {
   letter-spacing: -0.05em;
   vertical-align: middle;
   padding: 5px 7px 3px;
+}
+.Owner {
+  display: flex;
+}
+.Owner1 {
+  padding-left: 20px;
+    padding-right: 15px;
+
+  /* width: 30%; */
+}
+.md-field {
+  min-height: 35px;
+  margin: -5px 0 0px;
+}
+.md-autocomplete.inputEmail {
+  height: 50px;
+}
+.addcoll {
+  padding-left: 17px;
+}
+.inputEmail {
+  border: none;
+  outline: none;
+  width: 300px;
+}
+.collDialog {
+  z-index: 0;
+}
+.md-field.md-inline.md-autocomplete-box {
+  box-shadow: 0 0px 0px 0px rgba(0, 0, 0, 0.2), 0 0px 0px 0 rgba(0, 0, 0, 0.14),
+    0 0px 0px 0 rgba(0, 0, 0, 0.12);
+}
+.actions {
+  background-color: lightgrey;
 }
 </style>

@@ -44,21 +44,21 @@
 
           <div v-if="note.label != null" class="Icons">
             <div v-for="label in note.label" :key="label._id">
-              <md-chip class="" md-deletable>{{ label.label }}</md-chip>
+              <md-chip class="" md-deletable @md-delete="getNoteId(note._id);deleteLabel(label._id);">{{ label.label }}</md-chip>
             </div>
             <!-- md-limit md-delete -->
             <!-- <md-chips v-model="messages" md-placeholder></md-chips> -->
           </div>
 
-          <!-- <div v-if="note.collaborator != null" class="Icons">-->
-          <!-- <div v-for="collaborator in note.collaborator" :key="collaborator._id"> -->
-          <!-- <md-button class="collaboratorDiv md-icon-button">
+          <div v-if="note.collaborator != null" class="Icons">-->
+          <div v-for="collaborator in note.collaborator" :key="collaborator._id">
+          <md-button class="collaboratorDiv md-icon-button">
             <img src="../assets/avatar.png" alt="Avatar" />
             <md-tooltip md-direction="bottom">Shailesh Borase</md-tooltip>
-          </md-button> -->
-          <!-- </div> -->
+          </md-button>
+          </div>
 
-          <!-- </div>  -->
+          </div> 
 
           <div v-if="note.remainder != null" class="Icons">
             <md-chip class="" md-deletable>{{ note.remainder }}</md-chip>
@@ -123,6 +123,12 @@ export default {
 
   components: { EditNote, Icons },
   methods: {
+    deleteLabel(labelId){
+      this.currentLabelId=labelId;
+      this.updateFlag("del_label",this.currentNoteId);
+           this.$log.info("adgfdrfghxdfghfyhfhfh ");
+
+    },
     addCollaborator(flag) {
       this.collaboratorId = flag;
       this.$log.info("addCollaborator2:flag ::  ", flag, this.collaboratorId);
@@ -183,8 +189,8 @@ export default {
       // this.$log.info("note id at 246: ", this.currentNoteId);
     },
     updateFlag(flag, noteId) {
-      this.$log.info("color selected :: " + flag);
-      this.$log.info("color selected :: " + noteId);
+      this.$log.info("Flag selected :: " + flag);
+      this.$log.info("noteid selected :: " + noteId);
 
       const token = localStorage.getItem("token");
       const editData = {};
@@ -193,6 +199,8 @@ export default {
       } else if (flag == "color") {
         editData.flagValue = this.colorCode;
       } else if (flag == "label") {
+        editData.flagValue = this.currentLabelId;
+      }else if (flag == "del_label") {
         editData.flagValue = this.currentLabelId;
       }
 
@@ -277,7 +285,7 @@ export default {
     }
   },
   mounted() {
-    this.defaultImage = localStorage.getItem("imageUrl");
+    // this.defaultImage = localStorage.getItem("imageUrl");
     // this.$log.info("Display :: Note Object " + JSON.stringify(this.noteId));
     // this.title = this.AllNotes;
     // this.description = this.AllNotes;
