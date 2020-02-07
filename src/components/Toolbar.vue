@@ -1,6 +1,6 @@
 <template>
   <!-- <div class="page-container"> -->
-  <md-app class="MainApp" md-waterfall  md-mode="fixed" >
+  <md-app class="MainApp" md-waterfall md-mode="fixed">
     <md-app-toolbar class="">
       <div class="md-toolbar-section-start">
         <md-button class="md-icon-button" @click="toggleMenu">
@@ -10,7 +10,7 @@
         <div class="md-icon-button">
           <img src="../assets/icon_128.png" alt="icon" />
         </div>
-        <div><h2>Fundoo</h2></div>
+        <div><h2>{{fundoo}}</h2></div>
       </div>
 
       <!-- <div class="search-bar md-layout">  <search-bar></search-bar></div> -->
@@ -66,11 +66,6 @@
           </md-button>
 
           <md-menu-content>
-            <!-- <md-button> -->
-
-            <!-- <div v-if="profileUpload === true"> -->
-            <!-- <ProfileUpload @update="mounted"></ProfileUpload> -->
-            <!-- </div> -->
             <div class="profile">
               <!-- <md-badge class="" md-position="bottom" md-content="<md-icon>menu</md-icon>"> -->
               <div class="avatar md-icon-button" @click="profileUpload1()">
@@ -122,7 +117,7 @@
 
     <md-app-drawer :md-active.sync="menuVisible">
       <md-list>
-        <md-list-item @click="navigateTo('note')">
+        <md-list-item @click="navigateTo('note');fundoo='Fundoo'">
           <md-icon>emoji_objects</md-icon>
           <span class="md-list-item-text">Notes</span>
           <!-- <router-link :to="{ path: '/dashboard/note' } " replace>Notes</router-link> -->
@@ -131,7 +126,7 @@
         </md-list-item>
         <!-- <router-link to="/toolbar/trash">Home</router-link> -->
 
-        <md-list-item @click="navigateTo('remainder')">
+        <md-list-item @click="navigateTo('remainder');fundoo='Reminders'">
           <md-icon>notifications_none</md-icon>
           <span class="md-list-item-text">Remainders</span>
           <!-- <router-link :to="{ path: '/dashboard/remainders' } " replace>Remainders</router-link> -->
@@ -146,56 +141,56 @@
           </md-list-item>
         </div>
 
-        <div v-if="showEditLabel == true">
-          <md-dialog :md-active.sync="showEditLabel" class="Dialog1">
-            <div>
-              <div>Edit labels</div>
-              <div sytle="display:flex;justify-content:space-around">
-                <!-- <button class="md-icon-button">
-                   <md-icon class="menu_vert">more_vert</md-icon> -->
-                <!-- </button> -->
-
-                <md-field class="Field1">
-                  <md-input
-                    type="text"
-                    placeholder="Create Your Label.."
-                    v-model="labelName"
-                  />
-
-                  <!-- <button class="md-icon-button"> -->
-                  <!-- <md-icon class="menu_vert">more_vert</md-icon> -->
-                  <!-- </button> -->
-                </md-field>
-              </div>
-              <div>
-                <md-dialog-content
-                  v-for="label in AllLabels"
-                  :key="label._id"
-                  class="editLabel1"
-                >
-                  <div>
-                    <button class="md-icon-button">
-                      <md-icon>label</md-icon>
-                    </button>
-                  </div>
-
-                  <div>{{ label.label }}</div>
-                  <div>
-                    <button class="md-icon-button">
-                      <md-icon>edit</md-icon>
-                    </button>
-                  </div>
-                </md-dialog-content>
-              </div>
-              <md-divider></md-divider>
-              <button class="md-primary" @click="createLabel()">Done</button>
+        <div v-if="showEditLabel === true">
+          <md-dialog :md-active.sync="showEditLabel" class="md-scrollbar mainD">
+            <md-dialog-title>Edit labels</md-dialog-title>
+            <div class="scrollbar">
+              <md-field class="">
+                <md-button class="md-icon-button" @click="labelName=null">
+                  <md-icon class="menu_vert" style="padding:1px">clear</md-icon>
+                </md-button>
+                <md-input
+                  type="text"
+                  placeholder="Create Your Label.."
+                  v-model="labelName"
+                />
+                <md-button class="md-icon-button" @click="createLabel()">
+                  <md-icon class="menu_vert" style="padding:1px">done</md-icon>
+                </md-button>
+              </md-field>
             </div>
+            <md-dialog-content
+              v-for="label in AllLabels"
+              :key="label._id"
+              class="editLabel1 md-scrollbar"
+            >
+              <div>
+                <md-button
+                  class="md-icon-button"
+                  @click="deleteLabel(label._id)"
+                >
+                  <md-icon>delete</md-icon>
+                </md-button>
+              </div>
 
-            <!-- <EditLabel
-          :note="note"
-          @closeEdit="noteEdit"
-          @updateNote="updateNotes"
-        ></EditLabel> -->
+              <div>
+                <input v-model="label.label" />
+                <md-icon @click="editLabel(label._id,label.label)">edit</md-icon>
+              </div>
+              <!-- <div>
+                <md-button class="md-icon-button">
+                  <md-icon>edit</md-icon>
+                </md-button>
+              </div> -->
+            </md-dialog-content>
+
+            <md-divider></md-divider>
+
+            <md-dialog-actions>
+              <md-button class="" @click="showEditLabel = false"
+                >Done
+              </md-button>
+            </md-dialog-actions>
           </md-dialog>
         </div>
 
@@ -206,12 +201,12 @@
 
         <md-divider></md-divider>
 
-        <md-list-item @click="navigateTo('archive')">
+        <md-list-item @click="navigateTo('archive');fundoo='Archive'">
           <md-icon>archive</md-icon>
           <span class="md-list-item-text">Archive</span>
         </md-list-item>
 
-        <md-list-item @click="navigateTo('trash')">
+        <md-list-item @click="navigateTo('trash');fundoo='Trash'">
           <md-icon>delete</md-icon>
           <span class="md-list-item-text">Trash</span>
         </md-list-item>
@@ -235,6 +230,7 @@ import { HTTP } from "../services/http-common";
 
 export default {
   data: () => ({
+    fundoo:"Fundoo",
     // component:CreateNote1,
     showDialog: false,
     profileUpload: false,
@@ -262,18 +258,7 @@ export default {
     ProfileUpload
     // NoteComponent
   },
-  // mounted(){
-  // this.created();
-  // },
-  beforeCreate() {
-    // alert("before create");
-  },
-  created() {
-    // alert("created");
-  },
-  beforeMount() {
-    // alert("before Mount");
-  },
+
   mounted() {
     this.created();
     this.getAllLabels();
@@ -285,7 +270,6 @@ export default {
   updated() {
     // alert("updated");
     // this.toggleListGrid=this.toggleListGrid;
-
     // this.createLabel();
     // this.getAllLabels();
   },
@@ -359,10 +343,13 @@ export default {
       // this.$log.info("profileUpload :: " + this.profileUpload);
     },
 
+
+
     createLabel() {
       if (this.labelName !== null) {
         const labelData = {};
         labelData.label = this.labelName;
+        this.labelName=null;
         // this.$log.info("labelData :: " + JSON.stringify(labelData));
         const token = localStorage.getItem("token");
         //this.$log.info("token :: " + typeof token);
@@ -374,8 +361,9 @@ export default {
             this.$log.info(
               "createLabel:toolbar:response :: " +
                 JSON.stringify(response.data.data.label)
-            );
-            this.$emit("updateNote", "note added");
+                
+            );this.getAllLabels()
+            // this.$emit("updateNote", "note added");
           })
           .catch(err => {
             this.$log.info("createLabel : toolbar:error :: " + err);
@@ -403,6 +391,26 @@ export default {
         .catch(err => {
           this.$log.info("error :: " + err);
         });
+    },
+    deleteLabel(labelId) {
+      const token = localStorage.getItem("token");
+      const auth = { headers: { token: token } };
+      HTTP.delete("label/"+labelId,auth)
+        .then(response => {
+          this.$log.info(
+            " DeleteLabel:toolbar:response :: " +
+              JSON.stringify(response.data.data)
+          );
+
+          // this.$log.info("get color :: " + JSON.stringify(response.data.data.color));
+
+          this.getAllLabels()
+          
+          // this.$log.info("AllLabels :: " + JSON.stringify(this.AllLabels));
+        })
+        .catch(err => {
+          this.$log.info("DeleteLabel:toolbar:error :: " + err);
+        });
     }
   }
 };
@@ -410,5 +418,16 @@ export default {
 
 <style lang="scss" scoped>
 @import "../style/dashboard.css";
+.mainD {
+  width: 300px;
+}
+.md-list-item{
+  box-shadow:none;
+}
+.md-list-item:hover{
+  background-color: #fbefc3;
+  border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
 
+}
 </style>

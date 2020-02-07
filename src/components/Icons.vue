@@ -3,8 +3,7 @@
     <!-- CollaboratorDialog -->
     <md-dialog :md-active.sync="showCollaborator" class="collDialog">
       <md-dialog-title>Collaborators</md-dialog-title>
-      <!-- <md-divider></md-divider> -->
-      <hr style="width:100%;" />
+      <md-divider></md-divider>
       <div class="Owner">
         <div class="Owner1">
           <md-avatar style="">
@@ -344,7 +343,7 @@ export default {
     selectedDate: null,
     color: "",
     user: "Shailesh Borase(Owner)",
-    email: "adhokshaj108@gmail.com",
+    email: "shaileshborase@gmail.com",
     AllUsers: [],
 
     colorPalet: [
@@ -436,7 +435,7 @@ export default {
     },
     addNoteLabel(label) {
       this.labelValue = label;
-      this.$log.info("Labels of Note :", label.label);
+      this.$log.info("Labels of Note :", label.label,label._id);
       this.$emit("addLabel", label._id);
     },
     shareReminder() {
@@ -484,7 +483,14 @@ export default {
             "get All Users:IconComponent: " + JSON.stringify(response.data.data)
           );
 
-          this.AllUsers = response.data.data;
+          var array =[] 
+          array=response.data.data;
+          array.forEach(element=>{
+            this.$log.info("eleements",element) 
+            this.AllUsers.push(element.email)
+            this.$emit("update", "noteUpdate");
+            
+          })
           // this.$log.info("ALLNOTES :: " + JSON.stringify(this.AllNotes));
         })
         .catch(err => {

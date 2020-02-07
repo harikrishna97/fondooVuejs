@@ -38,7 +38,7 @@ export default {
       if (message) {
         // add message to local state if not empty
         this.AllNotes = message.text;
-        // this.$log.info("NoteComponent:created:RXJS message from search:: " + JSON.stringify(this.AllNotes));
+        this.$log.info("NoteComponent:created:RXJS message from search:: " + JSON.stringify(this.AllNotes));
       } else {
         // clear messages when empty message received
         // this.AllNotes = [];

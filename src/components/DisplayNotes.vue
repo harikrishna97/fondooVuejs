@@ -44,21 +44,38 @@
 
           <div v-if="note.label != null" class="Icons">
             <div v-for="label in note.label" :key="label._id">
-              <md-chip class="" md-deletable @md-delete="getNoteId(note._id);deleteLabel(label._id);">{{ label.label }}</md-chip>
+              <md-chip
+                class=""
+                md-deletable
+                @md-delete="
+                  getNoteId(note._id);
+                  deleteLabel(label._id);
+                "
+                >{{ label.label }}</md-chip
+              >
             </div>
             <!-- md-limit md-delete -->
             <!-- <md-chips v-model="messages" md-placeholder></md-chips> -->
           </div>
-
-          <div v-if="note.collaborator != null" class="Icons">-->
-          <div v-for="collaborator in note.collaborator" :key="collaborator._id">
-          <md-button class="collaboratorDiv md-icon-button">
-            <img src="../assets/avatar.png" alt="Avatar" />
-            <md-tooltip md-direction="bottom">Shailesh Borase</md-tooltip>
-          </md-button>
+          <!-- ---------- -->
+          <div v-if="note.collaborator != null" class="Icons">
+            <div
+              v-for="collaborator in note.collaborator"
+              :key="collaborator._id"
+            >
+              <!-- {{collaborator.imageUrl}} -->
+              <!-- <md-button  class="md-icon-button"> -->
+              <div >
+                <img class="round" :src="collaborator.imageUrl" alt="Avatar" />
+                <md-tooltip md-direction="bottom">{{
+                  collaborator.firstName
+                }}</md-tooltip>
+              </div>
+              <!-- </md-button> -->
+            </div>
+            <!-- md-limit md-delete -->
+            <!-- <md-chips v-model="messages" md-placeholder></md-chips> -->
           </div>
-
-          </div> 
 
           <div v-if="note.remainder != null" class="Icons">
             <md-chip class="" md-deletable>{{ note.remainder }}</md-chip>
@@ -68,6 +85,7 @@
         <div @click="getNoteId(note._id)">
           <Icons
             class="Icons"
+            @update="updateNotes"
             @addLabel="labelIdFromIcon"
             @collaborator="addCollaborator"
             @archive="addArchive"
@@ -123,11 +141,10 @@ export default {
 
   components: { EditNote, Icons },
   methods: {
-    deleteLabel(labelId){
-      this.currentLabelId=labelId;
-      this.updateFlag("del_label",this.currentNoteId);
-           this.$log.info("adgfdrfghxdfghfyhfhfh ");
-
+    deleteLabel(labelId) {
+      this.currentLabelId = labelId;
+      this.updateFlag("del_label", this.currentNoteId);
+      this.$log.info("adgfdrfghxdfghfyhfhfh ");
     },
     addCollaborator(flag) {
       this.collaboratorId = flag;
@@ -200,7 +217,7 @@ export default {
         editData.flagValue = this.colorCode;
       } else if (flag == "label") {
         editData.flagValue = this.currentLabelId;
-      }else if (flag == "del_label") {
+      } else if (flag == "del_label") {
         editData.flagValue = this.currentLabelId;
       }
 
@@ -212,7 +229,7 @@ export default {
           // this.$log.info(
           //   "response restore :: " + JSON.stringify(response.data.data)
           // );
-          this.$emit("updateNote", "note archived");
+          this.$emit("updateNote", "note updated");
           this.trashNotes = response.data.data;
           // this.$log.info("restore .... :: " + JSON.stringify(this.trashNotes));
         })
@@ -246,10 +263,19 @@ export default {
       if (this.collaboratorId !== null) {
         const token = localStorage.getItem("token");
         const auth = { headers: { token: token } };
-                this.$log.info("TOken .... :: " + auth,this.currentNoteId,this.collaboratorId,token);
-          const noteId=this.currentNoteId;
-          // const collaboratorId=this.collaboratorId;
-        HTTP.post("collaborator/"+noteId+"/5e2ea07520fbd470c4320d23",{},auth)
+        this.$log.info(
+          "TOken .... :: " + auth,
+          this.currentNoteId,
+          this.collaboratorId,
+          token
+        );
+        const noteId = this.currentNoteId;
+        // const collaboratorId=this.collaboratorId;
+        HTTP.post(
+          "collaborator/" + noteId + "/5e2ea07520fbd470c4320d23",
+          {},
+          auth
+        )
           .then(response => {
             this.$log.info("response :: " + JSON.stringify(response.data.data));
             // this.$emit("updateNote", "note added");
@@ -258,7 +284,6 @@ export default {
             this.$log.info("error :: " + err);
           });
       }
-
     },
     addRemainderToNote(value) {
       const reminderData = {};
@@ -410,5 +435,15 @@ export default {
   letter-spacing: -0.05em;
   vertical-align: middle;
   padding: 5px 7px 3px;
+}
+.round {
+.img {
+  border-radius: 50%;
+}
+  border-radius: 25px;
+  background: white;
+  padding: 2px; 
+  width: 25px;
+  height: 25px; 
 }
 </style>
