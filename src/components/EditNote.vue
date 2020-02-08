@@ -47,7 +47,6 @@
       <md-card-toolbar class="searchtoolbar" >
         <div class="md-toolbar-section">
           <md-button class="md-icon-button">
-            <!-- <md-icon>add_alert</md-icon> -->
             <img src="../assets/remainder.svg" alt="remainder" />
             <md-tooltip md-direction="bottom">Remind me</md-tooltip>
           </md-button>
@@ -58,19 +57,13 @@
           </md-button>
 
           <md-button class="md-icon-button">
-            <!-- <md-icon>color_lens</md-icon> -->
             <img src="../assets/colorPalet.svg" alt="colorpalet" />
             <md-tooltip md-direction="bottom">Change color</md-tooltip>
           </md-button>
 
-          <!-- <md-button class="md-icon-button"> -->
-          <!-- <md-icon>image</md-icon> -->
-          <!-- <img src="../assets/addImage.svg" alt="image" />
-                <md-tooltip md-direction="bottom">Add image</md-tooltip>
-              </md-button> -->
+         
 
           <md-button class="md-icon-button">
-            <!-- <md-icon>archive_none</md-icon> -->
             <img
               src="../assets/archive.svg"
               style="transform: scaleX(-1);"

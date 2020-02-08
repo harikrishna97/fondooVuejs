@@ -83,6 +83,7 @@
           </div>
         </md-card-content>
         <div @click="getNoteId(note._id)">
+          <!-- @deleteCollaborator="deleteCollaborator" -->
           <Icons
             class="Icons"
             @update="updateNotes"
@@ -145,6 +146,9 @@ export default {
       this.currentLabelId = labelId;
       this.updateFlag("del_label", this.currentNoteId);
       this.$log.info("adgfdrfghxdfghfyhfhfh ");
+    },
+    deleteCollaborator(Id){
+      this.collaboratorId = Id;
     },
     addCollaborator(flag) {
       this.collaboratorId = flag;

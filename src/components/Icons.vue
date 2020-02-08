@@ -4,6 +4,7 @@
     <md-dialog :md-active.sync="showCollaborator" class="collDialog">
       <md-dialog-title>Collaborators</md-dialog-title>
       <md-divider></md-divider>
+
       <div class="Owner">
         <div class="Owner1">
           <md-avatar style="">
@@ -11,6 +12,7 @@
             <md-tooltip md-direction="bottom">Shailesh Borase</md-tooltip>
           </md-avatar>
         </div>
+
         <div class="Owner2">
           <h4 :v-model="user">{{ user }}</h4>
           <!-- </div> -->
@@ -18,11 +20,18 @@
           <p :v-model="email">{{ email }}</p>
         </div>
       </div>
+      <!-- <md-dialog-content class="">
+        <md-avatar style="border: solid 1px lightgrey">
+          <img :src="imageUrl" alt="share" />
+          <md-tooltip md-direction="bottom">Shailesh Borase</md-tooltip>
+        </md-avatar>
+        <md-button class="md-icon-button" @click="deleteCollaborator('id')">
+          <md-icon class="menu_vert" style="padding:1px">clear</md-icon>
+        </md-button>
+      </md-dialog-content> -->
       <div class="card1">
         <div class="addcoll">
-          <div
-            style="border-radius:50%;height:40px;width:40px;border:1px solid grey"
-          >
+          <div class="personadd">
             <!-- <img src="../assets/sharePeople.svg" alt="share" /> -->
             <md-icon style="height:100%;width:100%">person_add</md-icon>
             <!-- <md-tooltip md-direction="bottom">Shailesh Borase</md-tooltip> -->
@@ -47,7 +56,7 @@
         <!-- </div> -->
       </div>
 
-      <md-dialog-actions class="actions">
+      <md-dialog-actions class="actions1">
         <md-button @click="showCollaborator = false">cancel</md-button>
         <md-button
           @click="
@@ -397,7 +406,7 @@ export default {
       }
     ]
   }),
-
+  // props:['collaborators'],
   mounted() {
     // alert("updated");
     this.getAllUsers();
@@ -424,6 +433,9 @@ export default {
   },
 
   methods: {
+    // deleteCollaborator(Id) {
+    //   this.$emit("deleteCollaborator",Id);
+    // },
     addCollaborator() {
       this.$emit("collaborator", this.collaboratorId);
       // this.$log.info("showCollaborator :", this.collaboratorId);
@@ -435,7 +447,7 @@ export default {
     },
     addNoteLabel(label) {
       this.labelValue = label;
-      this.$log.info("Labels of Note :", label.label,label._id);
+      this.$log.info("Labels of Note :", label.label, label._id);
       this.$emit("addLabel", label._id);
     },
     shareReminder() {
@@ -483,14 +495,13 @@ export default {
             "get All Users:IconComponent: " + JSON.stringify(response.data.data)
           );
 
-          var array =[] 
-          array=response.data.data;
-          array.forEach(element=>{
-            this.$log.info("eleements",element) 
-            this.AllUsers.push(element.email)
+          var array = [];
+          array = response.data.data;
+          array.forEach(element => {
+            this.$log.info("eleements", element);
+            this.AllUsers.push(element.email);
             this.$emit("update", "noteUpdate");
-            
-          })
+          });
           // this.$log.info("ALLNOTES :: " + JSON.stringify(this.AllNotes));
         })
         .catch(err => {
@@ -502,6 +513,12 @@ export default {
 </script>
 
 <style>
+.personadd {
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+  border: 1px solid grey;
+}
 .menu_vert {
   opacity: 1;
 }
@@ -542,7 +559,7 @@ export default {
 }
 .Owner1 {
   padding-left: 20px;
-    padding-right: 15px;
+  padding-right: 15px;
 
   /* width: 30%; */
 }
@@ -568,7 +585,7 @@ export default {
   box-shadow: 0 0px 0px 0px rgba(0, 0, 0, 0.2), 0 0px 0px 0 rgba(0, 0, 0, 0.14),
     0 0px 0px 0 rgba(0, 0, 0, 0.12);
 }
-.actions {
+.actions1 {
   background-color: lightgrey;
 }
 </style>
