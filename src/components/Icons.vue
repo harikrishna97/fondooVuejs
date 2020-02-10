@@ -20,15 +20,34 @@
           <p :v-model="email">{{ email }}</p>
         </div>
       </div>
-      <!-- <md-dialog-content class="">
-        <md-avatar style="border: solid 1px lightgrey">
-          <img :src="imageUrl" alt="share" />
-          <md-tooltip md-direction="bottom">Shailesh Borase</md-tooltip>
-        </md-avatar>
-        <md-button class="md-icon-button" @click="deleteCollaborator('id')">
-          <md-icon class="menu_vert" style="padding:1px">clear</md-icon>
-        </md-button>
-      </md-dialog-content> -->
+      <md-dialog-content class="">
+        <!-- <div v-if="collaboratorsArray != null "> -->
+          <!-- {{collaboratorsArray}} -->
+          <div
+            v-for="collaborator1 in collaboratorsArray"
+            :key="collaborator1"
+          > 
+          <!-- <div
+            v-for="collaborator2 in collaborator1"
+            :key="collaborator2"
+          >          {{collaborator2}} -->
+          <div v-if="collNoteId===collaborator1">
+            <md-avatar style="border: solid 1px lightgrey">
+              <img :src="collaborator1.imageUrl" alt="share" />
+              <md-tooltip md-direction="bottom">{{
+                collaborator1.email
+              }}</md-tooltip>
+            </md-avatar>
+            <md-button class="md-icon-button" @click="deleteCollaborator()">
+              <md-icon class="menu_vert" style="padding:1px">clear</md-icon>
+            </md-button>
+              </div>
+              </div>
+
+
+          <!-- </div> -->
+        <!-- </div> -->
+      </md-dialog-content>
       <div class="card1">
         <div class="addcoll">
           <div class="personadd">
@@ -404,7 +423,8 @@ export default {
         colorName: "Gray",
         colorCode: "#e8eaed"
       }
-    ]
+    ],
+    usersData: []
   }),
   // props:['collaborators'],
   mounted() {
@@ -431,13 +451,23 @@ export default {
         }
       });
   },
-
+  props: ["collaboratorsArray","collNoteId"],
   methods: {
-    // deleteCollaborator(Id) {
-    //   this.$emit("deleteCollaborator",Id);
-    // },
+    deleteCollaborator() {
+      // this.$emit("deleteCollaborator",Id);
+    },
     addCollaborator() {
-      this.$emit("collaborator", this.collaboratorId);
+      // this.$emit("collaborator", this.collaboratorId);
+      this.usersData.forEach(element => {
+        if (element.email === this.collaboratorId) {
+          this.$log.info(
+            "collaboratorIdss :",
+            element._id,
+            this.collaboratorId
+          );
+          this.$emit("collaborator", element._id);
+        }
+      });
       // this.$log.info("showCollaborator :", this.collaboratorId);
     },
     showCollaborator1() {
@@ -496,6 +526,7 @@ export default {
           );
 
           var array = [];
+          this.usersData = response.data.data;
           array = response.data.data;
           array.forEach(element => {
             this.$log.info("eleements", element);
@@ -513,6 +544,9 @@ export default {
 </script>
 
 <style>
+.md-dialog{
+  z-index:6;
+}
 .personadd {
   border-radius: 50%;
   height: 40px;

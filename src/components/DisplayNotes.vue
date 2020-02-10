@@ -78,14 +78,19 @@
           </div>
 
           <div v-if="note.remainder != null" class="Icons">
-            <md-chip class="" md-deletable>{{ note.remainder }}</md-chip>
+            <md-chip class="" md-deletable @md-delete="
+                  getNoteId(note._id);
+                  deleteReminder();
+                " >{{ note.remainder }}</md-chip>
             <!-- <md-chips v-model="messages" md-placeholder></md-chips> -->
           </div>
         </md-card-content>
         <div @click="getNoteId(note._id)">
-          <!-- @deleteCollaborator="deleteCollaborator" -->
           <Icons
             class="Icons"
+            :collaboratorsArray="AllNotes"
+            :collNoteId="collNoteId"
+            @deleteCollaborator="deleteCollaborator"
             @update="updateNotes"
             @addLabel="labelIdFromIcon"
             @collaborator="addCollaborator"
@@ -137,7 +142,9 @@ export default {
     colorCode: "",
     messages: [],
     defaultImage: "",
-    collaboratorId: null
+    collaboratorId: null,
+    collaboratorsArray:[],
+    collNoteId:null,
   }),
 
   components: { EditNote, Icons },
@@ -147,6 +154,26 @@ export default {
       this.updateFlag("del_label", this.currentNoteId);
       this.$log.info("adgfdrfghxdfghfyhfhfh ");
     },
+    deleteReminder() {
+      this.$log.info("Delete  reminder ");
+      const token = localStorage.getItem("token");
+      const auth = { headers: { token: token } };
+      const noteId =this.currentNoteId;
+      this.$log.info("noteId .... :: " + this.currentNoteId);
+
+      HTTP.delete("remainder/" + noteId, auth)
+        .then(response => {
+          this.$log.info(
+            "response delete reminder :: " + JSON.stringify(response.data.data)
+          );
+          this.$emit("updateNote", "note updated");
+          // this.$log.info("restore .... :: " + JSON.stringify(this.trashNotes));
+        })
+        .catch(err => {
+          this.$log.info("error :: " + err);
+        });
+    },
+    
     deleteCollaborator(Id){
       this.collaboratorId = Id;
     },
@@ -267,22 +294,25 @@ export default {
       if (this.collaboratorId !== null) {
         const token = localStorage.getItem("token");
         const auth = { headers: { token: token } };
+        this.collNoteId=this.currentNoteId;
         this.$log.info(
-          "TOken .... :: " + auth,
+          "TOken $.... :: " + auth,
           this.currentNoteId,
           this.collaboratorId,
-          token
+          token,this.collNoteId
         );
         const noteId = this.currentNoteId;
         // const collaboratorId=this.collaboratorId;
         HTTP.post(
-          "collaborator/" + noteId + "/5e2ea07520fbd470c4320d23",
+          "collaborator/" + noteId +"/"+this.collaboratorId,
           {},
           auth
         )
           .then(response => {
             this.$log.info("response :: " + JSON.stringify(response.data.data));
-            // this.$emit("updateNote", "note added");
+            this.$emit("updateNote", "note updated");
+            this.collaboratorsArray.push(response.data.data);
+             this.$log.info("collaboratorsArray :: " + JSON.stringify(this.collaboratorsArray));
           })
           .catch(err => {
             this.$log.info("error :: " + err);

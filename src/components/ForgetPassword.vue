@@ -1,14 +1,14 @@
 <template>
-  <div>
+  <div class="mainDiv md-layout-item  md-size-50 md-small-size-100">
     <form novalidate class="card md-layout  md-alignment-space-around-center" @submit.prevent="validateUser">
       <md-card class="  md-layout-item md-size-50 md-small-size-100">
         <div class="md-title ">
-          <span style="color:blue">F</span>
-          <span style="color:red">u</span>
-          <span style="color:#f3c300">n</span>
-          <span style="color:blue">d</span>
-          <span style="color:green">o</span>
-          <span style="color:red">o</span>
+          <span id="I1">F</span>
+          <span id="I2">u</span>
+          <span id="I3">n</span>
+          <span id="I4">d</span>
+          <span id="I5">o</span>
+          <span id="I6">o</span>
         </div>
         <div class="md-title">Enter Your Email</div>
         <md-card-content>
@@ -148,28 +148,26 @@ export default {
   display: flex;
   justify-content: space-between;
 }
-// .md-progress-bar {
-//   position: absolute;
-//   top: 0;
-//   right: 0;
-//   left: 0;
-// }
-// .md-layout {
-//   display: flex;
-//   /* height: 164px; */
-//   margin-top: 164px;
-//   margin-left: 413px;
-//   // background-color: red
-// }
-// .md-title {
-//   background-color: lightgrey;
-// }
-// .md-card-actions {
-//   display: flex;
-//   flex-direction: row;
-//   justify-content: center;
-// }
-// .md-button .md-ripple {
-//   background-color: cornflowerblue;
-// }
+.mainDiv{
+  display: flex;
+    justify-content: center
+}
+#I1{
+    color:blue;
+  }
+  #I2{
+    color:red
+  }
+  #I3{
+    color:#f3c300
+  }
+  #I4{
+    color:blue
+  }
+  #I5{
+    color:green
+  }
+  #I6{
+    color:red
+  }
 </style>

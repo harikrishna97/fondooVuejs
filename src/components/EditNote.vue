@@ -41,10 +41,21 @@
           </div>
         </form>
       </md-card-content>
-      <!-- <div>
-        <Icons></Icons>
-        </div> -->
-      <md-card-toolbar class="searchtoolbar" >
+      <div class="Icons">
+        <Icons
+        @colorpalet="colorPalet1"
+
+        >
+
+
+
+        </Icons>
+         <div class="">
+          <md-button @click="toggleComponent">close</md-button>
+        </div>
+        </div>
+
+      <!-- <md-card-toolbar class="searchtoolbar" >
         <div class="md-toolbar-section">
           <md-button class="md-icon-button">
             <img src="../assets/remainder.svg" alt="remainder" />
@@ -74,21 +85,20 @@
 
           <md-button class="md-icon-button">
             <md-icon>more_vert</md-icon>
-            <!-- <img src="../assets/threedot.svg" alt="more_vert"> -->
             <md-tooltip md-direction="bottom">more</md-tooltip>
           </md-button>
         </div>
         <div class="md-toolbar-section-end">
           <md-button @click="toggleComponent">close</md-button>
         </div>
-      </md-card-toolbar>
+      </md-card-toolbar> -->
     </md-card>
   </div>
 </template>
 
 <script>
 import { HTTP } from "../services/http-common";
-// import Icons from "./Icons";
+import Icons from "./Icons";
 
 export default {
   name: "editNote",
@@ -99,7 +109,7 @@ export default {
     noteColor:"",
   }),
   components: {
-    // Icons
+    Icons
     },
   props:["note"],
 
@@ -110,6 +120,9 @@ export default {
       this.noteColor=this.note.color
   },
   methods: {
+    colorPalet1(flag) {
+      this.$log.info("display colorPalet1:flag :: " + flag);
+    },
     toggleComponent() {
       this.editNote();
       (this.title = null), (this.description = null);
@@ -148,6 +161,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.Icons {
+  display: flex;
+  justify-content: space-between;
+  // flex-wrap: wrap;
+}
+.md-dialog{
+  z-index:6;
+}
 .md-card {
   width: 550px;
   margin: 4px;
