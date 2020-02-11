@@ -23,3 +23,12 @@ export const labelService = {
     clearLabel: () => labelSubject.next(),
     getLabelFromToolbar: () => labelSubject.asObservable()
 };
+
+
+const editSubject = new Subject();
+
+export const editService = {
+    sendDataToUpdate: message => editSubject.next({ text: message }),
+    clearUpdateData: () => editSubject.next(),
+    getDataFromEdit: () => editSubject.asObservable()
+};

@@ -61,7 +61,7 @@
         <div class="icons2">
           <div class="Iconns">
             <Icons
-              @remainder="addRemainder"
+              v-on:reminder="remainder"
               @collaborator="addCollaborator"
               @archive="addArchive"
               @colorpalet="colorPalet"
@@ -88,7 +88,7 @@ export default {
 
   data: () => ({
     open: false,
-
+remainderNote:null,
     title: null,
     description: null,
     noteColor: ""
@@ -96,7 +96,8 @@ export default {
   components: { Icons },
 
   methods: {
-    addRemainder(flag) {
+    remainder(flag) {
+      this.remainderNote=flag;
       this.$log.info("addRemainder:flag :: " + flag);
     },
     addCollaborator(flag) {
@@ -121,17 +122,18 @@ export default {
       this.open = !this.open;
       // this.$log.info("open:: " + this.open);
       this.createNote();
-      (this.title = null), (this.description = null);
+      (this.title = null), (this.description = null)
+      this.noteColor="";
       return this.open;
     },
-    /**
-     * @description check title and description is not empty to Create Note
-     */
-    notEmpty() {
-      if (this.title && this.description !== null) {
-        this.createNote();
-      }
-    },
+    // /**
+    //  * @description check title and description is not empty to Create Note
+    //  */
+    // notEmpty() {
+    //   if (this.title && this.description !== null) {
+    //     this.createNote();
+    //   }
+    // },
     /**
      * @description function to Create Note
      */
@@ -141,6 +143,7 @@ export default {
         noteData.title = this.title;
         noteData.description = this.description;
         noteData.color = this.noteColor;
+        noteData.remainder=this.remainder;
         // this.$log.info("NoteData :: " + JSON.stringify(noteData));
         const token = localStorage.getItem("token");
         // this.$log.info("token :: " + typeof token);

@@ -65,10 +65,10 @@
             >
               <!-- {{collaborator.imageUrl}} -->
               <!-- <md-button  class="md-icon-button"> -->
-              <div >
+              <div>
                 <img class="round" :src="collaborator.imageUrl" alt="Avatar" />
                 <md-tooltip md-direction="bottom">{{
-                  collaborator.firstName
+                  collaborator.email
                 }}</md-tooltip>
               </div>
               <!-- </md-button> -->
@@ -78,10 +78,15 @@
           </div>
 
           <div v-if="note.remainder != null" class="Icons">
-            <md-chip class="" md-deletable @md-delete="
-                  getNoteId(note._id);
-                  deleteReminder();
-                " >{{ note.remainder }}</md-chip>
+            <md-chip
+              class=""
+              md-deletable
+              @md-delete="
+                getNoteId(note._id);
+                deleteReminder();
+              "
+              >{{ note.remainder }}</md-chip
+            >
             <!-- <md-chips v-model="messages" md-placeholder></md-chips> -->
           </div>
         </md-card-content>
@@ -107,9 +112,9 @@
     <div v-if="editnote == true">
       <md-dialog :md-active.sync="editnote">
         <EditNote
+          @updateNote="updateNotes"
           :note="note"
           @closeEdit="noteEdit"
-          @updateNote="updateNotes"
         ></EditNote>
       </md-dialog>
     </div>
@@ -143,8 +148,8 @@ export default {
     messages: [],
     defaultImage: "",
     collaboratorId: null,
-    collaboratorsArray:[],
-    collNoteId:null,
+    collaboratorsArray: [],
+    collNoteId: null
   }),
 
   components: { EditNote, Icons },
@@ -158,7 +163,7 @@ export default {
       this.$log.info("Delete  reminder ");
       const token = localStorage.getItem("token");
       const auth = { headers: { token: token } };
-      const noteId =this.currentNoteId;
+      const noteId = this.currentNoteId;
       this.$log.info("noteId .... :: " + this.currentNoteId);
 
       HTTP.delete("remainder/" + noteId, auth)
@@ -173,8 +178,8 @@ export default {
           this.$log.info("error :: " + err);
         });
     },
-    
-    deleteCollaborator(Id){
+
+    deleteCollaborator(Id) {
       this.collaboratorId = Id;
     },
     addCollaborator(flag) {
@@ -228,7 +233,7 @@ export default {
     },
     updateNotes(data) {
       this.$log.info("data :: " + data);
-      this.$emit("updateNote", data);
+      this.$emit("updateNote", "data");
     },
 
     getNoteId(noteId) {
@@ -294,17 +299,18 @@ export default {
       if (this.collaboratorId !== null) {
         const token = localStorage.getItem("token");
         const auth = { headers: { token: token } };
-        this.collNoteId=this.currentNoteId;
+        this.collNoteId = this.currentNoteId;
         this.$log.info(
           "TOken $.... :: " + auth,
           this.currentNoteId,
           this.collaboratorId,
-          token,this.collNoteId
+          token,
+          this.collNoteId
         );
         const noteId = this.currentNoteId;
         // const collaboratorId=this.collaboratorId;
         HTTP.post(
-          "collaborator/" + noteId +"/"+this.collaboratorId,
+          "collaborator/" + noteId + "/" + this.collaboratorId,
           {},
           auth
         )
@@ -312,7 +318,30 @@ export default {
             this.$log.info("response :: " + JSON.stringify(response.data.data));
             this.$emit("updateNote", "note updated");
             this.collaboratorsArray.push(response.data.data);
-             this.$log.info("collaboratorsArray :: " + JSON.stringify(this.collaboratorsArray));
+            this.$log.info(
+              "collaboratorsArray :: " + JSON.stringify(this.collaboratorsArray)
+            );
+          })
+          .catch(err => {
+            this.$log.info("error :: " + err);
+          });
+      }
+    },
+
+    deleteCollaboratorFromNote() {
+      if (this.collaboratorId !== null) {
+        const token = localStorage.getItem("token");
+        const auth = { headers: { token: token } };
+        this.$log.info("TOken $.... :: " + auth, this.collaboratorId, token);
+        // const collaboratorId=this.collaboratorId;
+        HTTP.delete("collaborator/" + this.collaboratorId, {}, auth)
+          .then(response => {
+            this.$log.info("response :: " + JSON.stringify(response.data.data));
+            this.$emit("updateNote", "note updated");
+            // this.collaboratorsArray.push(response.data.data);
+            // this.$log.info(
+            //   "collaboratorsArray :: " + JSON.stringify(this.collaboratorsArray)
+            // );
           })
           .catch(err => {
             this.$log.info("error :: " + err);
@@ -342,6 +371,17 @@ export default {
           this.$log.info("error :: " + err);
         });
     }
+
+    // getUpdateDataFromEditNote() {
+    //   this.subscription = editService.getDataFromEdit().subscribe(message => {
+    //   if (message) {
+
+    //   }else{
+
+    //   }
+    //   });
+
+    // }
   },
   mounted() {
     // this.defaultImage = localStorage.getItem("imageUrl");
@@ -471,13 +511,13 @@ export default {
   padding: 5px 7px 3px;
 }
 .round {
-.img {
-  border-radius: 50%;
-}
+  .img {
+    border-radius: 50%;
+  }
   border-radius: 25px;
   background: white;
-  padding: 2px; 
+  padding: 2px;
   width: 25px;
-  height: 25px; 
+  height: 25px;
 }
 </style>

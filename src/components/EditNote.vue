@@ -1,24 +1,18 @@
 <template>
   <div>
-    <md-card class="card" :style="`background-color: ${note.color}`">
-      <!-- <md-ripple> -->
-      <!-- <md-card-header> -->
-      <!-- <div class="md-title">Card with hover effect</div>
-          <div class="md-subhead">It also have a ripple</div> -->
-      <!-- </md-card-header> -->
-<!-- {{note}} -->
-      <md-card-content >
+    <md-card class="card" :style="`background-color: ${noteColor}`">
+      <md-card-content>
         <form>
           <div class=" md-layout">
             <div>
               <input
-                class="md-layout-item md-size-50"
+                class="md-layout-item md-size-50 "
                 type="text"
                 name="title"
                 v-model="title"
                 placeholder="Title"
                 style="border:none;outline:none"
-                :style="`background-color: ${note.color}`"
+                :style="`background-color: ${noteColor}`"
               />
             </div>
 
@@ -36,24 +30,17 @@
               v-model="description"
               placeholder="Take a note..."
               style="border:none;outline:none"
-              :style="`background-color: ${note.color}`"
+              :style="`background-color: ${noteColor}`"
             />
           </div>
         </form>
       </md-card-content>
       <div class="Icons">
-        <Icons
-        @colorpalet="colorPalet1"
-
-        >
-
-
-
-        </Icons>
-         <div class="">
+        <Icons @shareColor="shareColor"> </Icons>
+        <div class="">
           <md-button @click="toggleComponent">close</md-button>
         </div>
-        </div>
+      </div>
 
       <!-- <md-card-toolbar class="searchtoolbar" >
         <div class="md-toolbar-section">
@@ -99,6 +86,7 @@
 <script>
 import { HTTP } from "../services/http-common";
 import Icons from "./Icons";
+// import { editService } from "../services/messageService";
 
 export default {
   name: "editNote",
@@ -106,27 +94,30 @@ export default {
   data: () => ({
     title: null,
     description: null,
-    noteColor:"",
+    noteColor: ""
   }),
   components: {
     Icons
-    },
-  props:["note"],
+  },
+  props: ["note"],
 
-  mounted(){
-      this.$log.info("Shared note from display :: " +this.note);
-      this.title = this.note.title;
-      this.description = this.note.description;
-      this.noteColor=this.note.color
+  mounted() {
+    this.$log.info("Shared note from display :: " + this.note);
+    this.title = this.note.title;
+    this.description = this.note.description;
+    this.noteColor = this.note.color;
   },
   methods: {
-    colorPalet1(flag) {
-      this.$log.info("display colorPalet1:flag :: " + flag);
+    shareColor(code) {
+      this.$log.info("display noteColor:flag :: " + code);
+      this.noteColor = code;
     },
+    sendDataToUpdate() {},
+
     toggleComponent() {
       this.editNote();
       (this.title = null), (this.description = null);
-      this.$emit('closeEdit',"false")
+      this.$emit("closeEdit", "false");
     },
 
     // notEmpty() {
@@ -136,20 +127,27 @@ export default {
     // },
 
     editNote() {
+      this.$log.info("Im in edit note now.. :: ");
       if (this.title && this.description !== null) {
         const noteData = {};
         noteData.title = this.title;
         noteData.description = this.description;
+        noteData.color = this.noteColor;
         // this.$log.info("NoteData :: " + JSON.stringify(noteData));
         const token = localStorage.getItem("token");
         // this.$log.info("token :: " + typeof token);
         // headers: {Authorization:'JWT ' + localStorage.getItem('token')
         // headers: {Authorization:'JWT ' + localStorage.getItem('token')
         const auth = { headers: { token: token } };
-        HTTP.put("note/"+this.note._id, noteData, auth)
+        HTTP.put("note/" + this.note._id, noteData, auth)
           .then(response => {
-            this.$log.info("response :: " + JSON.stringify(response.data.data.title));
-            this.$emit("updateNote", "noteupdated");
+            this.$emit("updateNote","noteupdated");
+            this.title = null;
+            this.description = null;
+            this.noteColor = "";
+            this.$log.info(
+              "response :: " + JSON.stringify(response.data.data.title)
+            );
           })
           .catch(err => {
             this.$log.info("error :: " + err);
@@ -166,15 +164,15 @@ export default {
   justify-content: space-between;
   // flex-wrap: wrap;
 }
-.md-dialog{
-  z-index:6;
+.md-dialog {
+  z-index: 6;
 }
 .md-card {
   width: 550px;
   margin: 4px;
   display: inline-block;
   vertical-align: top;
-//   border-radius: 8px;
+  //   border-radius: 8px;
 }
 .searchtoolbar {
   display: flex;

@@ -22,16 +22,16 @@
       </div>
       <md-dialog-content class="">
         <!-- <div v-if="collaboratorsArray != null "> -->
-          <!-- {{collaboratorsArray}} -->
-          <div
-            v-for="collaborator1 in collaboratorsArray"
-            :key="collaborator1"
-          > 
+        <!-- {{collaboratorsArray}} -->
+        <div
+          v-for="collaborator1 in collaboratorsArray"
+          :key="collaborator1._id"
+        >
           <!-- <div
             v-for="collaborator2 in collaborator1"
             :key="collaborator2"
           >          {{collaborator2}} -->
-          <div v-if="collNoteId===collaborator1">
+          <div v-if="collNoteId === collaborator1">
             <md-avatar style="border: solid 1px lightgrey">
               <img :src="collaborator1.imageUrl" alt="share" />
               <md-tooltip md-direction="bottom">{{
@@ -41,11 +41,10 @@
             <md-button class="md-icon-button" @click="deleteCollaborator()">
               <md-icon class="menu_vert" style="padding:1px">clear</md-icon>
             </md-button>
-              </div>
-              </div>
+          </div>
+        </div>
 
-
-          <!-- </div> -->
+        <!-- </div> -->
         <!-- </div> -->
       </md-dialog-content>
       <div class="card1">
@@ -205,7 +204,7 @@
         ></v-list-item>
 
         <div>
-          <v-btn @click="shareReminder">save</v-btn>
+          <md-button @click="shareReminder()">save</md-button>
         </div>
         <!-- <v-list-item v-for="(item, index) in items" :key="index" @click="a">
             <v-list-item-title>{{ item.title }}</v-list-item-title>
@@ -278,9 +277,9 @@
         <md-content v-for="label in AllLabels" :key="label._id">
           <md-menu-item>
             <md-checkbox
-              v-model="label[label]"
+              v-model="labels[label._id]"
               value="label._id"
-              @change="addNoteLabel(label)"
+              @change="addNoteLabel(label._id)"
               >{{ label.label }}</md-checkbox
             >
             <!--  <input type="checkbox" v-model="user.roles" :value="role"/> -->
@@ -451,7 +450,7 @@ export default {
         }
       });
   },
-  props: ["collaboratorsArray","collNoteId"],
+  props: ["collaboratorsArray", "collNoteId"],
   methods: {
     deleteCollaborator() {
       // this.$emit("deleteCollaborator",Id);
@@ -476,9 +475,10 @@ export default {
       this.$log.info("showCollaborator :", this.showCollaborator);
     },
     addNoteLabel(label) {
+      this.$log.info("Labels of Note11 :", this.labels);
+      this.$log.info("Labels of Note :", label);
       this.labelValue = label;
-      this.$log.info("Labels of Note :", label.label, label._id);
-      this.$emit("addLabel", label._id);
+      this.$emit("addLabel", label);
     },
     shareReminder() {
       if (this.now !== null || this.time !== null) {
@@ -486,8 +486,8 @@ export default {
         // this.$log.info("time :" + this.time);
         // this.$log.info("menu2 :" + this.menu2);
         const reminder = this.now + " " + this.time;
+        this.$emit("reminder",reminder);
         // this.$log.info("reminder :" + reminder);
-        this.$emit("reminder", reminder);
       }
     },
 
@@ -544,8 +544,8 @@ export default {
 </script>
 
 <style>
-.md-dialog{
-  z-index:6;
+.md-dialog {
+  z-index: 6;
 }
 .personadd {
   border-radius: 50%;

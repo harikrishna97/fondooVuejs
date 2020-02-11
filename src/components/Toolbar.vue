@@ -1,7 +1,7 @@
 <template>
   <!-- <div class="page-container"> -->
   <md-app class="MainApp" md-waterfall md-mode="fixed">
-    <md-app-toolbar class="">
+    <md-app-toolbar class="toolbar">
       <div class="md-toolbar-section-start">
         <md-button class="md-icon-button" @click="toggleMenu">
           <md-icon>menu</md-icon>
@@ -418,13 +418,16 @@ export default {
 
 <style lang="scss" scoped>
 @import "../style/dashboard.css";
+// .toolbar{
+//   background-color: white;
+// }
 .mainD {
   width: 300px;
 }
 .md-list-item{
   box-shadow:none;
 }
-.md-list-item:hover{
+.Hover:hover{
   background-color: #fbefc3;
   border-top-right-radius: 25px;
     border-bottom-right-radius: 25px;
