@@ -90,15 +90,13 @@
             <!-- <md-chips v-model="messages" md-placeholder></md-chips> -->
           </div>
         </md-card-content>
-        <div @click="getNoteId(note._id)">
+        <div @click="getNoteId(note._id,note)">
           <Icons
             class="Icons"
             :collaboratorsArray="AllNotes"
             :collNoteId="collNoteId"
-            @deleteCollaborator="deleteCollaborator"
             @update="updateNotes"
             @addLabel="labelIdFromIcon"
-            @collaborator="addCollaborator"
             @archive="addArchive"
             @colorpalet="colorPalet1"
             @moreVert="moreVert"
@@ -125,7 +123,7 @@
 import EditNote from "./EditNote";
 import { HTTP } from "../services/http-common";
 import Icons from "./Icons";
-import { listGridService } from "../services/messageService";
+import { listGridService,collService,collService1} from "../services/messageService";
 
 export default {
   name: "CreateNote",
@@ -159,6 +157,7 @@ export default {
       this.updateFlag("del_label", this.currentNoteId);
       this.$log.info("adgfdrfghxdfghfyhfhfh ");
     },
+    
     deleteReminder() {
       this.$log.info("Delete  reminder ");
       const token = localStorage.getItem("token");
@@ -179,14 +178,6 @@ export default {
         });
     },
 
-    deleteCollaborator(Id) {
-      this.collaboratorId = Id;
-    },
-    addCollaborator(flag) {
-      this.collaboratorId = flag;
-      this.$log.info("addCollaborator2:flag ::  ", flag, this.collaboratorId);
-      this.addCollaboratorToNote();
-    },
     labelIdFromIcon(labelId) {
       this.currentLabelId = labelId;
       this.updateFlag("label", this.currentNoteId);
@@ -236,10 +227,21 @@ export default {
       this.$emit("updateNote", "data");
     },
 
-    getNoteId(noteId) {
+    getNoteId(noteId,note) {
       this.$log.info("note id at 246: ", noteId);
       this.currentNoteId = noteId;
+      this.sendNoteIdToCollaborator(noteId);
+      this.sendNoteToCollaborator(note);
+
       // this.$log.info("note id at 246: ", this.currentNoteId);
+    },
+    sendNoteIdToCollaborator(noteId){
+      collService.sendNoteIdToCollaborator(noteId);
+
+    },
+    sendNoteToCollaborator(note){
+      collService1.sendNoteToCollaborator(note);
+
     },
     updateFlag(flag, noteId) {
       this.$log.info("Flag selected :: " + flag);
@@ -295,59 +297,8 @@ export default {
           });
       }
     },
-    addCollaboratorToNote() {
-      if (this.collaboratorId !== null) {
-        const token = localStorage.getItem("token");
-        const auth = { headers: { token: token } };
-        this.collNoteId = this.currentNoteId;
-        this.$log.info(
-          "TOken $.... :: " + auth,
-          this.currentNoteId,
-          this.collaboratorId,
-          token,
-          this.collNoteId
-        );
-        const noteId = this.currentNoteId;
-        // const collaboratorId=this.collaboratorId;
-        HTTP.post(
-          "collaborator/" + noteId + "/" + this.collaboratorId,
-          {},
-          auth
-        )
-          .then(response => {
-            this.$log.info("response :: " + JSON.stringify(response.data.data));
-            this.$emit("updateNote", "note updated");
-            this.collaboratorsArray.push(response.data.data);
-            this.$log.info(
-              "collaboratorsArray :: " + JSON.stringify(this.collaboratorsArray)
-            );
-          })
-          .catch(err => {
-            this.$log.info("error :: " + err);
-          });
-      }
-    },
-
-    deleteCollaboratorFromNote() {
-      if (this.collaboratorId !== null) {
-        const token = localStorage.getItem("token");
-        const auth = { headers: { token: token } };
-        this.$log.info("TOken $.... :: " + auth, this.collaboratorId, token);
-        // const collaboratorId=this.collaboratorId;
-        HTTP.delete("collaborator/" + this.collaboratorId, {}, auth)
-          .then(response => {
-            this.$log.info("response :: " + JSON.stringify(response.data.data));
-            this.$emit("updateNote", "note updated");
-            // this.collaboratorsArray.push(response.data.data);
-            // this.$log.info(
-            //   "collaboratorsArray :: " + JSON.stringify(this.collaboratorsArray)
-            // );
-          })
-          .catch(err => {
-            this.$log.info("error :: " + err);
-          });
-      }
-    },
+    
+    
     addRemainderToNote(value) {
       const reminderData = {};
       reminderData.remainder = value;
@@ -358,7 +309,6 @@ export default {
       this.$log.info("noteId .... :: " + this.currentNoteId);
 
       HTTP.post("remainder/" + noteId, reminderData, auth)
-        // /flag/5e15c3822a8f156011ea42e7/trash
         .then(response => {
           // this.$log.info(
           //   "response restore :: " + JSON.stringify(response.data.data)

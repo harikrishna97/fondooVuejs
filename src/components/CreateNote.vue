@@ -33,8 +33,8 @@
               <input
                 class="md-layout-item md-size-50"
                 type="text"
-                name="title"
                 v-model="title"
+                name="title"
                 placeholder="Title"
                 :style="`background-color: ${noteColor}`"
               />
@@ -63,10 +63,9 @@
             <Icons
               v-on:reminder="remainder"
               @collaborator="addCollaborator"
-              @archive="addArchive"
-              @colorpalet="colorPalet"
-              @moreVert="moreVert"
+              @archive="addArchive"             
               @shareColor="shareColor"
+              @deleteNote="deleteNote"
             ></Icons>
           </div>
 
@@ -88,32 +87,54 @@ export default {
 
   data: () => ({
     open: false,
-remainderNote:null,
+    remainderNote: null,
     title: null,
     description: null,
-    noteColor: ""
+    noteColor: "",
+    isArchive: false,
+    isTrash: false
   }),
   components: { Icons },
 
   methods: {
+    deleteNote(flag) {
+      this.isTrash = flag;
+      this.$log.info("deleteNote:flag create:: " + flag);
+      this.open = !this.open;
+      this.createNote();
+      this.title = null;
+      this.description = null;
+      this.noteColor = "";
+      this.remainder = null;
+      this.isArchive = false;
+      this.isTrash = false;
+    },
     remainder(flag) {
-      this.remainderNote=flag;
-      this.$log.info("addRemainder:flag :: " + flag);
+      this.remainderNote = flag;
+      this.$log.info("addRemainder:flag create:: " + flag);
     },
     addCollaborator(flag) {
       this.$log.info("addCollaborator:flag ::  " + flag);
     },
     addArchive(flag) {
+      if (flag == true) {
+        this.isArchive = true;
+        this.open = !this.open;
+        this.createNote();
+        this.title = null;
+        this.description = null;
+        this.noteColor = "";
+        this.remainder = null;
+        this.isArchive = false;
+        this.isTrash = false;
+      }
       this.$log.info("addArchive:flag :: " + flag);
     },
-    colorPalet(flag) {
-      this.$log.info("colorPalet:flag :: " + flag);
-      // this.noteColor=color;
-    },
+    
     shareColor(color) {
       this.noteColor = color;
     },
-    // moreVert(flag) {this.$log.info("moreVert:flag :: " +flag);},
+    
 
     /**
      * @description toggle value to close current componet and to Create Note
@@ -122,9 +143,13 @@ remainderNote:null,
       this.open = !this.open;
       // this.$log.info("open:: " + this.open);
       this.createNote();
-      (this.title = null), (this.description = null)
-      this.noteColor="";
-      return this.open;
+      (this.title = null), (this.description = null);
+      this.noteColor = "";
+      this.remainder = null;
+      this.isArchive = false;
+      this.isTrash = false;
+
+      // return this.open;
     },
     // /**
     //  * @description check title and description is not empty to Create Note
@@ -138,12 +163,15 @@ remainderNote:null,
      * @description function to Create Note
      */
     createNote() {
+      this.$log.info("TitleAnd Description :: " + this.title, this.description);
       if (this.title && this.description !== null) {
         const noteData = {};
         noteData.title = this.title;
         noteData.description = this.description;
         noteData.color = this.noteColor;
-        noteData.remainder=this.remainder;
+        noteData.remainder = this.remainderNote;
+        noteData.isArchive = this.isArchive;
+        noteData.isTrash = this.isTrash;
         // this.$log.info("NoteData :: " + JSON.stringify(noteData));
         const token = localStorage.getItem("token");
         // this.$log.info("token :: " + typeof token);
@@ -158,6 +186,8 @@ remainderNote:null,
           })
           .catch(err => {
             this.$log.info("error :: " + err);
+            this.$emit("updateNote", "note added");
+
           });
       }
     }

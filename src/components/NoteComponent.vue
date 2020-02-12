@@ -14,7 +14,7 @@
 import { HTTP } from "../services/http-common";
 import CreateNote from "./CreateNote";
 import DisplayNotes from "./DisplayNotes";
-import { messageService } from "../services/messageService";
+import { messageService, updateNoteService } from "../services/messageService";
 
 export default {
   data() {
@@ -38,12 +38,22 @@ export default {
       if (message) {
         // add message to local state if not empty
         this.AllNotes = message.text;
-        this.$log.info("NoteComponent:created:RXJS message from search:: " + JSON.stringify(this.AllNotes));
+        this.$log.info(
+          "NoteComponent:created:RXJS message from search:: " +
+            JSON.stringify(this.AllNotes)
+        );
       } else {
         // clear messages when empty message received
         // this.AllNotes = [];
         this.update();
         // this.$log.info("RXJS message :: " + JSON.stringify(this.messages));
+      }
+    });
+
+    this.subscription = updateNoteService.getUpdateNote().subscribe(message => {
+      if (message) {
+        this.$log.info("RXJS noteUpdate From colllaborator :: ");
+        this.getAllnotes();
       }
     });
   },

@@ -1,90 +1,15 @@
 <template>
   <div>
     <!-- CollaboratorDialog -->
-    <md-dialog :md-active.sync="showCollaborator" class="collDialog">
-      <md-dialog-title>Collaborators</md-dialog-title>
-      <md-divider></md-divider>
+    <div v-if="showCollaborator == true">
+      <md-dialog :md-active.sync="showCollaborator" class="collDialog">
+        <Collaborator
+          :noteId="currentNoteId"
+          @closeCollaborator="closeCollaborator"
+        />
+      </md-dialog>
+    </div>
 
-      <div class="Owner">
-        <div class="Owner1">
-          <md-avatar style="">
-            <img :src="imageUrl" alt="share" />
-            <md-tooltip md-direction="bottom">Shailesh Borase</md-tooltip>
-          </md-avatar>
-        </div>
-
-        <div class="Owner2">
-          <h4 :v-model="user">{{ user }}</h4>
-          <!-- </div> -->
-          <!-- <div class="email" :v-model="email"> -->
-          <p :v-model="email">{{ email }}</p>
-        </div>
-      </div>
-      <md-dialog-content class="">
-        <!-- <div v-if="collaboratorsArray != null "> -->
-        <!-- {{collaboratorsArray}} -->
-        <div
-          v-for="collaborator1 in collaboratorsArray"
-          :key="collaborator1._id"
-        >
-          <!-- <div
-            v-for="collaborator2 in collaborator1"
-            :key="collaborator2"
-          >          {{collaborator2}} -->
-          <div v-if="collNoteId === collaborator1">
-            <md-avatar style="border: solid 1px lightgrey">
-              <img :src="collaborator1.imageUrl" alt="share" />
-              <md-tooltip md-direction="bottom">{{
-                collaborator1.email
-              }}</md-tooltip>
-            </md-avatar>
-            <md-button class="md-icon-button" @click="deleteCollaborator()">
-              <md-icon class="menu_vert" style="padding:1px">clear</md-icon>
-            </md-button>
-          </div>
-        </div>
-
-        <!-- </div> -->
-        <!-- </div> -->
-      </md-dialog-content>
-      <div class="card1">
-        <div class="addcoll">
-          <div class="personadd">
-            <!-- <img src="../assets/sharePeople.svg" alt="share" /> -->
-            <md-icon style="height:100%;width:100%">person_add</md-icon>
-            <!-- <md-tooltip md-direction="bottom">Shailesh Borase</md-tooltip> -->
-          </div>
-        </div>
-
-        <!-- <div class="inputEmail"> -->
-        <md-autocomplete
-          class="inputEmail"
-          v-model="collaboratorId"
-          :md-options="AllUsers"
-          md-layout="box"
-        >
-          <label>Person or email to share with...</label>
-        </md-autocomplete>
-        <!-- <input
-          class="inputEmail"
-          type="text"
-          v-model="collaboratorId"
-          placeholder="Person or email to share with"
-        /> -->
-        <!-- </div> -->
-      </div>
-
-      <md-dialog-actions class="actions1">
-        <md-button @click="showCollaborator = false">cancel</md-button>
-        <md-button
-          @click="
-            showCollaborator = false;
-            addCollaborator();
-          "
-          >Save</md-button
-        >
-      </md-dialog-actions>
-    </md-dialog>
     <!-- ........................... -->
     <v-menu>
       <template v-slot:activator="{ on: menu }">
@@ -188,7 +113,7 @@
               <template v-slot:activator="{ on }">
                 <v-text-field
                   v-model="time"
-                  label="Picker in menu"
+                  label="Select Time"
                   prepend-icon="access_time"
                   readonly
                   v-on="on"
@@ -236,23 +161,12 @@
             v-on:click="shareColor(color.colorCode)"
             :key="color.colorName"
             :style="`background-color: ${color.colorCode}`"
-          >
-            <!-- <div@click="shareColor(color.colorCode)"/> -->
-
-            <!-- v-on="updateFlag(color.colorCode,note._id)" -->
-          </div>
+          ></div>
         </div>
       </md-menu-content>
     </md-menu>
 
-    <!-- <md-button class="md-icon-button" @click="image"> -->
-    <!-- <md-icon>image</md-icon> -->
-    <!-- <img src="../assets/addImage.svg" alt="image" />
-                <md-tooltip md-direction="bottom">Add image</md-tooltip>
-              </md-button> -->
-
     <md-button class="md-icon-button" @click="archive">
-      <!-- <md-icon>archive_none</md-icon> -->
       <img src="../assets/archive.svg" alt="archive" />
       <md-tooltip md-direction="bottom">Archive</md-tooltip>
     </md-button>
@@ -266,7 +180,6 @@
         @click="moreVert"
       >
         <md-icon class="menu_vert">more_vert</md-icon>
-        <!-- <img src="../assets/menu_vert.svg"  alt="more_vert"> -->
         <md-tooltip md-direction="bottom">more</md-tooltip>
       </md-button>
 
@@ -282,7 +195,6 @@
               @change="addNoteLabel(label._id)"
               >{{ label.label }}</md-checkbox
             >
-            <!--  <input type="checkbox" v-model="user.roles" :value="role"/> -->
           </md-menu-item>
         </md-content>
 
@@ -306,7 +218,6 @@
         @click="moreVert"
       >
         <md-icon class="menu_vert">more_vert</md-icon>
-        <!-- <img src="../assets/menu_vert.svg"  alt="more_vert"> -->
         <md-tooltip md-direction="bottom">more</md-tooltip>
       </md-button>
 
@@ -314,9 +225,6 @@
         <md-menu-item
           ><md-button @click="deleteNote">Delete Note</md-button></md-menu-item
         >
-        <!-- <md-menu-item v-if="addLabel == true">
-          
-        </md-menu-item> -->
 
         <md-menu-item
           ><md-button @click="addLabelTrue" md-menu-trigger
@@ -329,14 +237,14 @@
 </template>
 
 <script>
-// import Collaborator from "./Collaborator";
+import Collaborator from "./Collaborator";
 // import { Datetime } from 'vue-datetime'
 import { labelService } from "../services/messageService";
 import { HTTP } from "../services/http-common";
 
 export default {
   components: {
-    // Collaborator
+    Collaborator
   },
   computed: {
     hasEnd() {
@@ -350,7 +258,6 @@ export default {
     }
   },
   data: () => ({
-    imageUrl: "",
     collaboratorId: null,
     showCollaborator: false,
     labelId: "",
@@ -363,15 +270,11 @@ export default {
     nowMenu: false,
     time: null,
     menu2: false,
-
     addLabel: false,
     closeOnClick: false,
     closeOnSelect: false,
     selectedDate: null,
     color: "",
-    user: "Shailesh Borase(Owner)",
-    email: "shaileshborase@gmail.com",
-    AllUsers: [],
 
     colorPalet: [
       {
@@ -422,15 +325,10 @@ export default {
         colorName: "Gray",
         colorCode: "#e8eaed"
       }
-    ],
-    usersData: []
+    ]
   }),
   // props:['collaborators'],
-  mounted() {
-    // alert("updated");
-    this.getAllUsers();
-    this.$log.info("ALL Users" + JSON.stringify(this.AllUsers));
-  },
+  mounted() {},
   created() {
     // subscribe to home component messages
     this.subscription = labelService
@@ -450,11 +348,29 @@ export default {
         }
       });
   },
-  props: ["collaboratorsArray", "collNoteId"],
+  props: ["collaboratorsArray", "currentNoteId"],
   methods: {
-    deleteCollaborator() {
-      // this.$emit("deleteCollaborator",Id);
+    closeCollaborator(value) {
+      this.showCollaborator = value;
     },
+
+    getAllCollaborator() {
+      const token = localStorage.getItem("token");
+      const auth = { headers: { token: token } };
+      HTTP.get("collaborator", auth)
+        .then(response => {
+          this.$log.info(
+            "get all collaborators:response :: " +
+              JSON.stringify(response.data.data)
+          );
+          // this.AllNotes = response.data.data;
+          // this.$log.info("ALLNOTES :: " + JSON.stringify(this.AllNotes));
+        })
+        .catch(err => {
+          this.$log.info("error :: " + err);
+        });
+    },
+
     addCollaborator() {
       // this.$emit("collaborator", this.collaboratorId);
       this.usersData.forEach(element => {
@@ -471,7 +387,7 @@ export default {
     },
     showCollaborator1() {
       this.showCollaborator = !this.showCollaborator;
-      this.imageUrl = localStorage.getItem("imageUrl");
+
       this.$log.info("showCollaborator :", this.showCollaborator);
     },
     addNoteLabel(label) {
@@ -486,7 +402,7 @@ export default {
         // this.$log.info("time :" + this.time);
         // this.$log.info("menu2 :" + this.menu2);
         const reminder = this.now + " " + this.time;
-        this.$emit("reminder",reminder);
+        this.$emit("reminder", reminder);
         // this.$log.info("reminder :" + reminder);
       }
     },
@@ -514,30 +430,6 @@ export default {
       this.$emit("shareColor", colorCode);
       this.color = colorCode;
       // this.$log.info("shareColor :" + colorCode);
-    },
-    /**
-     * @description :API to get All Users
-     */
-    getAllUsers() {
-      HTTP.get("user")
-        .then(response => {
-          this.$log.info(
-            "get All Users:IconComponent: " + JSON.stringify(response.data.data)
-          );
-
-          var array = [];
-          this.usersData = response.data.data;
-          array = response.data.data;
-          array.forEach(element => {
-            this.$log.info("eleements", element);
-            this.AllUsers.push(element.email);
-            this.$emit("update", "noteUpdate");
-          });
-          // this.$log.info("ALLNOTES :: " + JSON.stringify(this.AllNotes));
-        })
-        .catch(err => {
-          this.$log.info("error :: " + err);
-        });
     }
   }
 };
@@ -588,15 +480,7 @@ export default {
   vertical-align: middle;
   padding: 5px 7px 3px;
 }
-.Owner {
-  display: flex;
-}
-.Owner1 {
-  padding-left: 20px;
-  padding-right: 15px;
 
-  /* width: 30%; */
-}
 .md-field {
   min-height: 35px;
   margin: -5px 0 0px;

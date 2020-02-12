@@ -32,3 +32,32 @@ export const editService = {
     clearUpdateData: () => editSubject.next(),
     getDataFromEdit: () => editSubject.asObservable()
 };
+
+
+const collSubject = new Subject();
+
+export const collService = {
+    sendNoteIdToCollaborator: message => collSubject.next({ text: message }),
+    clearNoteIdData: () => collSubject.next(),
+    getNoteIdFromDisplay: () => collSubject.asObservable(),
+
+    
+};
+
+const collSubject1 = new Subject();
+
+export const collService1 = {
+    sendNoteToCollaborator: message1 => collSubject1.next({ text: message1 }),
+    clearNoteData: () => collSubject1.next(),
+    getNoteFromDisplay: () => collSubject1.asObservable()
+};
+
+
+const updateNoteSubject = new Subject();
+
+export const updateNoteService = {
+    sendUpdateNote: message => updateNoteSubject.next({ text: message }),
+    clearUpdateNote: () => updateNoteSubject.next(),
+    getUpdateNote: () => updateNoteSubject.asObservable(),
+
+};
