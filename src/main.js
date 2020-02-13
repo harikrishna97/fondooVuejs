@@ -40,9 +40,19 @@ Vue.use(MdToolbar)
 // Vue.use(VueRouter)
 
 Vue.config.productionTip = false
-
+Vue.directive('switching-color',function(el,binding){
+  const colors=binding.value
+  let i=0
+  setInterval(()=>{
+    el.style.color=colors[i++]
+    if(i>colors.length-1){
+      i=0;
+    }
+  },500)
+})
 new Vue({
   render: h => h(App),
+  el: '#app',
   router,
   template:'<App/>',
   vuetify,

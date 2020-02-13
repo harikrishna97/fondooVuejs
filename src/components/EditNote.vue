@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="isOpen === true">
     <md-card class="card" :style="`background-color: ${noteColor}`">
       <md-card-content>
         <form>
@@ -33,52 +33,59 @@
               :style="`background-color: ${noteColor}`"
             />
           </div>
+          <div v-if="note.label != null" class="Icons">
+            <div v-for="label in note.label" :key="label._id">
+              <md-chip
+                class=""
+                md-deletable
+                @md-delete="
+                  getNoteId(note._id);
+                  deleteLabel(label._id);
+                "
+                >{{ label.label }}</md-chip
+              >
+            </div>
+          </div>
+
+          <div v-if="note.collaborator != null" class="Icons">
+            <div
+              v-for="collaborator in note.collaborator"
+              :key="collaborator._id"
+            >
+              <div>
+                <img class="round" :src="collaborator.imageUrl" alt="Avatar" />
+                <md-tooltip md-direction="bottom">{{
+                  collaborator.email
+                }}</md-tooltip>
+              </div>
+              <!-- </md-button> -->
+            </div>
+          </div>
+          <div v-if="note.remainder != null" class="Icons">
+            <md-chip
+              class=""
+              md-deletable
+              @md-delete="
+                getNoteId(note._id);
+                deleteReminder();
+              "
+              >{{ remainder }}</md-chip
+            >
+          </div>
         </form>
       </md-card-content>
       <div class="Icons">
-        <Icons @shareColor="shareColor"> </Icons>
+        <Icons
+          @shareColor="shareColor"
+          v-on:reminder="shareReminder"
+          @archive="addArchive"
+          @deleteNote="deleteNote1"
+        >
+        </Icons>
         <div class="">
           <md-button @click="toggleComponent">close</md-button>
         </div>
       </div>
-
-      <!-- <md-card-toolbar class="searchtoolbar" >
-        <div class="md-toolbar-section">
-          <md-button class="md-icon-button">
-            <img src="../assets/remainder.svg" alt="remainder" />
-            <md-tooltip md-direction="bottom">Remind me</md-tooltip>
-          </md-button>
-
-          <md-button class="md-icon-button">
-            <img src="../assets/collaborator.svg" alt="colaborator" />
-            <md-tooltip md-direction="bottom">Collaborator</md-tooltip>
-          </md-button>
-
-          <md-button class="md-icon-button">
-            <img src="../assets/colorPalet.svg" alt="colorpalet" />
-            <md-tooltip md-direction="bottom">Change color</md-tooltip>
-          </md-button>
-
-         
-
-          <md-button class="md-icon-button">
-            <img
-              src="../assets/archive.svg"
-              style="transform: scaleX(-1);"
-              alt="archive"
-            />
-            <md-tooltip md-direction="bottom">Archive</md-tooltip>
-          </md-button>
-
-          <md-button class="md-icon-button">
-            <md-icon>more_vert</md-icon>
-            <md-tooltip md-direction="bottom">more</md-tooltip>
-          </md-button>
-        </div>
-        <div class="md-toolbar-section-end">
-          <md-button @click="toggleComponent">close</md-button>
-        </div>
-      </md-card-toolbar> -->
     </md-card>
   </div>
 </template>
@@ -86,15 +93,19 @@
 <script>
 import { HTTP } from "../services/http-common";
 import Icons from "./Icons";
-// import { editService } from "../services/messageService";
+import { updateNoteService } from "../services/messageService";
 
 export default {
   name: "editNote",
 
   data: () => ({
+    isOpen: true,
     title: null,
     description: null,
-    noteColor: ""
+    noteColor: "",
+    remainder: null,
+    isArchive: false,
+    isTrash: false
   }),
   components: {
     Icons
@@ -106,42 +117,75 @@ export default {
     this.title = this.note.title;
     this.description = this.note.description;
     this.noteColor = this.note.color;
+    this.remainder=this.note.remainder;
   },
   methods: {
+    deleteNote1(flag) {
+      this.$log.info("editNote:delete:flag :: " + flag);
+      this.isTrash = flag;
+      this.isOpen = false;
+      this.editNote();
+    },
+    addArchive(flag) {
+      this.$log.info("editNote:addArchive:flag :: " + flag);
+      this.isOpen = false;
+      this.isArchive=flag;
+      this.editNote();
+      // this.sendUpdateNote();
+
+    },
+    shareReminder(value) {
+      this.$log.info("in edit :share remainder:", value);
+      this.remainder = value;
+    },
     shareColor(code) {
       this.$log.info("display noteColor:flag :: " + code);
       this.noteColor = code;
     },
-    sendDataToUpdate() {},
+    
 
     toggleComponent() {
+      this.isOpen = false;
       this.editNote();
+      // this.sendUpdateNote();
+
       (this.title = null), (this.description = null);
-      this.$emit("closeEdit", "false");
+      // this.$emit("closeEdit", "false");
     },
-
-    // notEmpty() {
-    //   if (this.title && this.description !== null) {
-    //     this.createNote();
-    //   }
-    // },
-
+    sendUpdateNote() {
+      updateNoteService.sendUpdateNote("updateNote");
+    },
     editNote() {
       this.$log.info("Im in edit note now.. :: ");
       if (this.title && this.description !== null) {
         const noteData = {};
         noteData.title = this.title;
         noteData.description = this.description;
-        noteData.color = this.noteColor;
+        if (this.noteColor != "") {
+          noteData.color = this.noteColor;
+        }
+
+        if (this.remainder != null) {
+          noteData.remainder =this.remainder;
+        }
+
+        if (this.isArchive != false) {
+          noteData.isArchive =true
+        }
+
+        if (this.isTrash != false) {
+          noteData.isTrash =true;
+        }
+
+        // noteData.collaborator=this.collaborator;
         // this.$log.info("NoteData :: " + JSON.stringify(noteData));
         const token = localStorage.getItem("token");
-        // this.$log.info("token :: " + typeof token);
-        // headers: {Authorization:'JWT ' + localStorage.getItem('token')
-        // headers: {Authorization:'JWT ' + localStorage.getItem('token')
         const auth = { headers: { token: token } };
         HTTP.put("note/" + this.note._id, noteData, auth)
           .then(response => {
-            this.$emit("updateNote","noteupdated");
+            // this.$emit("updateNote", "noteupdated");
+            this.sendUpdateNote();
+
             this.title = null;
             this.description = null;
             this.noteColor = "";
@@ -161,8 +205,18 @@ export default {
 <style lang="scss" scoped>
 .Icons {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   // flex-wrap: wrap;
+}
+.round {
+  .img {
+    border-radius: 50%;
+  }
+  border-radius: 25px;
+  background: white;
+  padding: 2px;
+  width: 25px;
+  height: 25px;
 }
 .md-dialog {
   z-index: 6;

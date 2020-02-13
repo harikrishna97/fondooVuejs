@@ -1,6 +1,6 @@
 <template>
   <!-- <div class="page-container"> -->
-  <md-app class="MainApp" md-waterfall md-mode="fixed">
+  <md-app class="MainApp" md-waterfall md-mode="fixed" id="app">
     <md-app-toolbar class="toolbar">
       <div class="md-toolbar-section-start">
         <md-button class="md-icon-button" @click="toggleMenu">
@@ -117,7 +117,7 @@
 
     <md-app-drawer :md-active.sync="menuVisible">
       <md-list>
-        <md-list-item @click="navigateTo('note');fundoo='Fundoo'">
+        <md-list-item v-switching-color="['purple','gold','pink','brown']" @click="navigateTo('note');fundoo='Fundoo'">
           <md-icon>emoji_objects</md-icon>
           <span class="md-list-item-text">Notes</span>
           <!-- <router-link :to="{ path: '/dashboard/note' } " replace>Notes</router-link> -->

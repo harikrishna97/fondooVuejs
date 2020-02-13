@@ -1,32 +1,28 @@
 <template>
-<div id="app">
-   <router-view></router-view>
-  <v-app data-app>
-  </v-app>
-</div>
-
+  <div id="app" v-switching-color="['purple','gold','pink','brown']" >
+   <h3>Welcome To Fundoo App</h3>
+    <router-view></router-view>
+    <v-app data-app > </v-app  >
+  </div>
 </template>
 
 <script>
 export default {
-  name: 'App',
-
-  
-
+  name: "App",
   data: () => ({
     //
-  }),
+  })
 };
 </script>
 
 <style>
 div.v-application--wrap {
-    display: none;
+  display: none;
 }
 
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-   /* background-color: linear-gradient(-90deg, #84CF6A, #16C0B0);  */
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  /* background-color: linear-gradient(-90deg, #84CF6A, #16C0B0);  */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;

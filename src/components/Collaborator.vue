@@ -194,7 +194,7 @@ export default {
 
     deleteCollaboratorFromNote(collaboratorId) {
       this.$log.info("CollaboratorId.... :: " + collaboratorId);
-      if (collaboratorId == undefined) {
+      if (collaboratorId !== undefined) {
         const token = localStorage.getItem("token");
         const auth = { headers: { token: token } };
         this.$log.info("TOken $.... :: " + auth,token);

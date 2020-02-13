@@ -387,7 +387,6 @@ export default {
     },
     showCollaborator1() {
       this.showCollaborator = !this.showCollaborator;
-
       this.$log.info("showCollaborator :", this.showCollaborator);
     },
     addNoteLabel(label) {
@@ -398,12 +397,9 @@ export default {
     },
     shareReminder() {
       if (this.now !== null || this.time !== null) {
-        // this.$log.info("now :" + this.now);
-        // this.$log.info("time :" + this.time);
-        // this.$log.info("menu2 :" + this.menu2);
         const reminder = this.now + " " + this.time;
         this.$emit("reminder", reminder);
-        // this.$log.info("reminder :" + reminder);
+        this.$log.info("Icon:reminder :" + reminder);
       }
     },
 

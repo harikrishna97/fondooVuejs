@@ -63,8 +63,6 @@
               v-for="collaborator in note.collaborator"
               :key="collaborator._id"
             >
-              <!-- {{collaborator.imageUrl}} -->
-              <!-- <md-button  class="md-icon-button"> -->
               <div>
                 <img class="round" :src="collaborator.imageUrl" alt="Avatar" />
                 <md-tooltip md-direction="bottom">{{
@@ -73,8 +71,6 @@
               </div>
               <!-- </md-button> -->
             </div>
-            <!-- md-limit md-delete -->
-            <!-- <md-chips v-model="messages" md-placeholder></md-chips> -->
           </div>
 
           <div v-if="note.remainder != null" class="Icons">
@@ -87,10 +83,9 @@
               "
               >{{ note.remainder }}</md-chip
             >
-            <!-- <md-chips v-model="messages" md-placeholder></md-chips> -->
           </div>
         </md-card-content>
-        <div @click="getNoteId(note._id,note)">
+        <div @click="getNoteId(note._id, note)">
           <Icons
             class="Icons"
             :collaboratorsArray="AllNotes"
@@ -123,7 +118,11 @@
 import EditNote from "./EditNote";
 import { HTTP } from "../services/http-common";
 import Icons from "./Icons";
-import { listGridService,collService,collService1} from "../services/messageService";
+import {
+  listGridService,
+  collService,
+  collService1
+} from "../services/messageService";
 
 export default {
   name: "CreateNote",
@@ -157,7 +156,7 @@ export default {
       this.updateFlag("del_label", this.currentNoteId);
       this.$log.info("adgfdrfghxdfghfyhfhfh ");
     },
-    
+
     deleteReminder() {
       this.$log.info("Delete  reminder ");
       const token = localStorage.getItem("token");
@@ -227,7 +226,7 @@ export default {
       this.$emit("updateNote", "data");
     },
 
-    getNoteId(noteId,note) {
+    getNoteId(noteId, note) {
       this.$log.info("note id at 246: ", noteId);
       this.currentNoteId = noteId;
       this.sendNoteIdToCollaborator(noteId);
@@ -235,13 +234,11 @@ export default {
 
       // this.$log.info("note id at 246: ", this.currentNoteId);
     },
-    sendNoteIdToCollaborator(noteId){
+    sendNoteIdToCollaborator(noteId) {
       collService.sendNoteIdToCollaborator(noteId);
-
     },
-    sendNoteToCollaborator(note){
+    sendNoteToCollaborator(note) {
       collService1.sendNoteToCollaborator(note);
-
     },
     updateFlag(flag, noteId) {
       this.$log.info("Flag selected :: " + flag);
@@ -297,8 +294,7 @@ export default {
           });
       }
     },
-    
-    
+
     addRemainderToNote(value) {
       const reminderData = {};
       reminderData.remainder = value;

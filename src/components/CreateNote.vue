@@ -57,15 +57,26 @@
               :style="`background-color: ${noteColor}`"
             />
           </div>
+          <div v-if="remainderNote != null" class="Icons">
+            <md-chip
+              class=""
+              md-deletable
+              @md-delete="
+                getNoteId(note._id);
+                deleteReminder();
+              "
+              >{{ remainderNote }}</md-chip
+            >
+          </div>
         </md-card-content>
         <div class="icons2">
           <div class="Iconns">
             <Icons
-              v-on:reminder="remainder"
               @collaborator="addCollaborator"
-              @archive="addArchive"             
+              @archive="addArchive"
               @shareColor="shareColor"
               @deleteNote="deleteNote"
+              @reminder="remainder"
             ></Icons>
           </div>
 
@@ -105,7 +116,7 @@ export default {
       this.title = null;
       this.description = null;
       this.noteColor = "";
-      this.remainder = null;
+      this.remainderNote = null;
       this.isArchive = false;
       this.isTrash = false;
     },
@@ -124,17 +135,16 @@ export default {
         this.title = null;
         this.description = null;
         this.noteColor = "";
-        this.remainder = null;
+        this.remainderNote = null;
         this.isArchive = false;
         this.isTrash = false;
       }
       this.$log.info("addArchive:flag :: " + flag);
     },
-    
+
     shareColor(color) {
       this.noteColor = color;
     },
-    
 
     /**
      * @description toggle value to close current componet and to Create Note
@@ -145,7 +155,7 @@ export default {
       this.createNote();
       (this.title = null), (this.description = null);
       this.noteColor = "";
-      this.remainder = null;
+      this.remainderNote = null;
       this.isArchive = false;
       this.isTrash = false;
 
@@ -187,7 +197,6 @@ export default {
           .catch(err => {
             this.$log.info("error :: " + err);
             this.$emit("updateNote", "note added");
-
           });
       }
     }

@@ -5,6 +5,11 @@
     border-radius: 8px;
     overflow: hidden;
   }
+  .Icons {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
   .searchtoolbar {
     display: flex;
     flex: left;
