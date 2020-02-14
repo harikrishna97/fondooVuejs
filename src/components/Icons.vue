@@ -172,7 +172,7 @@
     </md-button>
 
     <!-- LABESs -->
-    <md-menu md-size="medium" v-if="addLabel == true" md-align-trigger>
+    <md-menu md-size="medium" v-if="addLabel == true" md-align-trigger @click="stopTheEvent">
       <md-button
         md-menu-trigger
         class="md-icon-button"
@@ -210,7 +210,7 @@
 
     <!-- .......................... ADD Label.....-->
 
-    <md-menu md-size="medium" v-if="addLabel == false" md-align-trigger>
+    <md-menu md-size="medium" v-if="addLabel == false" md-align-trigger @click="stopTheEvent">
       <md-button
         md-menu-trigger
         class="md-icon-button"
@@ -328,8 +328,8 @@ export default {
     ]
   }),
   // props:['collaborators'],
-  mounted() {},
-  created() {
+  created() {},
+  mounted() {
     // subscribe to home component messages
     this.subscription = labelService
       .getLabelFromToolbar()
@@ -380,6 +380,7 @@ export default {
             element._id,
             this.collaboratorId
           );
+         
           this.$emit("collaborator", element._id);
         }
       });

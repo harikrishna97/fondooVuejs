@@ -61,3 +61,30 @@ export const updateNoteService = {
     getUpdateNote: () => updateNoteSubject.asObservable(),
 
 };
+
+const labelNoteSubject = new Subject();
+
+export const labelNoteService = {
+    sendLabelNote: message => labelNoteSubject.next({ text: message }),
+    clearUpdateNote: () => labelNoteSubject.next(),
+    getLabelNote: () => labelNoteSubject.asObservable(),
+
+};
+
+const createNoteSubject = new Subject();
+
+export const createNoteService = {
+    sendToCreateNote: message => createNoteSubject.next({ text: message }),
+    clearCreateNote: () => createNoteSubject.next(),
+    getFromCollaboratorNote: () => createNoteSubject.asObservable(),
+
+};
+
+const createCollaboratorSubject = new Subject();
+
+export const createCollaboratorService = {
+    sendToCreateCollaborator: message => createCollaboratorSubject.next({ text: message }),
+    clearCreateCollaborator: () => createCollaboratorSubject.next(),
+    getFromCreateCollaborator: () => createCollaboratorSubject.asObservable(),
+
+};

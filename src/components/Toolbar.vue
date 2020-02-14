@@ -67,15 +67,13 @@
 
           <md-menu-content>
             <div class="profile">
-              <!-- <md-badge class="" md-position="bottom" md-content="<md-icon>menu</md-icon>"> -->
+              <!-- <md-badge class="" md-position="bottom" md-content="*"> -->
               <div class="avatar md-icon-button" @click="profileUpload1()">
                 <img :src="imageUrl" alt="Avatar" />
                 <!-- <input type="file"> -->
                 <md-tooltip md-direction="bottom">Shailesh Borase</md-tooltip>
               </div>
-              <!-- <md-button class="md-fab md-primary md-fab-bottom-right badge">
-                <md-icon>camera_alt</md-icon>
-              </md-button> -->
+               
               <!-- </md-badge> -->
             </div>
 
@@ -85,26 +83,14 @@
                 <div>
                   <md-menu-item :v-model="user">{{ user }}</md-menu-item>
                 </div>
-                <!-- <div><md-menu-item :v-model="lastName">{{ lastName }}</md-menu-item></div> -->
               </div>
-              <!-- <div :v-model="user"> {{user}} </div> -->
               <div class="email">
                 <md-menu-item :v-model="email">{{ email }}</md-menu-item>
               </div>
             </div>
 
-            <!-- <div v-model="email"> {{email}} </div> -->
             <md-divider></md-divider>
             <md-button v-on:click="signout()">Sign Out</md-button>
-
-            <!-- <md-dialog :md-active.sync="profileUpload" md-click-outside-to-close="true"> -->
-            <!-- <md-dialog-title>Preferences</md-dialog-title> -->
-            <!-- <ProfileUpload @update="mounted"></ProfileUpload> -->
-
-            <!-- <md-dailog-content> -->
-            <!-- <ProfileUpload @update="mounted"></ProfileUpload></div> -->
-            <!-- </md-dailog-content> -->
-            <!-- </md-dialog> -->
           </md-menu-content>
           <div v-if="profileUpload == true">
             <ProfileUpload @update="update"></ProfileUpload>
@@ -117,7 +103,7 @@
 
     <md-app-drawer :md-active.sync="menuVisible">
       <md-list>
-        <md-list-item v-switching-color="['purple','gold','pink','brown']" @click="navigateTo('note');fundoo='Fundoo'">
+        <md-list-item class="Focus" v-switching-color="['purple','gold','pink','brown']" @click="navigateTo('note');fundoo='Fundoo'">
           <md-icon>emoji_objects</md-icon>
           <span class="md-list-item-text">Notes</span>
           <!-- <router-link :to="{ path: '/dashboard/note' } " replace>Notes</router-link> -->
@@ -126,7 +112,7 @@
         </md-list-item>
         <!-- <router-link to="/toolbar/trash">Home</router-link> -->
 
-        <md-list-item @click="navigateTo('remainder');fundoo='Reminders'">
+        <md-list-item class="Focus" @click="navigateTo('remainder');fundoo='Reminders'">
           <md-icon>notifications_none</md-icon>
           <span class="md-list-item-text">Remainders</span>
           <!-- <router-link :to="{ path: '/dashboard/remainders' } " replace>Remainders</router-link> -->
@@ -135,7 +121,7 @@
         <md-divider></md-divider>
 
         <div v-for="label in AllLabels" :key="label._id">
-          <md-list-item>
+          <md-list-item class="Focus" @click="showCurrentLabel(label)">
             <md-icon>label</md-icon>
             <span class="md-list-item-text">{{ label.label }}</span>
           </md-list-item>
@@ -194,19 +180,19 @@
           </md-dialog>
         </div>
 
-        <md-list-item @click="editLabelToggle()">
+        <md-list-item class="Focus" @click="editLabelToggle()">
           <md-icon>edit</md-icon>
           <span class="md-list-item-text">Edit label</span>
         </md-list-item>
 
         <md-divider></md-divider>
 
-        <md-list-item @click="navigateTo('archive');fundoo='Archive'">
+        <md-list-item class="Focus" @click="navigateTo('archive');fundoo='Archive'">
           <md-icon>archive</md-icon>
           <span class="md-list-item-text">Archive</span>
         </md-list-item>
 
-        <md-list-item @click="navigateTo('trash');fundoo='Trash'">
+        <md-list-item class="Focus" @click="navigateTo('trash');fundoo='Trash'">
           <md-icon>delete</md-icon>
           <span class="md-list-item-text">Trash</span>
         </md-list-item>
@@ -225,7 +211,7 @@
 import SearchBar from "./SearchBar";
 import ProfileUpload from "./ProfileUpload";
 
-import { listGridService, labelService } from "../services/messageService";
+import { listGridService, labelService,labelNoteService } from "../services/messageService";
 import { HTTP } from "../services/http-common";
 
 export default {
@@ -274,6 +260,13 @@ export default {
     // this.getAllLabels();
   },
   methods: {
+    sendLabelNote(label){
+      labelNoteService.sendLabelNote(label);
+    },
+    showCurrentLabel(label){
+      this.$log.info(" Current Label From Toolbar:",label);
+      this.sendLabelNote(label);
+    },
     update(e) {
       this.$log.info(" Profile changed...:: ", e);
       this.created();
@@ -421,16 +414,54 @@ export default {
 // .toolbar{
 //   background-color: white;
 // }
+// .avatar {
+//     width: 40px;
+//     min-width: 40px;
+//     height: 40px;
+//     margin: auto;
+//     display: inline-flex;
+//     justify-content: center;
+//     align-items: center;
+//     overflow: hidden;
+//     -webkit-user-select: none;
+//     -ms-user-select: none;
+//     user-select: none;
+//     position: relative;
+//     border-radius: 40px;
+//     transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+//     transition-property: color, background-color;
+//     will-change: color, background-color;
+//     font-size: 24px;
+//     letter-spacing: -0.05em;
+//     vertical-align: middle;
+//   }
 .mainD {
   width: 300px;
 }
-.md-list-item{
-  box-shadow:none;
-}
+// .md-list-item:hover {
+//   box-shadow:none;
+//   background-color: rgb(247, 229, 130);
+//   border-top-right-radius: 25px;
+//     border-bottom-right-radius: 25px;
+// }
 .Hover:hover{
   background-color: #fbefc3;
   border-top-right-radius: 25px;
     border-bottom-right-radius: 25px;
 
+}
+
+.md-list-item.Focus :focus {
+  // background-color: yellow;
+   background-color: rgb(247, 229, 130);
+  border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+}
+
+.md-list-item.Focus:hover{
+  // background-color: yellow;
+   background-color: rgb(247, 229, 130);
+  border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
 }
 </style>

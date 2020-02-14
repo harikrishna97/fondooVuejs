@@ -72,6 +72,20 @@
               >{{ remainder }}</md-chip
             >
           </div>
+             <div v-if="collaborators != null" class="Icons">
+            <div
+              v-for="collaborator in collaborators"
+              :key="collaborator.userId"
+            >
+              <div>
+                <img class="round" :src="collaborator.imageUrl" alt="Avatar" />
+                <md-tooltip md-direction="bottom">{{
+                  collaborator.email
+                }}</md-tooltip>
+              </div>
+              <!-- </md-button> -->
+            </div>
+          </div>
         </form>
       </md-card-content>
       <div class="Icons">
@@ -93,11 +107,10 @@
 <script>
 import { HTTP } from "../services/http-common";
 import Icons from "./Icons";
-import { updateNoteService } from "../services/messageService";
+import { updateNoteService, createNoteService } from "../services/messageService";
 
 export default {
   name: "editNote",
-
   data: () => ({
     isOpen: true,
     title: null,
@@ -105,7 +118,9 @@ export default {
     noteColor: "",
     remainder: null,
     isArchive: false,
-    isTrash: false
+    isTrash: false,
+    collaborators:[],
+    collaboratorId:null,
   }),
   components: {
     Icons
@@ -117,7 +132,20 @@ export default {
     this.title = this.note.title;
     this.description = this.note.description;
     this.noteColor = this.note.color;
-    this.remainder=this.note.remainder;
+    this.remainder = this.note.remainder;
+  },
+  created() {
+    // subscribe to home component messages
+    this.subscription = createNoteService
+      .getFromCollaboratorNote()
+      .subscribe(message => {
+        if (message) {
+          // add message to local state if not empty
+          this.collaborators.push(message.text);
+          this.collaboratorId = message.text.userId;
+          this.$log.info("collaborator from  Collaborator:: ", message.text);
+        }
+      });
   },
   methods: {
     deleteNote1(flag) {
@@ -129,10 +157,9 @@ export default {
     addArchive(flag) {
       this.$log.info("editNote:addArchive:flag :: " + flag);
       this.isOpen = false;
-      this.isArchive=flag;
+      this.isArchive = flag;
       this.editNote();
       // this.sendUpdateNote();
-
     },
     shareReminder(value) {
       this.$log.info("in edit :share remainder:", value);
@@ -142,7 +169,6 @@ export default {
       this.$log.info("display noteColor:flag :: " + code);
       this.noteColor = code;
     },
-    
 
     toggleComponent() {
       this.isOpen = false;
@@ -166,15 +192,15 @@ export default {
         }
 
         if (this.remainder != null) {
-          noteData.remainder =this.remainder;
+          noteData.remainder = this.remainder;
         }
 
         if (this.isArchive != false) {
-          noteData.isArchive =true
+          noteData.isArchive = true;
         }
 
         if (this.isTrash != false) {
-          noteData.isTrash =true;
+          noteData.isTrash = true;
         }
 
         // noteData.collaborator=this.collaborator;

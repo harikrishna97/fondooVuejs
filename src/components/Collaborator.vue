@@ -74,7 +74,13 @@
 
 <script>
 import { HTTP } from "../services/http-common";
-import { collService, collService1,updateNoteService } from "../services/messageService";
+import {
+  collService,
+  collService1,
+  updateNoteService,
+  createNoteService,
+  createCollaboratorService
+} from "../services/messageService";
 
 export default {
   name: "Collaborator",
@@ -93,10 +99,30 @@ export default {
   }),
 
   mounted() {
+    this.subscription = createCollaboratorService
+      .getFromCreateCollaborator()
+      .subscribe(message => {
+        if (message) {
+          this.$log.info("data From CreateNote :collaboratord:");
+
+          // add message to local state if not empty
+          this.collaboratorId = message.text.collaboratorId;
+          this.currentNoteId = message.text.noteId;
+          this.$log.info(
+            "Add collaborator from create note:: ",
+            JSON.stringify(message.text)
+          );
+          this.addCollaboratorToNote();
+        } else {
+          this.$log.info("Error From CreateNote :collaboratord:");
+        }
+      });
     this.userData();
     this.getAllUsers();
   },
   created() {
+    
+
     // subscribe to home component messages
     this.subscription = collService
       .getNoteIdFromDisplay()
@@ -119,22 +145,22 @@ export default {
           // add message to local state if not empty
           this.AllNotes = message1.text;
           this.$log.info("Note from Diaplsy:: ", this.AllNotes);
-        } else {
-          // clear messages when empty message received
-          // this.currentNoteId = null;
-          // this.$log.info("RXJS message :: " + JSON.stringify(this.messages));
         }
       });
   },
-  beforeDestroy() {
-    // unsubscribe to ensure no memory leaks
-    this.subscription.unsubscribe();
-  },
+  // beforeDestroy() {
+  //   // unsubscribe to ensure no memory leaks
+  //   this.subscription.unsubscribe();
+  // },
   methods: {
-    sendUpdateNote(){
-      updateNoteService.sendUpdateNote('updateNote');
+    sendToCreateNote(userData) {
+      createNoteService.sendToCreateNote(userData);
+    },
+    sendUpdateNote() {
+      updateNoteService.sendUpdateNote("updateNote");
     },
     addCollaborator() {
+      // if (this.currentNoteId !== null) {
       this.$log.info(
         "noteId: collaboratorEmail:collaboratorId :",
         this.currentNoteId,
@@ -149,9 +175,16 @@ export default {
             this.collaboratorId
           );
           // this.$emit("collaborator", element._id);
+          const CollaboratorIDEmail = {};
+          CollaboratorIDEmail.email = element.email;
+          CollaboratorIDEmail.imageUrl = element.imageUrl;
+          CollaboratorIDEmail.userId = element._id;
+          this.sendToCreateNote(CollaboratorIDEmail);
+          // this.$emit("collaboratorcreate", CollaboratorIDEmail);
         }
       });
       this.addCollaboratorToNote();
+      // }
     },
     userData() {
       this.user =
@@ -167,7 +200,7 @@ export default {
     },
 
     addCollaboratorToNote() {
-      if (this.collaboratorId !== null) {
+      if (this.collaboratorId !== null && this.currentNoteId !== null) {
         const token = localStorage.getItem("token");
         const auth = { headers: { token: token } };
         this.$log.info(
@@ -176,14 +209,17 @@ export default {
           this.collaboratorId,
           token
         );
-        const noteId = this.currentNoteId;
+        // const noteId = 
         HTTP.post(
-          "collaborator/" + noteId + "/" + this.collaboratorId,
+          "collaborator/" + this.currentNoteId + "/" + this.collaboratorId,
           {},
           auth
         )
           .then(response => {
-            this.$log.info("response :: " + JSON.stringify(response.data.data.daa));
+            this.$log.info(
+              "collaborator:response :: " +
+                JSON.stringify(response.data.data.daa)
+            );
             this.sendUpdateNote();
           })
           .catch(err => {
@@ -197,9 +233,9 @@ export default {
       if (collaboratorId !== undefined) {
         const token = localStorage.getItem("token");
         const auth = { headers: { token: token } };
-        this.$log.info("TOken $.... :: " + auth,token);
+        this.$log.info("TOken $.... :: " + auth, token);
         // const collaboratorId=this.collaboratorId;
-        HTTP.delete("collaborator/" +collaboratorId, {}, auth)
+        HTTP.delete("collaborator/" + collaboratorId, {}, auth)
           .then(response => {
             this.$log.info("response :: " + JSON.stringify(response.data.data));
             this.sendUpdateNote();

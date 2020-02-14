@@ -12,6 +12,7 @@ data:()=>{
 []
 
 },
+
 methods: {
     getAllLabels() {
       const token = localStorage.getItem("token");

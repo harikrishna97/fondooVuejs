@@ -146,7 +146,8 @@ export default {
     defaultImage: "",
     collaboratorId: null,
     collaboratorsArray: [],
-    collNoteId: null
+    collNoteId: null,
+    isArchived:false,
   }),
 
   components: { EditNote, Icons },
@@ -184,7 +185,7 @@ export default {
 
     shareReminder(reminder) {
       this.reminderValue = reminder;
-      // this.$log.info("reminderValue from icon :: " + this.reminderValue);
+      this.$log.info("reminderValue from icon :: " + this.reminderValue);
       this.addRemainderToNote(this.reminderValue);
     },
     addRemainder(flag) {
@@ -247,7 +248,7 @@ export default {
       const token = localStorage.getItem("token");
       const editData = {};
       if (flag == "archive") {
-        editData.flagValue = true;
+        editData.flagValue =!this.isArchived;
       } else if (flag == "color") {
         editData.flagValue = this.colorCode;
       } else if (flag == "label") {
@@ -301,7 +302,7 @@ export default {
       const token = localStorage.getItem("token");
 
       const auth = { headers: { token: token } };
-      const noteId = "5e3270ad174f8639caed2f06"; //this.currentNoteId;
+      const noteId = this.currentNoteId; //this.currentNoteId;
       this.$log.info("noteId .... :: " + this.currentNoteId);
 
       HTTP.post("remainder/" + noteId, reminderData, auth)
@@ -363,7 +364,7 @@ export default {
 // @import "../style/displayNote.css";
 .Icons {
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   flex-wrap: wrap;
 }
 .gridViewClass {

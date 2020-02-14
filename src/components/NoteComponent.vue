@@ -14,7 +14,11 @@
 import { HTTP } from "../services/http-common";
 import CreateNote from "./CreateNote";
 import DisplayNotes from "./DisplayNotes";
-import { messageService, updateNoteService } from "../services/messageService";
+import {
+  messageService,
+  labelNoteService,
+  updateNoteService
+} from "../services/messageService";
 
 export default {
   data() {
@@ -23,7 +27,6 @@ export default {
       // searchTerms:"a"
     };
   },
-  props: ["toggleListGrid"],
   components: {
     CreateNote,
     DisplayNotes
@@ -33,6 +36,7 @@ export default {
   },
 
   created() {
+    this.getAllnotes();
     // subscribe to home component messages
     this.subscription = messageService.getMessage().subscribe(message => {
       if (message) {
@@ -56,7 +60,25 @@ export default {
         this.getAllnotes();
       }
     });
+
+    this.subscription = labelNoteService.getLabelNote().subscribe(message => {
+      if (message) {
+        this.$log.info("Label data-- :: ",this.AllNotes, message.text._id);
+        this.AllNotes.forEach(element=>{
+          element.label.forEach(element1=>{
+            if(element1._id==message.text._id){
+              this.$log.info("NoteLabeled data-- :: ",element1.label,element);
+              // this.AllNotes=[element]
+              // this.AllNotes.push(element);
+            }else{
+              this.getAllnotes();
+            }
+          })
+        })
+      }
+    });
   },
+
   beforeDestroy() {
     // unsubscribe to ensure no memory leaks
     this.subscription.unsubscribe();
