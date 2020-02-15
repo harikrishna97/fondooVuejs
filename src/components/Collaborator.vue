@@ -19,7 +19,7 @@
       </div>
       <md-dialog-content class="">
         <div
-          v-for="collaborator in AllNotes.collaborator"
+          v-for="collaborator in collaborators"
           :key="collaborator._id"
         >
           <div v-if="currentNoteId === AllNotes._id">
@@ -95,7 +95,8 @@ export default {
     AllUsers: [],
     usersData: [],
     currentNoteId: null,
-    AllNotes: []
+    AllNotes: [],
+    collaborators:[],
   }),
 
   mounted() {
@@ -144,6 +145,7 @@ export default {
         if (message1) {
           // add message to local state if not empty
           this.AllNotes = message1.text;
+          this.collaborators=message1.text.collaborator;
           this.$log.info("Note from Diaplsy:: ", this.AllNotes);
         }
       });
@@ -229,6 +231,11 @@ export default {
     },
 
     deleteCollaboratorFromNote(collaboratorId) {
+      // const filteredPeople = people.filter((item) => item.id !== idToRemove);
+      var data=[]
+      data=this.collaborators.filter((item)=>item._id!==collaboratorId)
+      this.collaborators=data;
+       this.$log.info("Collaborators.... :: " + data);
       this.$log.info("CollaboratorId.... :: " + collaboratorId);
       if (collaboratorId !== undefined) {
         const token = localStorage.getItem("token");

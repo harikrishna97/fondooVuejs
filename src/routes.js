@@ -17,6 +17,8 @@ import ProfileUpload from "./components/ProfileUpload.vue";
 
 import Icons from "./components/Icons.vue"
 import Collaborator from "./components/Collaborator.vue"
+import NoteLabel from "./components/NoteLabel.vue"
+
 
 
 Vue.use(Router);
@@ -51,6 +53,10 @@ export default new Router({
         {
           path: "archive",
           component: ArchiveNotes
+        },
+        {
+          path: "label",
+          component: NoteLabel
         },
         {
           path: "trash",

@@ -47,10 +47,10 @@
             </div>
           </div>
 
-          <div v-if="note.collaborator != null" class="Icons">
+          <div v-if="collaborators != null" class="Icons">
             <div
-              v-for="collaborator in note.collaborator"
-              :key="collaborator._id"
+              v-for="collaborator in collaborators"
+              :key="collaborator.userId"
             >
               <div>
                 <img class="round" :src="collaborator.imageUrl" alt="Avatar" />
@@ -71,20 +71,6 @@
               "
               >{{ remainder }}</md-chip
             >
-          </div>
-             <div v-if="collaborators != null" class="Icons">
-            <div
-              v-for="collaborator in collaborators"
-              :key="collaborator.userId"
-            >
-              <div>
-                <img class="round" :src="collaborator.imageUrl" alt="Avatar" />
-                <md-tooltip md-direction="bottom">{{
-                  collaborator.email
-                }}</md-tooltip>
-              </div>
-              <!-- </md-button> -->
-            </div>
           </div>
         </form>
       </md-card-content>
@@ -107,7 +93,11 @@
 <script>
 import { HTTP } from "../services/http-common";
 import Icons from "./Icons";
-import { updateNoteService, createNoteService } from "../services/messageService";
+import {
+  updateNoteService,
+  createNoteService,
+  createCollaboratorService
+} from "../services/messageService";
 
 export default {
   name: "editNote",
@@ -119,8 +109,9 @@ export default {
     remainder: null,
     isArchive: false,
     isTrash: false,
-    collaborators:[],
-    collaboratorId:null,
+    collaborators: [],
+    collaboratorId: null,
+    currentNoteId: null
   }),
   components: {
     Icons
@@ -133,6 +124,8 @@ export default {
     this.description = this.note.description;
     this.noteColor = this.note.color;
     this.remainder = this.note.remainder;
+    this.currentNoteId = this.note._id;
+    this.collaborators = this.note.collaborator;
   },
   created() {
     // subscribe to home component messages
@@ -181,6 +174,17 @@ export default {
     sendUpdateNote() {
       updateNoteService.sendUpdateNote("updateNote");
     },
+    sendToCreateCollaborator() {
+      this.$log.info(
+        "Im in sendToLabelCollaborator now:: " + this.currentNoteId,
+        "gsgs",
+        this.collaboratorId
+      );
+      const DataToCollaborator = {};
+      DataToCollaborator.noteId = this.currentNoteId;
+      DataToCollaborator.collaboratorId = this.collaboratorId;
+      createCollaboratorService.sendToCreateCollaborator(DataToCollaborator);
+    },
     editNote() {
       this.$log.info("Im in edit note now.. :: ");
       if (this.title && this.description !== null) {
@@ -210,13 +214,17 @@ export default {
         HTTP.put("note/" + this.note._id, noteData, auth)
           .then(response => {
             // this.$emit("updateNote", "noteupdated");
+            this.currentNoteId = response.data.data._id;
+              this.sendToCreateCollaborator();
+              this.collaboratorId = null;
+              this.currentNoteId = null;
             this.sendUpdateNote();
 
             this.title = null;
             this.description = null;
             this.noteColor = "";
             this.$log.info(
-              "response :: " + JSON.stringify(response.data.data.title)
+              "Edited:response :: " + JSON.stringify(response.data.data._id)
             );
           })
           .catch(err => {

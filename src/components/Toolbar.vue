@@ -121,7 +121,7 @@
         <md-divider></md-divider>
 
         <div v-for="label in AllLabels" :key="label._id">
-          <md-list-item class="Focus" @click="showCurrentLabel(label)">
+          <md-list-item class="Focus" @click="showCurrentLabel(label._id);navigateTo('label')">
             <md-icon>label</md-icon>
             <span class="md-list-item-text">{{ label.label }}</span>
           </md-list-item>

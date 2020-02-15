@@ -1,8 +1,8 @@
 <template>
   <div
-    class="elevation-demo"
     :class="listView ? 'listViewClass' : 'gridViewClass'"
   >
+   <draggable v-model="AllNotes" class="gridViewClass" >
     <div v-for="note in AllNotes" :key="note._id">
       <md-card
         class="md-elevation-1"
@@ -102,6 +102,7 @@
         </div>
       </md-card>
     </div>
+   </draggable>
     <div v-if="editnote == true">
       <md-dialog :md-active.sync="editnote">
         <EditNote
@@ -115,6 +116,7 @@
 </template>
 
 <script>
+import draggable from "vuedraggable";
 import EditNote from "./EditNote";
 import { HTTP } from "../services/http-common";
 import Icons from "./Icons";
@@ -150,7 +152,7 @@ export default {
     isArchived:false,
   }),
 
-  components: { EditNote, Icons },
+  components: { EditNote, Icons,draggable },
   methods: {
     deleteLabel(labelId) {
       this.currentLabelId = labelId;
@@ -319,16 +321,7 @@ export default {
         });
     }
 
-    // getUpdateDataFromEditNote() {
-    //   this.subscription = editService.getDataFromEdit().subscribe(message => {
-    //   if (message) {
-
-    //   }else{
-
-    //   }
-    //   });
-
-    // }
+    
   },
   mounted() {
     // this.defaultImage = localStorage.getItem("imageUrl");

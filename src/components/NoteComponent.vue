@@ -16,7 +16,6 @@ import CreateNote from "./CreateNote";
 import DisplayNotes from "./DisplayNotes";
 import {
   messageService,
-  labelNoteService,
   updateNoteService
 } from "../services/messageService";
 
@@ -61,22 +60,22 @@ export default {
       }
     });
 
-    this.subscription = labelNoteService.getLabelNote().subscribe(message => {
-      if (message) {
-        this.$log.info("Label data-- :: ",this.AllNotes, message.text._id);
-        this.AllNotes.forEach(element=>{
-          element.label.forEach(element1=>{
-            if(element1._id==message.text._id){
-              this.$log.info("NoteLabeled data-- :: ",element1.label,element);
-              // this.AllNotes=[element]
-              // this.AllNotes.push(element);
-            }else{
-              this.getAllnotes();
-            }
-          })
-        })
-      }
-    });
+    // this.subscription = labelNoteService.getLabelNote().subscribe(message => {
+    //   if (message) {
+    //     this.$log.info("Label data-- :: ",this.AllNotes, message.text._id);
+    //     this.AllNotes.forEach(element=>{
+    //       element.label.forEach(element1=>{
+    //         if(element1._id==message.text._id){
+    //           this.$log.info("NoteLabeled data-- :: ",element1.label,element);
+    //           // this.AllNotes=[element]
+    //           this.AllNotes.push(element);
+    //         }else{
+    //           this.getAllnotes();
+    //         }
+    //       })
+    //     })
+    //   }
+    // });
   },
 
   beforeDestroy() {
